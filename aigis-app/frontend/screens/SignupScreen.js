@@ -21,7 +21,7 @@ const SignupScreen = ({ navigation }) => {
       const response = await axios.post(url, data);
       if (response.status === 200) {
         Alert.alert('Signup', 'Registro completado');
-        navigation.navigate('Welcome');
+        navigation.navigate('Options');
       }
     } catch (error) {
       console.log('Error en try catch: ', error);
@@ -37,7 +37,7 @@ const SignupScreen = ({ navigation }) => {
       <Text style={styles.nameField}>Nombre de la empresa</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={nombre}
         onChangeText={setNombre}
@@ -45,7 +45,7 @@ const SignupScreen = ({ navigation }) => {
       <Text style={styles.nameField}>Dirección</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={direccion}
         onChangeText={setDireccion}
@@ -53,7 +53,7 @@ const SignupScreen = ({ navigation }) => {
       <Text style={styles.nameField}>Número de teléfono de contacto</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         keyboardType='numeric'
         value={telefono}
@@ -66,12 +66,12 @@ const SignupScreen = ({ navigation }) => {
           { label: 'Industrial', value: 'Industrial' },
           { label: 'Medicina', value: 'Medicina' },
           { label: 'Almacenes', value: 'Almacenes' },
-          { label: 'Techología', value: 'Tecnología' },
+          { label: 'Tecnología', value: 'Tecnología' },
         ]}
         style={pickerSelectStyles}
         placeholder={{ label: 'Seleccione el tipo de empresa', value: null }}
       />
-      <Text style={styles.nameField}>Email</Text>
+      <Text style={styles.nameField}>Correo Electrónico</Text>
       <TextInput
         style={styles.input}
         placeholderTextColor="#F4F6FC"
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   errorText: {
-    color: 'white',
-    backgroundColor: 'red',
+    color: '#F4F6FC',
+    backgroundColor: '#B71C1C',
     marginTop: 10,
     padding: 4,
     borderRadius: 4,

@@ -10,13 +10,14 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import PaquetesScreen from './screens/User/PaquetesScreen';
 import PayScreen from './screens/User/PayScreen';
 import MembershipScreen from './screens/User/MembershipScreen';
+import OptionScreen from './screens/User/OptionsScreen';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Options" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
@@ -27,6 +28,7 @@ const App = () => {
         <Stack.Screen name="Paquetes" component={PaquetesScreen} />
         <Stack.Screen name="Pay" component={PayScreen} />
         <Stack.Screen name="Membership" component={MembershipScreen} />
+        <Stack.Screen name="Options" component={OptionScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

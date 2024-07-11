@@ -97,6 +97,21 @@ const tarjetaRFIDSchema = new Schema({
   estado: { type: String, enum: ['activa', 'inactiva'] }
 });
 
+// Membresia Schema
+const membresiaSchema = new Schema({
+  cantidad: { type: Number, required: true }, // Numero de meses
+  periodo: { type: [String], required: true }, // "Meses" o "Anual"
+  descripcion: { type: [String], required: true }
+});
+
+// Paquete Schema
+const paqueteSchema = new Schema({
+  paquete: { type: String, required: true },
+  descripcion: { type: String },
+  precio: { type: Number, required: true },
+  contenido: { type: [String], required: true }
+});
+
 // Crear los modelos
 const Usuario = model('Usuario', usuarioSchema);
 const Sensor = model('Sensor', sensorSchema);
@@ -107,6 +122,8 @@ const Comentario = model('Comentario', comentarioSchema);
 const Estadistica = model('Estadistica', estadisticaSchema);
 const Accesibilidad = model('Accesibilidad', accesibilidadSchema);
 const TarjetaRFID = model('TarjetaRFID', tarjetaRFIDSchema);
+const Membresia = model('Membresias', membresiaSchema);
+const Paquete = model('Paquetes', paqueteSchema);
 
 module.exports = {
   Usuario,
@@ -117,5 +134,7 @@ module.exports = {
   Comentario,
   Estadistica,
   Accesibilidad,
-  TarjetaRFID
+  TarjetaRFID,
+  Membresia,
+  Paquete
 };

@@ -49,6 +49,7 @@ const PaquetesScreen = () => {
             color='#E53935'
             size={24}
           />
+          <Text style={styles.iconText}>Volver</Text>
         </TouchableOpacity>
         <Text style={styles.tituloMem}>Selecciona un paquete</Text>
       </View>
@@ -92,9 +93,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 48,
+    justifyContent: 'space-between', 
+    marginTop: 28,
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
   tituloMem: {
     color: '#F4F6FC',
@@ -102,10 +104,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
-    marginRight: 30,
+    marginTop: 60,
+    right: 40
   },
   iconContainer: {
-    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    bottom: 20
+  },
+  iconText: {
+    color: '#E53935',
+    fontSize: 16,
+    marginLeft: 1,
   },
   cardContainer: {
     backgroundColor: '#212121',
