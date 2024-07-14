@@ -1,37 +1,40 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IP from '../../IP';
 
 const MembershipScreen = () => {
-    const [checked, setChecked] = useState(0);
+    const [memberships, setMemberships] = useState([]);
+    const [checked, setChecked] = useState('');
     const navigation = useNavigation();
 
-    const handleConfirmar = () => {
-        console.log('Membresía seleccionada:', checked);
-        navigation.navigate('Paquetes');
+    const fetchMemberships = async () => {
+        const url = `http://${IP}:3000/membership`;
+        try {
+            const response = await axios.get(url);
+            console.log(response.data.membresias);
+            setMemberships(response.data.membresias);
+        } catch (error) {
+            console.error('Error getting memberships:', error);
+            Alert.alert('Error', 'Memberships could not be loaded');
+        }
     };
 
-    const membresias = [
-        {
-            id: 1,
-            title: '3',
-            month: 'Meses',
-            description: 'Membresía por 3 meses',
-        },
-        {
-            id: 2,
-            title: '6',
-            month: 'Meses',
-            description: 'Membresía por 6 meses',
-        },
-        {
-            id: 3,
-            title: '12',
-            month: 'Meses',
-            description: 'Membresía por 12 meses',
-        },
-    ];
+    useEffect(() => {
+        fetchMemberships();
+    }, []);
+
+    const handleConfirm = () => {
+        if (!checked) {
+            Alert.alert('Error', 'Please select a membership');
+            return;
+        }
+
+        console.log('Selected membership:', checked);
+        navigation.navigate('Paquetes', { membershipId: checked });
+    };
 
     return (
         <ScrollView style={styles.container}>
@@ -43,26 +46,26 @@ const MembershipScreen = () => {
                         color='#E53935'
                         size={24}
                     />
-                    <Text style={styles.iconText} onPress={() => navigation.navigate('Options')} >Volver</Text>
+                    <Text style={styles.iconText}>Back</Text>
                 </TouchableOpacity>
-                <Text style={styles.tituloMem}>Seleccione la duración de la membresía</Text>
+                <Text style={styles.tituloMem}>Select Membership Duration</Text>
             </View>
 
-            {membresias.map((membresia) => (
+            {memberships.map((membership) => (
                 <TouchableOpacity
-                    key={membresia.id}
-                    style={[styles.cardContainer, checked === membresia.id && styles.selectedCard]}
-                    onPress={() => setChecked(membresia.id)}
+                    key={membership._id}
+                    style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
+                    onPress={() => setChecked(membership._id)}
                 >
                     <View>
-                        <Text style={styles.title}>{membresia.title}</Text>
-                        <Text style={styles.months}>{membresia.month}</Text>
+                        <Text style={styles.title}>{membership.cantidad}</Text>
+                        <Text style={styles.months}>{membership.periodo}</Text>
                     </View>
                 </TouchableOpacity>
             ))}
 
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmar}>
-                <Text style={styles.confirmButtonText}>CONFIRMAR</Text>
+            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+                <Text style={styles.confirmButtonText}>CONFIRM</Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -87,14 +90,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
-        marginTop: 100
+        marginTop: 100,
     },
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         position: 'absolute',
         left: 10,
-        top: 20
+        top: 20,
     },
     iconText: {
         color: '#E53935',

@@ -1,32 +1,30 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import IP from '../../IP';
 
 const PaquetesScreen = () => {
   const navigation = useNavigation();
+  const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
 
-  const paquetes = [
-    {
-      title: 'Paquete Básico',
-      description: 'Incluye funcionalidades esenciales como tarjetas de acceso y monitoreo de la temperatura y humedad.',
-      price: '$50.00',
-      info: ['RFID', 'Temperatura y Humedad'],
-    },
-    {
-      title: 'Paquete Intermedio',
-      description: 'Un paquete con más seguridad, añade detección de humo.',
-      price: '$75.00',
-      info: ['RFID', 'Temperatura y Humedad', 'Humo'],
-    },
-    {
-      title: 'Paquete Avanzado',
-      description: 'Ofrece nuevo sistema de seguridad con el paquete nuevo de cámara y detector de presencia. Ademas de las funcionaldiades de los anteriores paquetes.',
-      price: '$100.00',
-      info: ['RFID', 'Temperatura y Humedad', 'Humo', 'Presencia', 'Cámara'],
-    },
-  ];
+  const fetchPackages = async () => {
+    const url = `http://${IP}:3000/packages`;
+    try {
+      const response = await axios.get(url);
+      console.log(response.data.paquetes);
+      setPackages(response.data.paquetes);
+    } catch (error) {
+      console.error('Error getting packages:', error);
+      Alert.alert('Error', 'Packages could not be loaded');
+    }
+  };
+
+  useEffect(() => {
+    fetchPackages();
+  }, []);
 
   const handleSeleccionarPaquete = (index) => {
     setSelectedPackage(index);
@@ -34,8 +32,10 @@ const PaquetesScreen = () => {
 
   const handleConfirmarPaquete = () => {
     if (selectedPackage !== null) {
-      console.log('Paquete seleccionado:', paquetes[selectedPackage].title);
+      console.log('Selected package:', packages[selectedPackage].paquete);
       navigation.navigate('Pay');
+    } else {
+      Alert.alert('Error', 'Please select a package');
     }
   };
 
@@ -49,36 +49,40 @@ const PaquetesScreen = () => {
             color='#E53935'
             size={24}
           />
-          <Text style={styles.iconText}>Volver</Text>
+          <Text style={styles.iconText}>Back</Text>
         </TouchableOpacity>
-        <Text style={styles.tituloMem}>Selecciona un paquete</Text>
+        <Text style={styles.tituloMem}>Select a package</Text>
       </View>
 
-      {paquetes.map((paquete, index) => (
+      {packages.map((paquete, index) => (
         <TouchableOpacity
-          key={index}
+          key={paquete._id}
           style={[styles.cardContainer, selectedPackage === index && styles.selectedCard]}
           onPress={() => handleSeleccionarPaquete(index)}
         >
           <View>
-            <Text style={styles.title}>{paquete.title}</Text>
-            <Text style={styles.desc}>{paquete.description}</Text>
-            <Text style={styles.contText}>Contiene:</Text>
-            {paquete.info.map((item, idx) => (
-              <Text key={idx} style={styles.infoItem}>
-                - {item}
-              </Text>
-            ))}
+            <Text style={styles.title}>{paquete.paquete}</Text>
+            <Text style={styles.desc}>{paquete.descripcion}</Text>
+            <Text style={styles.contText}>Contains:</Text>
+            {typeof paquete.contenido === 'string' && paquete.contenido.trim() !== '' ? (
+              paquete.contenido.split(',').map((item, idx) => (
+                <Text key={idx} style={styles.infoItem}>
+                  - {item.trim()}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.infoItem}>- Not specified</Text>
+            )}
             <View style={styles.priceContainer}>
-              <Text style={[styles.textPrice, selectedPackage === index && { color: '#F4F6FC' }]}>Costo:</Text>
-              <Text style={[styles.price, selectedPackage === index && { color: '#F4F6FC' }]}>{paquete.price}</Text>
+              <Text style={[styles.textPrice, selectedPackage === index && { color: '#F4F6FC' }]}>Cost:</Text>
+              <Text style={[styles.price, selectedPackage === index && { color: '#F4F6FC' }]}>${paquete.precio}.00</Text>
             </View>
           </View>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmarPaquete}>
-        <Text style={styles.confirmButtonText}>CONFIRMAR PAQUETE</Text>
+        <Text style={styles.confirmButtonText}>CONFIRM PACKAGE</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     marginTop: 28,
     marginBottom: 20,
     paddingHorizontal: 10,
@@ -105,12 +109,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     flex: 1,
     marginTop: 60,
-    right: 40
+    right: 40,
   },
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    bottom: 20
+    bottom: 20,
   },
   iconText: {
     color: '#E53935',

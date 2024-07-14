@@ -11,88 +11,88 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      // URL de tu API de login
+      // URL for your login API
       const url = `http://${IP}:3000/usuario/login`;
 
-      // Datos de las credenciales de usuario
+      // User credentials data
       const data = {
         correo: email,
         contrasena: password
       };
-      // Hacer la solicitud POST
+
+      // Make POST request
       const response = await axios.post(url, data);
-      console.log('Respuesta del servidor:', response.data);
+      console.log('Server response:', response.data);
 
-      // Manejar la respuesta
+      // Handle response
       if (response.status === 200) {
-        console.log('Login exitoso');
+        console.log('Login successful');
 
-        // Verifica el rol del usuario
+        // Check user role
         const user = response.data.user;
         const userRole = user.rol;
 
-        // Guardar el id del usuario en asyncStorage
+        // Save user id in AsyncStorage
         await AsyncStorage.setItem('userId', user._id)
 
-        // Obtener el id y mandarlo por consola
+        // Get id and log it to console
         const userId = await AsyncStorage.getItem('userId')
-        console.log('ESTE ES UNA PRUBEA DE ASYNCSTORAGE: ',userId)
+        console.log('THIS IS A TEST OF ASYNCSTORAGE: ', userId)
 
-        Alert.alert('Welcome', '${user.nombre}');
+        Alert.alert('Welcome', `${user.nombre}`);
 
-        // Redireccionar basado en el rol del usuario
+        // Redirect based on user role
         if (userRole === 'administrador') {
           navigation.navigate('AdminStack');
         } else if (userRole === 'usuario' && !user.membresia) {
           navigation.navigate('Paquetes');
-        }else{
+        } else {
           navigation.navigate('UserStack');
         }
-      }  else {
-        console.log('Error en el login');
-        setErrorMessage('Error en el login');
+      } else {
+        console.log('Error in login');
+        setErrorMessage('Error in login');
       }
     } catch (error) {
-      // Manejar errores
-      console.log('Error al realizar el login:', error);
-      setErrorMessage(error.response?.data?.message || 'Error al realizar el login');
+      // Handle errors
+      console.log('Error logging in:', error);
+      setErrorMessage(error.response?.data?.message || 'Error logging in');
     }
   };
 
-
   return (
-      <View style={styles.overlay}>
-        <Text style={styles.title}>Iniciar Sesión</Text>
-        <Text style={styles.nameField}>Correo Electrónico</Text>
-        <TextInput
-          style={styles.input}
-          placeholderTextColor="#F4F6FC"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Text style={styles.nameField}>Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          placeholderTextColor="#F4F6FC"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+    <View style={styles.overlay}>
+      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.nameField}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#F4F6FC"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <Text style={styles.nameField}>Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#F4F6FC"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+      <View style={styles.linksContainer}>
+        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.linkText}>Don't have an account? Sign Up now</Text>
         </TouchableOpacity>
-        <View style={styles.linksContainer}>
-          <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.linkText}>¿No tienes una cuenta? Registrate ahora</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Welcome')}>
-            <Text style={styles.linkText}>Volver al menú</Text>
-          </TouchableOpacity>
-        </View>
-        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Welcome')}>
+          <Text style={styles.linkText}>Back to menu</Text>
+        </TouchableOpacity>
       </View>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+    </View>
   );
 };
 

@@ -17,12 +17,12 @@ const OptionScreen = () => {
                             color='#E53935'
                             size={24}
                         />
-                        <Text style={styles.iconText} onPress={() => navigation.navigate('Welcome')} >Activar más tarde</Text>
+                        <Text style={styles.iconText}>Back</Text>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.title}>Activa tu suscripción para disfrutar de todos los beneficios de nuestro sistema de seguridad avanzado. Monitorea y protege tu hogar con las últimas tecnologías en seguridad.</Text>
+                <Text style={styles.title}>Activate your subscription to enjoy all the benefits of our advanced security system. Monitor and protect your company with the latest security technologies.</Text>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Membership')}>
-                    <Text style={styles.buttonText}>Activar Suscripción</Text>
+                    <Text style={styles.buttonText}>Activate Subscription</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
         color: '#F4F6FC',
         textAlign: 'center',
         marginBottom: 50,
-        bottom: 35,
     },
     button: {
         backgroundColor: '#E53935',
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 10,
         marginVertical: 10,
-        width: 230,
+        width: 250,
         height: 55,
         alignItems: 'center',
     },

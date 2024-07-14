@@ -101,7 +101,8 @@ const tarjetaRFIDSchema = new Schema({
 const membresiaSchema = new Schema({
   cantidad: { type: Number, required: true }, // Numero de meses
   periodo: { type: [String], required: true }, // "Meses" o "Anual"
-  descripcion: { type: [String], required: true }
+  descripcion: { type: [String], required: true },
+  precio: { type: Number, required: true }
 });
 
 // Paquete Schema
