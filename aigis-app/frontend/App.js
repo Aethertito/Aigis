@@ -11,6 +11,7 @@ import PaquetesScreen from './screens/User/PaquetesScreen';
 import PayScreen from './screens/User/PayScreen';
 import MembershipScreen from './screens/User/MembershipScreen';
 import OptionScreen from './screens/User/OptionsScreen';
+import TotalScreen from './screens/User/TotalScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const App = () => {
         <Stack.Screen name="Pay" component={PayScreen} />
         <Stack.Screen name="Membership" component={MembershipScreen} />
         <Stack.Screen name="Options" component={OptionScreen} />
+        <Stack.Screen name="Total" component={TotalScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

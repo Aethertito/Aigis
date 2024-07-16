@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const PayScreen = () => {
     const navigation = useNavigation();
+    const route = useRoute();
     const [cardNumber, setCardNumber] = useState('');
     const [cardTitular, setCardTitular] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
 
+    const { selectedMembership, selectedPackage } = route.params;
+
     const handlePayment = () => {
-        console.log('Número de tarjeta:', cardNumber);
-        console.log('Titular de la tarjeta:', cardTitular);
-        console.log('Fecha de expiración:', expiryDate);
-        console.log('CVV:', cvv);
+        if (cardNumber && cardTitular && expiryDate && cvv) {
+            console.log('Número de tarjeta:', cardNumber);
+            console.log('Titular de la tarjeta:', cardTitular);
+            console.log('Fecha de expiración:', expiryDate);
+            console.log('CVV:', cvv);
+
+            navigation.navigate('Total', {
+                selectedMembership,
+                selectedPackage,
+                cardNumber,
+                cardTitular,
+                expiryDate,
+                cvv,
+            });
+        } else {
+            alert('Please fill in all card details');
+        }
     };
+    console.log('Datos recibidos en PayScreen:', route.params);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('Paquetes')} style={styles.iconContainer}>
+        <View style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.navigate('Total')} style={styles.iconContainer}>
                 <Icon
                     name='arrow-back-ios'
                     type='MaterialIcons'
@@ -83,13 +100,13 @@ const PayScreen = () => {
             <View style={styles.buttonContainer}>
                 <Button title="Pagar" onPress={handlePayment} color="#E53935" />
             </View>
-        </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
+        flex: 1,
         justifyContent: 'center',
         padding: 16,
         backgroundColor: '#424242',
@@ -109,9 +126,8 @@ const styles = StyleSheet.create({
         bottom: 50
     },
     image: {
-        width: 250, 
+        width: 250,
         height: 250,
-        alignSelf: 'center',
     },
     title: {
         fontSize: 28,
@@ -147,7 +163,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         left: "36%",
-        bottom: 50
+        bottom: 50  
     },
 });
 

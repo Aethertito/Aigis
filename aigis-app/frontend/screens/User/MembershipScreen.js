@@ -10,11 +10,15 @@ const MembershipScreen = () => {
     const [checked, setChecked] = useState('');
     const navigation = useNavigation();
 
+    useEffect(() => {
+        fetchMemberships();
+    }, []);
+
     const fetchMemberships = async () => {
         const url = `http://${IP}:3000/membership`;
         try {
             const response = await axios.get(url);
-            console.log(response.data.membresias);
+            // console.log(response.data.membresias);
             setMemberships(response.data.membresias);
         } catch (error) {
             console.error('Error getting memberships:', error);
@@ -22,9 +26,13 @@ const MembershipScreen = () => {
         }
     };
 
-    useEffect(() => {
-        fetchMemberships();
-    }, []);
+    const handleSelectMembership = (membershipId) => {
+        if (checked === membershipId) { //Funciona para seleccionar y deseleccionar 
+            setChecked(''); 
+        } else {
+            setChecked(membershipId);
+        }
+    };
 
     const handleConfirm = () => {
         if (!checked) {
@@ -32,8 +40,17 @@ const MembershipScreen = () => {
             return;
         }
 
-        console.log('Selected membership:', checked);
-        navigation.navigate('Paquetes', { membershipId: checked });
+        const selectedMembership = memberships.find(membership => membership._id === checked);
+        if (selectedMembership) {
+            console.log(`Membership: ${selectedMembership.cantidad} ${selectedMembership.periodo}`);
+            console.log(`Price: $${selectedMembership.costo}.00`);
+            navigation.navigate('Paquetes', {
+                membershipId: checked,
+                membershipData: selectedMembership //Pasar los datos de la membresía
+            });
+        } else {
+            Alert.alert('Error', 'Selected membership not found');
+        }
     };
 
     return (
@@ -55,11 +72,14 @@ const MembershipScreen = () => {
                 <TouchableOpacity
                     key={membership._id}
                     style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
-                    onPress={() => setChecked(membership._id)}
+                    onPress={() => handleSelectMembership(membership._id)}
                 >
                     <View>
                         <Text style={styles.title}>{membership.cantidad}</Text>
                         <Text style={styles.months}>{membership.periodo}</Text>
+                        <View style={styles.priceContainer}>
+                            <Text style={[styles.price, checked === membership._id && styles.selectedText]}>${membership.costo}.00</Text>
+                        </View>
                     </View>
                 </TouchableOpacity>
             ))}
@@ -85,7 +105,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     tituloMem: {
-        color: '#FFF',
+        color: '#F4F6FC',
         fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -114,8 +134,8 @@ const styles = StyleSheet.create({
     },
     selectedCard: {
         backgroundColor: '#E53935',
-        color: '#FFF',
-        borderColor: '#FFF',
+        color: '#F4F6FC',
+        borderColor: '#F4F6FC',
         borderWidth: 1,
         borderRadius: 20,
     },
@@ -131,6 +151,27 @@ const styles = StyleSheet.create({
         color: '#F4F6FC',
         textAlign: 'center',
     },
+    desc: {
+        fontSize: 16,
+        color: '#F4F6FC',
+        marginTop: 5,
+        textAlign: 'center',
+    },
+    priceContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    price: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#E53935',
+        textAlign: 'left',
+    },
+    selectedText: {
+        color: '#F4F6FC',
+    },
     confirmButton: {
         backgroundColor: '#E53935',
         paddingVertical: 12,
@@ -140,7 +181,7 @@ const styles = StyleSheet.create({
         width: '38%',
     },
     confirmButtonText: {
-        color: '#FFF',
+        color: '#F4F6FC',
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
