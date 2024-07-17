@@ -3,6 +3,6 @@ const router = express.Router();
 const PagoController = require('../controllers/pago.js');
 
 //Hacer pago
-router.post('/pago', PagoController.pago);
+router.post('/', PagoController.pago);
 
 module.exports = router;

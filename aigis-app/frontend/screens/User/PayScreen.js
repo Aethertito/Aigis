@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import React, { useState } from 'react';
+import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const PayScreen = () => {
     const navigation = useNavigation();
@@ -21,8 +21,10 @@ const PayScreen = () => {
                     selectedPackage
                 };
 
+                console.log(paymentData);
+
                 // URL de tu API para procesar el pago
-                const apiUrl = `http://${IP}:3000/pago`; 
+                const apiUrl = `http://${IP}:3000/pago`;
 
                 // Realizar la solicitud POST a la API con los datos mínimos necesarios
                 const response = await axios.post(apiUrl, paymentData);

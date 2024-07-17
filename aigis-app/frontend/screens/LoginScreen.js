@@ -45,9 +45,9 @@ const LoginScreen = ({ navigation }) => {
         if (userRole === 'administrador') {
           navigation.navigate('AdminStack');
         } else if (userRole === 'usuario' && !user.membresia) {
-          navigation.navigate('Options');
-        } else {
           navigation.navigate('UserStack');
+        } else {
+          navigation.navigate('Options');
         }
       } else {
         console.log('Error in login');
