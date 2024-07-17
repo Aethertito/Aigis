@@ -13,17 +13,15 @@ const Stack = createStackNavigator();
 
 const AdminTabs = () => (
   <Tab.Navigator>
-    <Tab.Screen name="Home" component={AdminHomeScreen} options={{ headerShown: false }}/>
-    <Tab.Screen name="ManageSensors" component={ManageSensorsScreen} options={{ headerShown: false }}  />
-    <Tab.Screen name="ManageUsers" component={ManageUsersScreen} options={{ headerShown: false }} />
+    <Tab.Screen name="Home" component={AdminHomeScreen} />
+    <Tab.Screen name="ManageSensors" component={ManageSensorsScreen} />
+    <Tab.Screen name="ManageUsers" component={ManageUsersScreen} />
   </Tab.Navigator>
 );
 
 const AdminDrawer = () => (
   <Drawer.Navigator>
-    <Drawer.Screen name="Home" component={AdminHomeScreen} />
-    <Drawer.Screen name="Manage Sensors" component={ManageSensorsScreen} />
-    <Drawer.Screen name="Manage Users" component={ManageUsersScreen} />
+    <Drawer.Screen name="Tabs" component={AdminTabs} />
   </Drawer.Navigator>
 );
 
@@ -31,7 +29,6 @@ const AdminStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="AdminDrawer" component={AdminDrawer} />
     <Stack.Screen name="AddNewSensor" component={AddNewSensorScreen} />
-    <Stack.Screen name="AdminHomeScreen" component={AdminHomeScreen} />
   </Stack.Navigator>
 );
 

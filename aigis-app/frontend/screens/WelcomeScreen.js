@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, Pressable } from 'react-native';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -23,7 +23,7 @@ const WelcomeScreen = ({ navigation }) => {
             ]} 
             onPress={() => navigation.navigate('Login')}
           >
-            <Text style={styles.buttonText}>Sign In</Text>
+            <Text style={styles.buttonText}>Login</Text>
           </Pressable>
           <Pressable 
             style={({ pressed }) => [
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#F4F6FC',
+    color: '#FFF',
     marginBottom: '5%', 
     fontFamily: 'Roboto',
     textAlign: 'center',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   buttonText: {
-    color: '#F4F6FC',
+    color: '#FFF',
     fontSize: 18,
   },
   loginButton: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonPressed: {
-    backgroundColor: '#C62828',
+    backgroundColor: '#D32F2F',
   },
 });
 

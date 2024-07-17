@@ -40,15 +40,9 @@ app.use(express.urlencoded({ extended: true }))
 // Cargar conf rutas
 const UsuarioRoutes = require('./routes/usuario.js')
 const SensorRoutes = require('./routes/sensor.js')
-const MembershipRoutes = require('./routes/membership.js')
-const PackageRoutes = require('./routes/package.js')
-const PagoRoutes = require('./routes/pago.js');
 
 app.use('/usuario', UsuarioRoutes)
 app.use('/sensor', SensorRoutes)
-app.use('/membership', MembershipRoutes)
-app.use('/packages', PackageRoutes)
-app.use('/pago', PagoRoutes);
 
 // Poner servidor a escuchar paticiones http
 app.listen(port, () => {

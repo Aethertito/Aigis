@@ -63,29 +63,21 @@ const AddNewSensorScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.overlay}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AdminHomeScreen')}>
-          <Text style={styles.addButtonText}>Regresar</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
       <Text style={styles.title}>Add New Sensor</Text>
-      <Text style={styles.nameField}>Tipo</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#aaa"
+        placeholder="Tipo"
         value={tipo}
         onChangeText={setTipo}
       />
-      <Text style={styles.nameField}>Precio</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#aaa"
+        placeholder="Precio"
         value={precio}
         onChangeText={setPrecio}
         keyboardType="numeric"
       />
-      <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Agregar Sensor</Text>
-      </TouchableOpacity>
       <TextInput
         style={styles.input}
         placeholder='Descripcion'
@@ -105,64 +97,24 @@ const AddNewSensorScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
+    padding: 16,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
-  },
-  nameField:{
-    color: '#FFF',
-    left: '3%',
-    alignSelf: 'flex-start',
-  },
-  overlay: {
-    width: '100%',
-    height: '100%',
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#424242',
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
     marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    width: '100%',
-    padding: 15,
-    color: '#FFF',
-    borderColor: '#E53935',
+    height: 40,
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 10,
-    marginBottom: 20,
-    backgroundColor: '#212121',
-  },
-  loginButton: {
-    backgroundColor: '#E53935',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  addButton: {
-    backgroundColor: '#E53935',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 6,
-  },
-  addButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 12,
   },
   imagePickerButton: {
     backgroundColor: '#007BFF',

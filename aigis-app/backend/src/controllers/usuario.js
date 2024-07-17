@@ -1,6 +1,12 @@
 // Importar model
 const { Usuario } = require('../models/model.js');
 
+// Acciones de prueba
+const pruebaUser = (req, res) => {
+    return res.status(200).send({
+        message: 'Mensaje enviado desde: controllers/user.js'
+    });
+};
 
 // Registrar usuarios
 const signup = async (req, res) => {
@@ -29,7 +35,7 @@ const signup = async (req, res) => {
                 status: "success",
                 message: "El correo ya esta en uso"
             });
-        }   
+        }
 
         // Guardar usuario en la BD
         const usuarioRegistrado = await usuario.save();
@@ -81,7 +87,7 @@ const login = async (req, res) => {
         
         req.userId = userIdString;
         // Devolver respuesta exitosa
-        return res.status(200).json({ status: "success", message: "Acción de login", user, _id});
+        return res.status(200).json({ status: "success", message: "Acción de login", user});
 
     } catch (error) {
         return res.status(500).json({
@@ -92,52 +98,10 @@ const login = async (req, res) => {
     }
 };
 
-const getUsuario = async (req,res) => {
-    const userId = req.params.userId
-
-    try {
-        const user = await Usuario.findById(userId)
-
-        if(!user){
-            return res.status(404).json({message: 'Usuario no encontrado'})
-        }
-
-        res.status(200).json(user)
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message: 'Erro del servidor'})
-    }
-}
-
-const updateUsuario = async (req, res) => {
-    const userId = req.params.userId;
-    const updates = req.body;
-    try {
-        const user = await Usuario.findById(userId);
-        if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-      // Actualizar solo los campos que están presentes en el cuerpo de la solicitud
-        Object.keys(updates).forEach(key => {
-        if (updates[key] !== undefined && updates[key] !== null && updates[key] !== '') {
-            user[key] = updates[key];
-        }
-    });
-
-        await user.save();
-
-    res.status(200).json(user);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error del servidor' });
-    }
-};
-
 
 // Exportar acciones
 module.exports = {
+    pruebaUser,
     signup,
-    login,
-    getUsuario,
-    updateUsuario
+    login
 };
