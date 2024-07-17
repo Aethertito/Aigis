@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginTop: 60,
-        right: 40,
+        right: 35
     },
     iconContainer: {
         flexDirection: 'row',
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     iconText: {
         color: '#E53935',
         fontSize: 16,
-        marginLeft: 1,
     },
     cardContainer: {
         backgroundColor: '#212121',

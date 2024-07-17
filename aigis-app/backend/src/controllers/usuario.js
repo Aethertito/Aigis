@@ -29,7 +29,7 @@ const signup = async (req, res) => {
                 status: "success",
                 message: "El correo ya esta en uso"
             });
-        }
+        }   
 
         // Guardar usuario en la BD
         const usuarioRegistrado = await usuario.save();

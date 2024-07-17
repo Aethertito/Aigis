@@ -11,7 +11,11 @@ const usuarioSchema = new Schema({
   telefono: { type: String },
   giro: { type: String },
   sensores: [{ type: Schema.Types.ObjectId, ref: 'Sensor' }],
-  membresia: { type: Boolean }
+  membresia: { type: Schema.Types.ObjectId, ref: 'Membresia' },
+  paquete: { type: Schema.Types.ObjectId, ref: 'Paquete' },
+  memActiva: { type: Boolean, default: false },
+  memFechaInicio: { type: Date },
+  memFechaFin: { type: Date }
 });
 
 // Sensor Schema
@@ -42,11 +46,15 @@ const citaSchema = new Schema({
 // Pago Schema
 const pagoSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
+  membresia_id: { type: Schema.Types.ObjectId, ref: 'Membresia' },
+  paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' },
   monto: { type: Number },
-  fecha: { type: Date },
+  fecha: { type: Date, default: Date.now },
   metodo_pago: { type: String },
-  estado: { type: String, enum: ['completado', 'pendiente', 'fallido'] }
+  estado: { type: String, enum: ['completado', 'pendiente', 'fallido'], default: 'pendiente' }
 });
+
+
 
 // Notificacion Schema
 const notificacionSchema = new Schema({

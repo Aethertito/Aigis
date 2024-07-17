@@ -10,7 +10,7 @@ const getPackage = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: "error",
-            message: "Error al obtener los sensores",
+            message: "Error packages",
             error: error.message
         })
     }

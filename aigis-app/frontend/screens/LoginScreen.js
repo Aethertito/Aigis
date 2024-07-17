@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
         if (userRole === 'administrador') {
           navigation.navigate('AdminStack');
         } else if (userRole === 'usuario' && !user.membresia) {
-          navigation.navigate('Paquetes');
+          navigation.navigate('Options');
         } else {
           navigation.navigate('UserStack');
         }

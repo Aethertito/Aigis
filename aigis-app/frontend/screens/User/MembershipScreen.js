@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -27,8 +27,8 @@ const MembershipScreen = () => {
     };
 
     const handleSelectMembership = (membershipId) => {
-        if (checked === membershipId) { //Funciona para seleccionar y deseleccionar 
-            setChecked(''); 
+        if (checked === membershipId) {
+            setChecked('');
         } else {
             setChecked(membershipId);
         }
@@ -46,7 +46,7 @@ const MembershipScreen = () => {
             console.log(`Price: $${selectedMembership.costo}.00`);
             navigation.navigate('Paquetes', {
                 membershipId: checked,
-                membershipData: selectedMembership //Pasar los datos de la membresía
+                membershipData: selectedMembership
             });
         } else {
             Alert.alert('Error', 'Selected membership not found');
@@ -54,7 +54,7 @@ const MembershipScreen = () => {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Options')} style={styles.iconContainer}>
                     <Icon
@@ -87,7 +87,7 @@ const MembershipScreen = () => {
             <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
                 <Text style={styles.confirmButtonText}>CONFIRM</Text>
             </TouchableOpacity>
-        </ScrollView>
+        </View>
     );
 };
 

@@ -10,7 +10,7 @@ const getMembership = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: "error",
-            message: "Error al obtener los sensores",
+            message: "Error membership",
             error: error.message
         })
     }

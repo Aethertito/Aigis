@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
-const TotalScreen = ({ route, navigation }) => {
-  const { selectedPackageData, membershipId, membershipData } = route.params;
+const TotalScreen = ({ route }) => {
+  const navigation = useNavigation();
+  const { selectedPackageData, membershipData } = route.params;
 
   useEffect(() => {
-    console.log('Datos recibidos en TotalScreen:', route.params); // Verificar si se recibieron los datos
+    console.log('Datos recibidos en TotalScreen:', route.params);
   }, []);
 
   if (!selectedPackageData || !membershipData) {
     return (
       <View style={styles.container}>
-        <Text style={styles.errorText}>Error: Data not found</Text>
+        <Text style={styles.errorText}>Error: Datos no encontrados</Text>
       </View>
     );
   }
 
-  const totalCost = selectedPackageData.costo + membershipData.costo; // Sumar ambos precios
+  const totalCost = selectedPackageData.costo + membershipData.costo;
 
   const handleConfirm = () => {
     navigation.navigate('Pay', {
@@ -28,15 +31,35 @@ const TotalScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Selected Package:</Text>
-      <Text style={styles.packageName}>{selectedPackageData.paquete}</Text>
-      <View style={styles.priceContainer}>
-        <Text style={styles.price}>Package Cost: ${selectedPackageData.costo}.00</Text>
-        <Text style={styles.price}>Membership Cost: ${membershipData.costo}.00</Text>
-        <Text style={styles.total}>Total Amount: ${totalCost}.00</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
+        <Icon
+          name='arrow-back-ios'
+          type='MaterialIcons'
+          color='#E53935'
+          size={24}
+        />
+        <Text style={styles.iconText}>Volver</Text>
+      </TouchableOpacity>
+      <View style={styles.infoContainer}>
+        <View style={styles.row}>
+          <Text style={styles.label}>Paquete:</Text>
+          <Text style={styles.value}>{selectedPackageData.paquete}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Costo del Paquete:</Text>
+          <Text style={styles.value}>${selectedPackageData.costo}.00</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Costo de Membresía:</Text>
+          <Text style={styles.value}>${membershipData.costo}.00</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.labelTotal}>Monto Total:</Text>
+          <Text style={styles.valueTotal}>${totalCost}.00</Text>
+        </View>
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleConfirm}>
-        <Text style={styles.button}>Confirm and Pay</Text>
+        <Text style={styles.button}>Confirmar y Pagar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -47,38 +70,50 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#424242',
     padding: 20,
+    backgroundColor: '#424242',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#F4F6FC',
-    marginBottom: 10,
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 45,
+    left: 20,
   },
-  packageName: {
-    fontSize: 20,
-    color: '#F4F6FC',
-    marginBottom: 5,
-  },
-  priceContainer: {
-    marginTop: 20,
-    width: '100%',
-  },
-  price: {
-    fontSize: 18,
-    color: '#F4F6FC',
-    marginBottom: 5,
-  },
-  total: {
-    fontSize: 20,
+  iconText: {
     color: '#E53935',
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  errorText: {
     fontSize: 18,
-    color: 'red',
+  },
+  infoContainer: {
+    borderWidth: 2,
+    borderColor: '#E53935',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F4F6FC',
+    width: '90%',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  label: {
+    fontSize: 18,
+    color: '#424242',
+  },
+  value: {
+    fontSize: 18,
+    color: '#424242',
+  },
+  labelTotal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#424242',
+  },
+  valueTotal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#E53935',
   },
   buttonContainer: {
     marginTop: 20,
@@ -86,11 +121,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
+    alignItems: 'center',
   },
   button: {
     color: '#F4F6FC',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
     textAlign: 'center',
   },
 });

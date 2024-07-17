@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 const PayScreen = () => {
     const navigation = useNavigation();
@@ -10,33 +11,47 @@ const PayScreen = () => {
     const [cardTitular, setCardTitular] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
-
     const { selectedMembership, selectedPackage } = route.params;
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (cardNumber && cardTitular && expiryDate && cvv) {
-            console.log('Número de tarjeta:', cardNumber);
-            console.log('Titular de la tarjeta:', cardTitular);
-            console.log('Fecha de expiración:', expiryDate);
-            console.log('CVV:', cvv);
+            try {
+                const paymentData = {
+                    selectedMembership,
+                    selectedPackage
+                };
 
-            navigation.navigate('Total', {
-                selectedMembership,
-                selectedPackage,
-                cardNumber,
-                cardTitular,
-                expiryDate,
-                cvv,
-            });
+                // URL de tu API para procesar el pago
+                const apiUrl = `http://${IP}:3000/pago`; 
+
+                // Realizar la solicitud POST a la API con los datos mínimos necesarios
+                const response = await axios.post(apiUrl, paymentData);
+
+                // Limpiar los datos sensibles después del pago
+                setCardNumber('');
+                setCardTitular('');
+                setExpiryDate('');
+                setCvv('');
+
+                // Si la respuesta es exitosa, navegar a la pantalla de bienvenida
+                navigation.navigate('Welcome', {
+                    selectedPackageData: selectedPackage,
+                    membershipData: selectedMembership,
+                });
+
+                console.log('Respuesta de la API:', response.data);
+            } catch (error) {
+                console.error('Error al procesar el pago:', error);
+                alert('Ocurrió un error al procesar el pago. Por favor, intenta nuevamente.');
+            }
         } else {
-            alert('Please fill in all card details');
+            alert('Por favor completa todos los detalles de la tarjeta');
         }
     };
-    console.log('Datos recibidos en PayScreen:', route.params);
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('Total')} style={styles.iconContainer}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
                 <Icon
                     name='arrow-back-ios'
                     type='MaterialIcons'
@@ -114,7 +129,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        bottom: 70
+        marginBottom: 20,
     },
     iconText: {
         color: '#E53935',
@@ -123,7 +138,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         alignItems: 'center',
-        bottom: 50
+        marginBottom: 50,
     },
     image: {
         width: 250,
@@ -135,11 +150,9 @@ const styles = StyleSheet.create({
         color: '#F4F6FC',
         alignSelf: 'center',
         marginBottom: 24,
-        bottom: 40
     },
     inputContainer: {
         marginBottom: 16,
-        bottom: 40
     },
     rowContainer: {
         flexDirection: 'row',
@@ -158,12 +171,10 @@ const styles = StyleSheet.create({
         padding: 12,
         fontSize: 16,
         backgroundColor: '#212121',
+        color: '#F4F6FC',
     },
     buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        left: "36%",
-        bottom: 50  
+        marginTop: 20,
     },
 });
 
