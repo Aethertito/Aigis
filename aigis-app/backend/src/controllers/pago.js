@@ -1,5 +1,4 @@
-const { Pago } = require('../models/model.js');
-const { Usuario } = require('../models/model.js');
+const { Pago, Usuario } = require('../models/model.js');
 
 async function pago(req, res) {
     const { usuarioId, membresiaId, paqueteId, monto, metodoPago } = req.body;
@@ -29,7 +28,6 @@ async function pago(req, res) {
 
         // Establecer la membresía como activa
         usuario.membresia_activa = true;
-
 
         const fechaInicio = new Date();
         const fechaFin = new Date();

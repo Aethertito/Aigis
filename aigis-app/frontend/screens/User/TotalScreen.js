@@ -8,7 +8,7 @@ const TotalScreen = ({ route }) => {
   const { selectedPackageData, membershipData } = route.params;
 
   useEffect(() => {
-    console.log('Datos recibidos en TotalScreen:', route.params);
+    // console.log('Datos recibidos en TotalScreen:', route.params);
   }, []);
 
   if (!selectedPackageData || !membershipData) {

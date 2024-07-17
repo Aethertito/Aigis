@@ -14,7 +14,7 @@ const PaquetesScreen = () => {
     const [selectedPackage, setSelectedPackage] = useState(null);
 
     useEffect(() => {
-        console.log('Membership Data:', membershipData);
+        // console.log('Membership Data:', membershipData);
         fetchPackages();
     }, []);
 
@@ -44,11 +44,11 @@ const PaquetesScreen = () => {
                 costo: packages[selectedPackage].precio,
             };
             const totalAmount = packages[selectedPackage].precio;
-            console.log('Datos enviados a TotalScreen:', {
-                selectedPackageData,
-                totalAmount,
-                membershipData
-            });
+            // console.log('Datos enviados a TotalScreen:', {
+            //     selectedPackageData,
+            //     totalAmount,
+            //     membershipData
+            // });
             navigation.navigate('Total', {
                 selectedPackageData,
                 totalAmount,
