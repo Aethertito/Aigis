@@ -20,12 +20,12 @@ const SignupScreen = ({ navigation }) => {
       const url = `http://${IP}:3000/usuario/signup`;
       const response = await axios.post(url, data);
       if (response.status === 200) {
-        Alert.alert('Signup', 'Registro completado');
-        navigation.navigate('Welcome');
+        Alert.alert('Signup', 'Registration completed');
+        navigation.navigate('Options');
       }
     } catch (error) {
-      console.log('Error en try catch: ', error);
-      setErrorMessage(error.response?.data?.message || "Algo salió mal con tu registro");
+      console.log('Error in try catch: ', error);
+      setErrorMessage(error.response?.data?.message || "Something went wrong with your registration");
     }
 
     console.log(data);
@@ -34,10 +34,10 @@ const SignupScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-      <Text style={styles.nameField}>Company</Text>
+      <Text style={styles.nameField}>Company Name</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={nombre}
         onChangeText={setNombre}
@@ -45,36 +45,36 @@ const SignupScreen = ({ navigation }) => {
       <Text style={styles.nameField}>Address</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={direccion}
         onChangeText={setDireccion}
       />
-      <Text style={styles.nameField}>Phone Number</Text>
+      <Text style={styles.nameField}>Contact Phone Number</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         keyboardType='numeric'
         value={telefono}
         onChangeText={setTelefono}
       />
-      <Text style={styles.nameField}>Type of Company</Text>
+      <Text style={styles.nameField}>Type of Business</Text>
       <RNPickerSelect
         onValueChange={(value) => setGiro(value)}
         items={[
-          { label: 'Industry', value: 'Industry' },
-          { label: 'Medicine', value: 'Medicine' },
-          { label: 'House', value: 'House' },
-          { label: 'Market', value: 'Market' },
+          { label: 'Industrial', value: 'Industrial' },
+          { label: 'Medical', value: 'Medical' },
+          { label: 'Warehouses', value: 'Warehouses' },
+          { label: 'Technology', value: 'Technology' },
         ]}
         style={pickerSelectStyles}
-        placeholder={{ label: 'Select a type of company', value: null }}
+        placeholder={{ label: 'Select type of business', value: null }}
       />
       <Text style={styles.nameField}>Email</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         keyboardType="email-address"
         autoCapitalize="none"
         value={correo}
@@ -83,23 +83,23 @@ const SignupScreen = ({ navigation }) => {
       <Text style={styles.nameField}>Create Password</Text>
       <TextInput
         style={styles.input}
-        placeholderTextColor="#FFF"
+        placeholderTextColor="#F4F6FC"
         secureTextEntry
         value={contrasena}
         onChangeText={setContrasena}
       />
       <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginRedirect}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.loginText}>Already have an account? Login</Text>
+        <Text style={styles.loginText}>Already have an account? Sign In</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      <TouchableOpacity 
         style={styles.backToWelcome}
-        onPress={() => navigation.navigate('VSAT App')}>
-        <Text style={styles.backToWelcomeText}>Back to Welcome</Text>
+        onPress={() => navigation.navigate('Welcome')}>
+        <Text style={styles.backToWelcomeText}>Back to menu</Text>
       </TouchableOpacity>
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </ScrollView>
@@ -115,20 +115,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   nameField: {
-    color: '#FFF',
+    color: '#F4F6FC',
     left: '3%',
     alignSelf: 'flex-start',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#F4F6FC',
     marginBottom: 20,
   },
   input: {
     width: '100%',
     padding: 15,
-    color: '#FFF',
+    color: '#F4F6FC',
     borderColor: '#E53935',
     borderWidth: 2,
     borderRadius: 5,
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   errorText: {
-    color: 'white',
-    backgroundColor: 'red',
+    color: '#F4F6FC',
+    backgroundColor: '#B71C1C',
     marginTop: 10,
     padding: 4,
     borderRadius: 4,
