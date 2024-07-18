@@ -14,7 +14,7 @@ const SignupScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignup = async () => {
-    const data = { nombre, correo, contrasena, direccion, telefono, giro, rol: 'usuario', membresia: false };
+    const data = { nombre, correo, contrasena, direccion, telefono, giro, rol: 'usuario', memActiva: false };
 
     try {
       const url = `http://${IP}:3000/usuario/signup`;

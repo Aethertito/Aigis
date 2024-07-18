@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IP from '../../IP';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const MembershipScreen = () => {
     const [memberships, setMemberships] = useState([]);
@@ -54,6 +55,8 @@ const MembershipScreen = () => {
     };
 
     return (
+        <ScrollView>
+
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Options')} style={styles.iconContainer}>
@@ -62,7 +65,7 @@ const MembershipScreen = () => {
                         type='MaterialIcons'
                         color='#E53935'
                         size={24}
-                    />
+                        />
                     <Text style={styles.iconText}>Back</Text>
                 </TouchableOpacity>
                 <Text style={styles.tituloMem}>Select Membership Duration</Text>
@@ -70,9 +73,9 @@ const MembershipScreen = () => {
 
             {memberships.map((membership) => (
                 <TouchableOpacity
-                    key={membership._id}
-                    style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
-                    onPress={() => handleSelectMembership(membership._id)}
+                key={membership._id}
+                style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
+                onPress={() => handleSelectMembership(membership._id)}
                 >
                     <View>
                         <Text style={styles.title}>{membership.cantidad}</Text>
@@ -88,6 +91,7 @@ const MembershipScreen = () => {
                 <Text style={styles.confirmButtonText}>CONFIRM</Text>
             </TouchableOpacity>
         </View>
+            </ScrollView>
     );
 };
 

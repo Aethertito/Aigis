@@ -1,40 +1,41 @@
-const { Pago, Usuario } = require('../models/model.js');
+const { Pago } = require('../models/model.js');
+const { Usuario } = require('../models/model.js');
 
 async function pago(req, res) {
-    const { usuarioId, membresiaId, paqueteId, monto, metodoPago } = req.body;
+    const { usuario_id, membresia_id, paquete_id, monto, metodo_pago, estado } = req.body;
 
     try {
         const pago = new Pago({
-            usuario_id: usuarioId,
-            membresia_id: membresiaId,
-            paquete_id: paqueteId,
-            monto: monto,
-            fecha: new Date(),
-            metodo_pago: metodoPago,
-            estado: 'completado' // Estado completado
+            usuario_id,
+            membresia_id,
+            paquete_id,
+            monto,
+            metodo_pago,
+            estado
         });
 
         await pago.save();
 
         // Actualizar el usuario con la membresía y paquete seleccionados
-        const usuario = await Usuario.findById(usuarioId);
+        const usuario = await Usuario.findById(usuario_id);
         if (!usuario) {
             return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
         }
 
         // Actualizar datos de membresía y paquete
-        usuario.membresia = membresiaId;
-        usuario.paquete = paqueteId;
+        usuario.membresia = membresia_id;
+        usuario.paquete = paquete_id;
 
         // Establecer la membresía como activa
-        usuario.membresia_activa = true;
+        usuario.memActiva = true;
+
 
         const fechaInicio = new Date();
         const fechaFin = new Date();
         fechaFin.setMonth(fechaFin.getMonth() + 1); 
 
-        usuario.fecha_inicio_membresia = fechaInicio;
-        usuario.fecha_fin_membresia = fechaFin;
+        usuario.memFechaInicio = fechaInicio;
+        usuario.memFechaFin = fechaFin;
 
         await usuario.save();
 

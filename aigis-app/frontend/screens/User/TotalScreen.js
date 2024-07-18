@@ -8,7 +8,7 @@ const TotalScreen = ({ route }) => {
   const { selectedPackageData, membershipData } = route.params;
 
   useEffect(() => {
-    // console.log('Datos recibidos en TotalScreen:', route.params);
+    console.log('Datos recibidos en TotalScreen:', route.params);
   }, []);
 
   if (!selectedPackageData || !membershipData) {
@@ -21,7 +21,9 @@ const TotalScreen = ({ route }) => {
 
   const totalCost = selectedPackageData.costo + membershipData.costo;
 
-  const handleConfirm = () => {
+
+  const handleConfirm = async () => {
+
     navigation.navigate('Pay', {
       totalCost: totalCost,
       selectedPackageData: selectedPackageData,

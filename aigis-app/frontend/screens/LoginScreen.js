@@ -44,10 +44,10 @@ const LoginScreen = ({ navigation }) => {
         // Redirect based on user role
         if (userRole === 'administrador') {
           navigation.navigate('AdminStack');
-        } else if (userRole === 'usuario' && !user.memActiva) {
-          navigation.navigate('Options');
-        } else {
+        } else if (userRole === 'usuario' && user.memActiva) {
           navigation.navigate('UserStack');
+        } else {
+          navigation.navigate('Options');
         }
       } else {
         console.log('Error in login');
