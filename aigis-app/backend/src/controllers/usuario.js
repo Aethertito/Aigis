@@ -1,12 +1,6 @@
 // Importar model
 const { Usuario } = require('../models/model.js');
 
-// Acciones de prueba
-const pruebaUser = (req, res) => {
-    return res.status(200).send({
-        message: 'Mensaje enviado desde: controllers/user.js'
-    });
-};
 
 // Registrar usuarios
 const signup = async (req, res) => {
@@ -35,7 +29,7 @@ const signup = async (req, res) => {
                 status: "success",
                 message: "El correo ya esta en uso"
             });
-        }
+        }   
 
         // Guardar usuario en la BD
         const usuarioRegistrado = await usuario.save();
@@ -145,7 +139,6 @@ const updateUsuario = async (req, res) => {
 
 // Exportar acciones
 module.exports = {
-    pruebaUser,
     signup,
     login,
     getUsuario,
