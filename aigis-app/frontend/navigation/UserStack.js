@@ -6,6 +6,7 @@ import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import OrdersScreen from '../screens/User/OrdersScreen';
 import EditProfileScreen from '../screens/User/EditProfileScreen';
 import CamerasScreen from '../screens/User/CamerasScreen';
+import AppointmentScreen from '../screens/User/AppointmentScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -17,6 +18,7 @@ const UserDrawer = () => (
     <Drawer.Screen name="Orders" component={OrdersScreen} />
     <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
     <Drawer.Screen name="Cameras" component={CamerasScreen} />
+    <Drawer.Screen name="Appointment" component={AppointmentScreen} />
   </Drawer.Navigator>
 );
 

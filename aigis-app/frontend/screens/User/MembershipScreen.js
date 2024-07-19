@@ -55,9 +55,7 @@ const MembershipScreen = () => {
     };
 
     return (
-        <ScrollView>
-
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Options')} style={styles.iconContainer}>
                     <Icon
@@ -90,8 +88,7 @@ const MembershipScreen = () => {
             <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
                 <Text style={styles.confirmButtonText}>CONFIRM</Text>
             </TouchableOpacity>
-        </View>
-            </ScrollView>
+        </ScrollView>
     );
 };
 
