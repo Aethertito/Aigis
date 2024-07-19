@@ -43,12 +43,14 @@ const SensorRoutes = require('./routes/sensor.js')
 const MembershipRoutes = require('./routes/membership.js')
 const PackageRoutes = require('./routes/package.js')
 const PagoRoutes = require('./routes/pago.js');
+const CitaRoutes = require('./routes/citas.js')
 
 app.use('/usuario', UsuarioRoutes)
 app.use('/sensor', SensorRoutes)
 app.use('/membership', MembershipRoutes)
 app.use('/packages', PackageRoutes)
 app.use('/pago', PagoRoutes);
+app.use('/cita', CitaRoutes);
 
 // Poner servidor a escuchar paticiones http
 app.listen(port, () => {
