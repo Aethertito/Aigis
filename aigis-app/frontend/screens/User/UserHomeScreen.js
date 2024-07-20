@@ -1,32 +1,34 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 const UserHomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Welcome to Your Dashboard</Text>
       <Text style={styles.subtitle}>Monitor your sensors and manage your profile</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewSensorsScreen')}>
-          <Text style={styles.buttonText}>View Sensors</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrdersScreen')}>
-          <Text style={styles.buttonText}>View Orders</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EditProfileScreen')}>
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CamerasScreen')}>
-          <Text style={styles.buttonText}>View Cameras</Text>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Promote Your Business</Text>
+        <Text style={styles.sectionText}>Discover how our solutions can help grow your business and manage your resources efficiently.</Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Explore Our Packages</Text>
+        <Text style={styles.sectionText}>Check out the benefits of our packages:</Text>
+        <Text style={styles.sectionText}>- Comprehensive sensor management</Text>
+        <Text style={styles.sectionText}>- Customizable options</Text>
+        <Text style={styles.sectionText}>- Competitive pricing</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Paquetes')}>
+          <Text style={styles.buttonText}>View Packages</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f8f8f8',
@@ -49,6 +51,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
+    marginBottom: 20,
   },
   button: {
     backgroundColor: '#3498db',
@@ -62,6 +65,27 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  section: {
+    width: '100%',
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  sectionText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 10,
   },
 });
 
