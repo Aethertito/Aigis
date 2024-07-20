@@ -4,17 +4,18 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IP from '../../IP';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PaquetesScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { membershipId, membershipData } = route.params; 
+    const { membershipId, membershipData } = route.params;
 
     const [packages, setPackages] = useState([]);
     const [selectedPackage, setSelectedPackage] = useState(null);
 
     useEffect(() => {
-        // console.log('Membership Data:', membershipData);
+        console.log('Membership Data:', membershipData, membershipId);
         fetchPackages();
     }, []);
 
@@ -37,18 +38,23 @@ const PaquetesScreen = () => {
         }
     };
 
-    const handleConfirmPackage = () => {
+    const handleConfirmPackage = async () => {
         if (selectedPackage !== null) {
             const selectedPackageData = {
+                id: packages[selectedPackage]._id,
                 paquete: packages[selectedPackage].paquete,
                 costo: packages[selectedPackage].precio,
             };
+            // Save user id in AsyncStorage
+            await AsyncStorage.setItem('membresiaId', membershipId)
+            await AsyncStorage.setItem('packageId', selectedPackageData.id)
+
             const totalAmount = packages[selectedPackage].precio;
-            // console.log('Datos enviados a TotalScreen:', {
-            //     selectedPackageData,
-            //     totalAmount,
-            //     membershipData
-            // });
+            console.log('Datos enviados a TotalScreen:', {
+                selectedPackageData,
+                totalAmount,
+                membershipData
+            });
             navigation.navigate('Total', {
                 selectedPackageData,
                 totalAmount,
@@ -60,7 +66,7 @@ const PaquetesScreen = () => {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Membership')} style={styles.iconContainer}>
                     <Icon
@@ -74,44 +80,38 @@ const PaquetesScreen = () => {
                 <Text style={styles.tituloMem}>Select a package</Text>
             </View>
 
-            {packages.map((paquete, index) => (
-                <TouchableOpacity
-                    key={paquete._id}
-                    style={[styles.cardContainer, selectedPackage === index && styles.selectedCard]}
-                    onPress={() => handleSelectPackage(index)}
-                >
-                    <View>
-                        <Text style={styles.title}>{paquete.paquete}</Text>
-                        <Text style={styles.desc}>{paquete.descripcion}</Text>
-                        <Text style={styles.contText}>Contains:</Text>
-                        {typeof paquete.contenido === 'string' && paquete.contenido.trim() !== '' ? (
-                            paquete.contenido.split(',').map((item, idx) => (
-                                <Text key={idx} style={styles.infoItem}>
-                                    - {item.trim()}
-                                </Text>
-                            ))
-                        ) : (
-                            <Text style={styles.infoItem}>- Not specified</Text>
-                        )}
-                        <View style={styles.priceContainer}>
-                            <Text style={styles.textPrice}>Cost:</Text>
-                            <Text style={[styles.price, selectedPackage === index && { color: '#FFFFFF' }]}>${paquete.precio}.00</Text>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                {packages.map((paquete, index) => (
+                    <TouchableOpacity
+                        key={paquete._id}
+                        style={[styles.cardContainer, selectedPackage === index && styles.selectedCard]}
+                        onPress={() => handleSelectPackage(index)}
+                    >
+                        <View>
+                            <Text style={styles.title}>{paquete.paquete}</Text>
+                            <Text style={styles.desc}>{paquete.descripcion}</Text>
+                            <Text style={styles.contText}>Contains:</Text>
+                            {paquete.contenido.map((sensor, sensorIndex) => (
+                                <Text key={sensorIndex} style={styles.contText}>{sensor}</Text>
+                            ))}
+                            <View style={styles.priceContainer}>
+                                <Text style={styles.textPrice}>Cost:</Text>
+                                <Text style={[styles.price, selectedPackage === index && { color: '#FFFFFF' }]}>${paquete.precio}.00</Text>
+                            </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
+                ))}
+                <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPackage}>
+                    <Text style={styles.confirmButtonText}>CONFIRM PACKAGE</Text>
                 </TouchableOpacity>
-            ))}
-
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPackage}>
-                <Text style={styles.confirmButtonText}>CONFIRM PACKAGE</Text>
-            </TouchableOpacity>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         backgroundColor: '#424242',
     },
     header: {
@@ -139,6 +139,9 @@ const styles = StyleSheet.create({
     iconText: {
         color: '#E53935',
         fontSize: 16,
+    },
+    scrollViewContent: {
+        paddingHorizontal: 10,
     },
     cardContainer: {
         backgroundColor: '#212121',
@@ -184,11 +187,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#F4F6FC',
         marginTop: 10,
-    },
-    infoItem: {
-        fontSize: 16,
-        color: '#F4F6FC',
-        marginLeft: 15,
     },
     confirmButton: {
         backgroundColor: '#E53935',
