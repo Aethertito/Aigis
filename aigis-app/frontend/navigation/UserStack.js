@@ -1,18 +1,19 @@
-import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import AppointmentScreen from '../screens/User/AppointmentScreen';
+import CamerasScreen from '../screens/User/CamerasScreen';
+import EditProfileScreen from '../screens/User/EditProfileScreen';
+import OrdersScreen from '../screens/User/OrdersScreen';
 import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
-import OrdersScreen from '../screens/User/OrdersScreen';
-import EditProfileScreen from '../screens/User/EditProfileScreen';
-import CamerasScreen from '../screens/User/CamerasScreen';
-import AppointmentScreen from '../screens/User/AppointmentScreen';
+import DrawerUserContent from './DrawerUserStyle';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const UserDrawer = () => (
-  <Drawer.Navigator>
+  <Drawer.Navigator drawerUserContent={props => <DrawerUserContent {...props} />}>
     <Drawer.Screen name="Home" component={UserHomeScreen} />
     <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
     <Drawer.Screen name="Orders" component={OrdersScreen} />

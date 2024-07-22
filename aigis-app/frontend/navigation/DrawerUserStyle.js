@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, Title, Caption, Drawer } from 'react-native-paper';
+import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export function DrawerContent(props) {
+export function DrawerUserContent(props) {
     const [activeItem, setActiveItem] = useState('');
 
     return (
@@ -58,8 +58,8 @@ export function DrawerContent(props) {
                     label="Logout"
                     labelStyle={styles.label}
                     onPress={() => {
-                        // Implementar lógica para cerrar sesión aquí
-                        props.navigation.navigate('Welcome'); // Cambia 'Welcome' al nombre de la pantalla a la que deseas navegar después de cerrar sesión
+                        //Algo para cerrar sesion
+                        props.navigation.navigate('Welcome');
                         console.log('Logout pressed');
                     }}
                     style={styles.logoutItem}
@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DrawerContent;
+export default DrawerUserContent;
