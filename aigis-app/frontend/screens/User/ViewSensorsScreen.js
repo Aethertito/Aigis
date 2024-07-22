@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View} from 'react-native';
+import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import IP from '../../IP.js';
@@ -13,7 +13,9 @@ const ViewSensorsScreen = () => {
     const url = `http://${IP}:3000/sensor/`;
     try {
       const response = await axios.get(url);
-      console.log(response.data.sensores); // Verifica la estructura de los datos
+      //console.log(response.data.sensores); // Verifica la estructura de los datos
+
+
       setData(response.data.sensores); // Asegúrate de que response.data es un array
     } catch (error) {
       console.error(error);
@@ -29,9 +31,9 @@ const ViewSensorsScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-        <CardList sensores={data} fetchSensores={fetchData} loading={loading} />
+      <CardList sensores={data} fetchSensores={fetchData} loading={loading} />
     </View>
-);
+  );
 
 };
 
