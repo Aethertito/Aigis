@@ -1,56 +1,40 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-
-const sensors = [
-  { id: '1', name: 'Sensor 1', price: '$50' },
-  { id: '2', name: 'Sensor 2', price: '$60' },
-  // Agrega más sensores según sea necesario
-];
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
+import IP from '../../IP.js';
+import CardList from '../../components/CardList.js';
 
 const ViewSensorsScreen = () => {
-  const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.details}>Price: {item.price}</Text>
-    </View>
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    const url = `http://${IP}:3000/sensor/`;
+    try {
+      const response = await axios.get(url);
+      //console.log(response.data.sensores); // Verifica la estructura de los datos
+
+
+      setData(response.data.sensores); // Asegúrate de que response.data es un array
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
   );
+
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>View Sensors</Text>
-      <FlatList
-        data={sensors}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+    <View style={{ flex: 1 }}>
+      <CardList sensores={data} fetchSensores={fetchData} loading={loading} />
     </View>
   );
-};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  item: {
-    padding: 16,
-    marginVertical: 8,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  details: {
-    fontSize: 16,
-  },
-});
+};
 
 export default ViewSensorsScreen;

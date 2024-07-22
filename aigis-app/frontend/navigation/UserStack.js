@@ -1,30 +1,25 @@
-import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import AppointmentScreen from '../screens/User/AppointmentScreen';
+import CamerasScreen from '../screens/User/CamerasScreen';
+import EditProfileScreen from '../screens/User/EditProfileScreen';
+import OrdersScreen from '../screens/User/OrdersScreen';
 import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
-import OrdersScreen from '../screens/User/OrdersScreen';
-import EditProfileScreen from '../screens/User/EditProfileScreen';
-import CamerasScreen from '../screens/User/CamerasScreen';
+import DrawerUserContent from './DrawerUserStyle';
 
 const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const UserTabs = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="Home" component={UserHomeScreen} />
-    <Tab.Screen name="Sensors" component={ViewSensorsScreen} />
-    <Tab.Screen name="Orders" component={OrdersScreen} />
-  </Tab.Navigator>
-);
-
 const UserDrawer = () => (
-  <Drawer.Navigator>
-    <Drawer.Screen name="Tabs" component={UserTabs} />
+  <Drawer.Navigator drawerUserContent={props => <DrawerUserContent {...props} />}>
+    <Drawer.Screen name="Home" component={UserHomeScreen} />
+    <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
+    <Drawer.Screen name="Orders" component={OrdersScreen} />
     <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
     <Drawer.Screen name="Cameras" component={CamerasScreen} />
+    <Drawer.Screen name="Appointment" component={AppointmentScreen} />
   </Drawer.Navigator>
 );
 

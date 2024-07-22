@@ -6,22 +6,27 @@ const usuarioSchema = new Schema({
   nombre: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
   contrasena: { type: String, required: true },
-  rol: { type: String, enum: ['usuario', 'administrador'], required: true },
+  rol: { type: String, enum: ['user', 'administrator'], required: true },
   direccion: { type: String },
   telefono: { type: String },
-  sensores: [{ type: Schema.Types.ObjectId, ref: 'Sensor' }],
-  membresia: {
-    tipo: { type: String, enum: ['3 meses', '6 meses', '1 año'] },
-    fecha_inicio: { type: Date },
-    fecha_fin: { type: Date }
-  }
+  giro: { type: String },
+  sensores: [ { tipo: { type: String }, descripcion: { type: String } } ],
+  membresia: { cantidad: { type: Number }, periodo: { type: String }, descripcion: { type: String } },
+  memActiva: { type: Boolean, default: false },
+  memFechaInicio: { type: Date },
+  memFechaFin: { type: Date },
+  paqSelect: [ { paquete: { type: String }, descripcion: { type: String }, cantidad: { type: Number } } ]
 });
+
 
 // Sensor Schema
 const sensorSchema = new Schema({
   tipo: { type: String },
+  descripcion: { type: String },
+  precio: { type: Number },
+  imagen: { type: String },
   ubicacion: { type: String },
-  estado: { type: String, enum: ['activo', 'inactivo'] },
+  estado: { type: String, enum: ['active', 'inactive'] },
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
   lecturas: [
     {
@@ -34,19 +39,29 @@ const sensorSchema = new Schema({
 // Cita Schema
 const citaSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
-  fecha: { type: Date },
-  estado: { type: String, enum: ['pendiente', 'confirmada', 'cancelada'] },
-  direccion: { type: String }
+  fecha: { type: Date, required: true },
+  hora: { type: String, required: true, enum: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+  colonia: { type: String, required: true },
+  calle: { type: String, required: true },
+  numero: { type: String, required: true },
+  referencia: { type: String, maxlength: 50 },
+  estado: { type: String, enum: ['pending', 'confirmed', 'canceled'], default: 'pending' }
 });
 
 // Pago Schema
 const pagoSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
-  monto: { type: Number },
-  fecha: { type: Date },
-  metodo_pago: { type: String },
-  estado: { type: String, enum: ['completado', 'pendiente', 'fallido'] }
+  membresia_id: { type: Schema.Types.ObjectId, ref: 'Membresia' },
+  paquetes: [ { paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' }, cantidad: { type: Number, required: true } } ],
+  monto: { type: Number, required: true },
+  fecha: { type: Date, default: Date.now },
+  metodoPago: { type: String, required: true },
+  estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' }
 });
+
+
+
+
 
 // Notificacion Schema
 const notificacionSchema = new Schema({
@@ -63,7 +78,7 @@ const comentarioSchema = new Schema({
   sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor' },
   mensaje: { type: String },
   fecha: { type: Date },
-  estado: { type: String, enum: ['pendiente', 'resuelto'] }
+  estado: { type: String, enum: ['pending', 'resolved'] }
 });
 
 // Estadistica Schema
@@ -94,7 +109,23 @@ const accesibilidadSchema = new Schema({
 const tarjetaRFIDSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
   codigo: { type: String },
-  estado: { type: String, enum: ['activa', 'inactiva'] }
+  estado: { type: String, enum: ['active', 'Inactive'] }
+});
+
+// Membresia Schema
+const membresiaSchema = new Schema({
+  cantidad: { type: Number, required: true }, // Numero de meses
+  periodo: { type: [String], required: true }, // "Meses" o "Anual"
+  descripcion: { type: [String], required: true },
+  precio: { type: Number, required: true }
+});
+
+// Paquete Schema
+const paqueteSchema = new Schema({
+  paquete: { type: String, required: true },
+  descripcion: { type: String },
+  precio: { type: Number, required: true },
+  contenido: { type: [String], required: true }
 });
 
 // Crear los modelos
@@ -107,6 +138,8 @@ const Comentario = model('Comentario', comentarioSchema);
 const Estadistica = model('Estadistica', estadisticaSchema);
 const Accesibilidad = model('Accesibilidad', accesibilidadSchema);
 const TarjetaRFID = model('TarjetaRFID', tarjetaRFIDSchema);
+const Membresia = model('Membresias', membresiaSchema);
+const Paquete = model('Paquetes', paqueteSchema);
 
 module.exports = {
   Usuario,
@@ -117,5 +150,7 @@ module.exports = {
   Comentario,
   Estadistica,
   Accesibilidad,
-  TarjetaRFID
+  TarjetaRFID,
+  Membresia,
+  Paquete
 };

@@ -1,91 +1,142 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import axios from 'axios';
+import RNPickerSelect from 'react-native-picker-select';
+import IP from '../IP';
 
 const SignupScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [giro, setGiro] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignup = async () => {
+    const data = { nombre, correo, contrasena, direccion, telefono, giro, rol: 'usuario', memActiva: false };
 
-    
-    // Simulate a registration process
-    console.log('User registered with email:', email);
+    try {
+      const url = `http://${IP}:3000/usuario/signup`;
+      const response = await axios.post(url, data);
+      if (response.status === 200) {
+        Alert.alert('Signup', 'Registration completed');
+        navigation.navigate('Options');
+      }
+    } catch (error) {
+      console.log('Error in try catch: ', error);
+      setErrorMessage(error.response?.data?.message || "Something went wrong with your registration");
+    }
 
-    // Navigate back to the Welcome screen
-    navigation.navigate('Welcome');
-  }  
+    console.log(data);
+  };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.nameField}>Company Name</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#aaa"
+        placeholderTextColor="#F4F6FC"
+        autoCapitalize='none'
+        value={nombre}
+        onChangeText={setNombre}
+      />
+      <Text style={styles.nameField}>Address</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#F4F6FC"
+        autoCapitalize='none'
+        value={direccion}
+        onChangeText={setDireccion}
+      />
+      <Text style={styles.nameField}>Contact Phone Number</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#F4F6FC"
+        autoCapitalize='none'
+        keyboardType='numeric'
+        value={telefono}
+        onChangeText={setTelefono}
+      />
+      <Text style={styles.nameField}>Type of Business</Text>
+      <RNPickerSelect
+        onValueChange={(value) => setGiro(value)}
+        items={[
+          { label: 'Industrial', value: 'Industrial' },
+          { label: 'Medical', value: 'Medical' },
+          { label: 'Warehouses', value: 'Warehouses' },
+          { label: 'Technology', value: 'Technology' },
+        ]}
+        style={pickerSelectStyles}
+        placeholder={{ label: 'Select type of business', value: null }}
+      />
+      <Text style={styles.nameField}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#F4F6FC"
         keyboardType="email-address"
         autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
+        value={correo}
+        onChangeText={setCorreo}
       />
+      <Text style={styles.nameField}>Create Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#aaa"
+        placeholderTextColor="#F4F6FC"
         secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        placeholderTextColor="#aaa"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
+        value={contrasena}
+        onChangeText={setContrasena}
       />
       <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.loginRedirect} 
+      <TouchableOpacity
+        style={styles.loginRedirect}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.loginText}>Already have an account? Login</Text>
+        <Text style={styles.loginText}>Already have an account? Sign In</Text>
       </TouchableOpacity>
       <TouchableOpacity 
-        style={styles.backToWelcome} 
+        style={styles.backToWelcome}
         onPress={() => navigation.navigate('Welcome')}>
-        <Text style={styles.backToWelcomeText}>Back to Welcome</Text>
+        <Text style={styles.backToWelcomeText}>Back to menu</Text>
       </TouchableOpacity>
-    </View>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#424242',
     padding: 20,
+  },
+  nameField: {
+    color: '#F4F6FC',
+    left: '3%',
+    alignSelf: 'flex-start',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#F4F6FC',
     marginBottom: 20,
   },
   input: {
     width: '100%',
     padding: 15,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    color: '#F4F6FC',
+    borderColor: '#E53935',
+    borderWidth: 2,
     borderRadius: 5,
     marginBottom: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#212121',
   },
   signupButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#E53935',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 5,
@@ -101,15 +152,51 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loginText: {
-    color: '#3498db',
+    color: '#E53935',
     fontSize: 16,
   },
   backToWelcome: {
     marginTop: 10,
   },
   backToWelcomeText: {
-    color: '#3498db',
+    color: '#E53935',
     fontSize: 16,
+  },
+  errorText: {
+    color: '#F4F6FC',
+    backgroundColor: '#B71C1C',
+    marginTop: 10,
+    padding: 4,
+    borderRadius: 4,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#FFF',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+    width: '100%',
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#FFF',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+    width: '100%',
   },
 });
 

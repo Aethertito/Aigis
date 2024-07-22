@@ -1,29 +1,43 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Image, ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.background}>
+    <ImageBackground
+      source={require('../assets/system.png')}
+      style={styles.background}
+      resizeMode="cover"
+    >
       <View style={styles.content}>
         <Image 
-          source={require('../assets/logo2.jpeg')} 
+          source={require('../assets/LOGO-Completo.png')} 
           style={styles.image}
         />
-        <Text style={styles.title}>Welcome to IoT App</Text>
-        <TouchableOpacity 
-          style={styles.loginButton} 
-          onPress={() => navigation.navigate('Login')}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.signupButton} 
-          onPress={() => navigation.navigate('Signup')}
-        >
-          <Text style={styles.signupButtonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>Welcome!</Text>
+        <View style={styles.buttonContainer}>
+          <Pressable 
+            style={({ pressed }) => [
+              styles.button,
+              styles.loginButton,
+              pressed ? styles.buttonPressed : null
+            ]} 
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={styles.buttonText}>Sign In</Text>
+          </Pressable>
+          <Pressable 
+            style={({ pressed }) => [
+              styles.button,
+              styles.signupButton,
+              pressed ? styles.buttonPressed : null
+            ]} 
+            onPress={() => navigation.navigate('Signup')}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -32,53 +46,52 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#020617', // Aquí puedes cambiar el color de fondo
     padding: 16,
   },
   content: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 10,
-    padding: 20,
+    marginTop: '-30%', 
   },
   image: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
+    top: 2,
+    width: 350,
+    height: 350,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 40,
+    color: '#F4F6FC',
+    marginBottom: '5%', 
+    fontFamily: 'Roboto',
     textAlign: 'center',
   },
-  loginButton: {
-    backgroundColor: '#334155',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 5,
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
-    alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 20, 
   },
-  loginButtonText: {
-    color: '#fff',
+  button: {
+    backgroundColor: '#E53935',
+    borderRadius: 5,
+    width: '45%', 
+    alignItems: 'center',
+    paddingVertical: 15,
+  },
+  buttonText: {
+    color: '#F4F6FC',
     fontSize: 18,
   },
-  signupButton: {
-    backgroundColor: '#94a3b8',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
+  loginButton: {
+    marginBottom: 10,
   },
-  signupButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  signupButton: {
+    marginBottom: 10,
+  },
+  buttonPressed: {
+    backgroundColor: '#C62828',
   },
 });
 
