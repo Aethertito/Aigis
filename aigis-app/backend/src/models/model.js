@@ -6,17 +6,18 @@ const usuarioSchema = new Schema({
   nombre: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
   contrasena: { type: String, required: true },
-  rol: { type: String, enum: ['usuario', 'administrador'], required: true },
+  rol: { type: String, enum: ['user', 'administrator'], required: true },
   direccion: { type: String },
   telefono: { type: String },
   giro: { type: String },
-  sensores: [{ type: Schema.Types.ObjectId, ref: 'Sensor' }],
-  membresia: { type: Schema.Types.ObjectId, ref: 'Membresia' },
-  paquete: { type: Schema.Types.ObjectId, ref: 'Paquete' },
+  sensores: [ { tipo: { type: String }, descripcion: { type: String } } ],
+  membresia: { cantidad: { type: Number }, periodo: { type: String }, descripcion: { type: String } },
   memActiva: { type: Boolean, default: false },
   memFechaInicio: { type: Date },
-  memFechaFin: { type: Date }
+  memFechaFin: { type: Date },
+  paqSelect: [ { paquete: { type: String }, descripcion: { type: String }, cantidad: { type: Number } } ]
 });
+
 
 // Sensor Schema
 const sensorSchema = new Schema({
@@ -25,7 +26,7 @@ const sensorSchema = new Schema({
   precio: { type: Number },
   imagen: { type: String },
   ubicacion: { type: String },
-  estado: { type: String, enum: ['activo', 'inactivo'] },
+  estado: { type: String, enum: ['active', 'inactive'] },
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
   lecturas: [
     {
@@ -44,19 +45,21 @@ const citaSchema = new Schema({
   calle: { type: String, required: true },
   numero: { type: String, required: true },
   referencia: { type: String, maxlength: 50 },
-  estado: { type: String, enum: ['pendiente', 'confirmada', 'cancelada'], default: 'pendiente' }
+  estado: { type: String, enum: ['pending', 'confirmed', 'canceled'], default: 'pending' }
 });
 
 // Pago Schema
 const pagoSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
   membresia_id: { type: Schema.Types.ObjectId, ref: 'Membresia' },
-  paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' },
-  monto: { type: Number },
+  paquetes: [ { paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' }, cantidad: { type: Number, required: true } } ],
+  monto: { type: Number, required: true },
   fecha: { type: Date, default: Date.now },
-  metodo_pago: { type: String },
-  estado: { type: String, enum: ['completado', 'pendiente', 'fallido'], default: 'pendiente' }
+  metodoPago: { type: String, required: true },
+  estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' }
 });
+
+
 
 
 
@@ -75,7 +78,7 @@ const comentarioSchema = new Schema({
   sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor' },
   mensaje: { type: String },
   fecha: { type: Date },
-  estado: { type: String, enum: ['pendiente', 'resuelto'] }
+  estado: { type: String, enum: ['pending', 'resolved'] }
 });
 
 // Estadistica Schema
@@ -106,7 +109,7 @@ const accesibilidadSchema = new Schema({
 const tarjetaRFIDSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
   codigo: { type: String },
-  estado: { type: String, enum: ['activa', 'inactiva'] }
+  estado: { type: String, enum: ['active', 'Inactive'] }
 });
 
 // Membresia Schema

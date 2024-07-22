@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import IP from '../../IP';
 import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const MembershipScreen = () => {
     const [memberships, setMemberships] = useState([]);

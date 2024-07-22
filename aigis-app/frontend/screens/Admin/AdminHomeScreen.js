@@ -6,24 +6,8 @@ const AdminHomeScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome!</Text>
+        <Text style={styles.title}>Welcome Administrator!</Text>
         <Image style={styles.imageLogo} source={require('../../assets/LOGO-Completo.png')} />
-      </View>
-      <View style={styles.container2}>
-        <View style={styles.buttonContainer}>
-          <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
-            <Image style={styles.buttonImage} />
-            <Text>New User</Text>
-          </Pressable>
-          <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={() => navigation.navigate('AddNewSensor')}>
-            <Image style={styles.buttonImage} />
-            <Text>New Sensor</Text>
-          </Pressable>
-          <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
-            <Image style={styles.buttonImage} />
-            <Text>View Suscriptions</Text>
-          </Pressable>
-        </View>
       </View>
     </View>
   );

@@ -13,7 +13,7 @@ const ManageSensorsScreen = ({navigation}) => {
     const url = `http://${IP}:3000/sensor`
     try {
       const response = await axios.get(url)
-      console.log(response.data.sensores)
+      // console.log(response.data.sensores)
       setData(response.data.sensores)
     } catch (error) {
       console.log(error)

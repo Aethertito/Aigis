@@ -8,7 +8,10 @@ router.post('/signup', UsuarioController.signup)
 router.post('/login', UsuarioController.login)
 // Obtener datos de un usuario
 router.get('/:userId', UsuarioController.getUsuario)
-// Actualizar usuario
-router.put('/:userId', UsuarioController.updateUsuario)
+
+//CRUD
+router.get('/', UsuarioController.getAllUser)
+router.put('/:userId', UsuarioController.updateUser)
+router.delete('/:userId', UsuarioController.deleteUser)
 
 module.exports = router
