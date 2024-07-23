@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 const cameras = [
   { id: '1', location: 'Entrance', status: 'Active' },
   { id: '2', location: 'Parking Lot', status: 'Inactive' },
-  // Agrega más cámaras según sea necesario
 ];
 
 const CamerasScreen = () => {

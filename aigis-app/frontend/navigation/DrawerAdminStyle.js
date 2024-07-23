@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     },
     logoutSection: {
         marginTop: 'auto',
-        top: 520
+        top: 525
     },
     logoutItem: {
         backgroundColor: '#424242', 

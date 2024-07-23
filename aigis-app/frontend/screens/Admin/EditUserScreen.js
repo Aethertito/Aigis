@@ -21,7 +21,7 @@ const EditUserScreen = ({ route, navigation }) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const url = `http://${IP}:3000/usuario/${userId}`;
+        const url = `http://${IP}:3000/usuario/${userId}`
         const response = await axios.get(url);
         const user = response.data;
         setNombre(user.nombre || '');
