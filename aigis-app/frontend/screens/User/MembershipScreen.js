@@ -19,7 +19,6 @@ const MembershipScreen = () => {
         const url = `http://${IP}:3000/membership`;
         try {
             const response = await axios.get(url);
-            // console.log(response.data.membresias);
             setMemberships(response.data.membresias);
         } catch (error) {
             console.error('Error getting memberships:', error);
@@ -28,11 +27,7 @@ const MembershipScreen = () => {
     };
 
     const handleSelectMembership = (membershipId) => {
-        if (checked === membershipId) {
-            setChecked('');
-        } else {
-            setChecked(membershipId);
-        }
+        setChecked(membershipId === checked ? '' : membershipId);
     };
 
     const handleConfirm = () => {
@@ -43,10 +38,7 @@ const MembershipScreen = () => {
 
         const selectedMembership = memberships.find(membership => membership._id === checked);
         if (selectedMembership) {
-            console.log(`Membership: ${selectedMembership.cantidad} ${selectedMembership.periodo}`);
-            console.log(`Price: $${selectedMembership.costo}.00`);
-            navigation.navigate('Paquetes', {
-                membershipId: checked,
+            navigation.navigate('PayScreen', {
                 membershipData: selectedMembership
             });
         } else {
@@ -58,12 +50,7 @@ const MembershipScreen = () => {
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.navigate('Options')} style={styles.iconContainer}>
-                    <Icon
-                        name='arrow-back-ios'
-                        type='MaterialIcons'
-                        color='#E53935'
-                        size={24}
-                        />
+                    <Icon name='arrow-back-ios' type='MaterialIcons' color='#E53935' size={24} />
                     <Text style={styles.iconText}>Back</Text>
                 </TouchableOpacity>
                 <Text style={styles.tituloMem}>Select Membership Duration</Text>
@@ -71,9 +58,9 @@ const MembershipScreen = () => {
 
             {memberships.map((membership) => (
                 <TouchableOpacity
-                key={membership._id}
-                style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
-                onPress={() => handleSelectMembership(membership._id)}
+                    key={membership._id}
+                    style={[styles.cardContainer, checked === membership._id && styles.selectedCard]}
+                    onPress={() => handleSelectMembership(membership._id)}
                 >
                     <View>
                         <Text style={styles.title}>{membership.cantidad}</Text>
@@ -150,12 +137,6 @@ const styles = StyleSheet.create({
         fontSize: 33,
         fontWeight: 'bold',
         color: '#F4F6FC',
-        textAlign: 'center',
-    },
-    desc: {
-        fontSize: 16,
-        color: '#F4F6FC',
-        marginTop: 5,
         textAlign: 'center',
     },
     priceContainer: {

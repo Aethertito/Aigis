@@ -4,34 +4,37 @@ const { Usuario } = require('../models/model.js');
 // Register users
 const signup = async (req, res) => {
     try {
-        // Collect data from the request
+        console.log('Request body:', req.body);
         let params = req.body;
 
         // Check that all required data is provided
         if (!params.nombre || !params.correo || !params.contrasena || !params.rol || !params.direccion || !params.telefono || !params.giro) {
+            console.log('Missing data:', params);
             return res.status(400).json({
                 status: "error",
                 message: "Missing data to submit"
             });
         }
 
-        // Create a user object
-        let usuario = new Usuario(params);
-
         // Check for duplicate users
         const usuarios = await Usuario.find({
-            correo: usuario.correo.toLowerCase(),
+            correo: params.correo.toLowerCase(),
         });
 
         if (usuarios.length >= 1) {
-            return res.status(500).json({
+            console.log('Email already in use:', params.correo);
+            return res.status(400).json({
                 status: "error",
                 message: "Email is already in use"
             });
-        }   
+        }
+
+        // Create a user object
+        let usuario = new Usuario(params);
 
         // Save user to the database
         const usuarioRegistrado = await usuario.save();
+        console.log('User registered successfully:', usuarioRegistrado);
 
         // Return result
         return res.status(200).json({
@@ -40,6 +43,7 @@ const signup = async (req, res) => {
             usuario: usuarioRegistrado
         });
     } catch (error) {
+        console.error('Error registering user:', error);
         return res.status(500).json({
             status: "error",
             message: "Error registering user",
