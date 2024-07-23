@@ -34,10 +34,14 @@ const LoginScreen = ({ navigation }) => {
 
         // Guardar el id del usuario en asyncStorage
         await AsyncStorage.setItem('userId', user._id)
+        await AsyncStorage.setItem('userName', user.nombre)
+        await AsyncStorage.setItem('userEmail', user.correo)
 
         // Obtener el id y mandarlo por consola
         const userId = await AsyncStorage.getItem('userId')
+
         console.log('ESTE ES UNA PRUBEA DE ASYNCSTORAGE: ',userId)
+
 
         Alert.alert('Welcome', `${user.nombre}`);
 

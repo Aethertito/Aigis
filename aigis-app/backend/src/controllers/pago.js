@@ -32,7 +32,7 @@ async function pago(req, res) {
 
         const fechaInicio = new Date();
         const fechaFin = new Date();
-        fechaFin.setMonth(fechaFin.getMonth() + 1); 
+        fechaFin.setMonth(fechaFin.getMonth() + 1);
 
         usuario.memFechaInicio = fechaInicio;
         usuario.memFechaFin = fechaFin;

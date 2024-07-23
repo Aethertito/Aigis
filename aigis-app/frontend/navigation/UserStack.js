@@ -13,7 +13,7 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const UserDrawer = () => (
-  <Drawer.Navigator drawerUserContent={props => <DrawerUserContent {...props} />}>
+  <Drawer.Navigator drawerContent={props => <DrawerUserContent {...props} />}>
     <Drawer.Screen name="Home" component={UserHomeScreen} />
     <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
     <Drawer.Screen name="Orders" component={OrdersScreen} />
