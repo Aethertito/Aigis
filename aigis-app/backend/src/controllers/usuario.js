@@ -105,32 +105,22 @@ const login = async (req, res) => {
     }
 };
 
-const getUsuario = async (req, res) => {
-    const userId = req.params.userId;
-    const updates = req.body;
-  
+const getUsuario = async (req,res) => {
+    const userId = req.params.userId
+
     try {
-      const user = await Usuario.findById(userId);
-  
-      if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-      }
-  
-      // Actualizar solo los campos que están presentes en el cuerpo de la solicitud
-      Object.keys(updates).forEach(key => {
-        if (updates[key] !== undefined && updates[key] !== null && updates[key] !== '') {
-          user[key] = updates[key];
+        const user = await Usuario.findById(userId)
+
+        if(!user){
+            return res.status(404).json({message: 'Usuario no encontrado'})
         }
-      });
-  
-      await user.save();
-  
-      res.status(200).json(user);
+
+        res.status(200).json(user)
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error del servidor' });
+        console.error(error)
+        res.status(500).json({message: 'Erro del servidor'})
     }
-  };
+}
 
 const getAllUser = async (req, res) => {
     try {
