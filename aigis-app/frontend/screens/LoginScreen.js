@@ -33,15 +33,13 @@ const LoginScreen = ({ navigation }) => {
         const userRole = user.rol;
 
         // Guardar el id del usuario en asyncStorage
-        await AsyncStorage.setItem('userId', user._id)
-        await AsyncStorage.setItem('userName', user.nombre)
-        await AsyncStorage.setItem('userEmail', user.correo)
+        await AsyncStorage.setItem('userId', user._id);
+        await AsyncStorage.setItem('userName', user.nombre);
+        await AsyncStorage.setItem('userEmail', user.correo);
 
         // Obtener el id y mandarlo por consola
-        const userId = await AsyncStorage.getItem('userId')
-
-        console.log('ESTE ES UNA PRUBEA DE ASYNCSTORAGE: ',userId)
-
+        const userId = await AsyncStorage.getItem('userId');
+        console.log('ESTE ES UNA PRUBEA DE ASYNCSTORAGE: ', userId);
 
         Alert.alert('Welcome', `${user.nombre}`);
 
@@ -56,11 +54,14 @@ const LoginScreen = ({ navigation }) => {
       } else {
         console.log('Error in login');
         setErrorMessage('Error in login');
+        Alert.alert('Login Failed', 'Incorrect email or password');
       }
     } catch (error) {
       // Handle errors
       console.log('Error logging in:', error);
-      setErrorMessage(error.response?.data?.message || 'Error logging in');
+      const message = error.response?.data?.message || 'Error logging in';
+      setErrorMessage(message);
+      Alert.alert('Login Failed', message);
     }
   };
 
