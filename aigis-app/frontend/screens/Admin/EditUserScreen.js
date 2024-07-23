@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import axios from 'axios';
 import IP from '../../IP';  // Asegúrate de que IP esté configurado correctamente
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -16,6 +16,7 @@ const EditUserScreen = ({ route, navigation }) => {
   const [memActiva, setMemActiva] = useState('');
   const [loading, setLoading] = useState(false);
   const userId = route.params?.userId; // Obtener el ID del usuario desde los parámetros de la ruta
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,7 +63,7 @@ const EditUserScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('ManageUser')} style={styles.iconContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
                     <Icon name='arrow-back-ios' type='MaterialIcons' color='#E53935' size={24} />
                     <Text style={styles.iconText}>Back</Text>
                 </TouchableOpacity>
@@ -81,13 +82,26 @@ const EditUserScreen = ({ route, navigation }) => {
         value={correo}
         onChangeText={setCorreo}
     />
-    <Text style={styles.nameField}>Password: </Text>
-    <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={contrasena}
-        editable={false}
-    />
+     <Text style={styles.nameField}>Password: </Text>
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          value={contrasena}
+          editable={false}
+          secureTextEntry={!showPassword}
+        />
+        <Pressable 
+          style={styles.eyeIconContainer} 
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Icon 
+            name={showPassword ? "visibility" : "visibility-off"} 
+            size={24} 
+            color="#E53935"
+          />
+        </Pressable>
+      </View>
     <Text style={styles.nameField}>Role: </Text>
     <TextInput
         style={styles.input}
@@ -159,6 +173,27 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#212121',
         color: '#F4F6FC',
+    },
+    passwordContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      marginVertical: 8,
+      borderWidth: 1,
+      borderColor: '#E53935',
+      borderRadius: 5,
+      backgroundColor: '#212121',
+    },
+    passwordInput: {
+      flex: 1,
+      padding: 12,
+      color: '#F4F6FC',
+      backgroundColor: 'transparent',
+    },
+    eyeIconContainer: {
+      padding: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     });
 

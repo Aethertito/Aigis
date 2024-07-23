@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable } from 'react-native';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
 import IP from '../IP';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const SignupScreen = ({ navigation }) => {
   const [nombre, setNombre] = useState('');
@@ -12,6 +13,7 @@ const SignupScreen = ({ navigation }) => {
   const [telefono, setTelefono] = useState('');
   const [giro, setGiro] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignup = async () => {
     const data = { nombre, correo, contrasena, direccion, telefono, giro, rol: 'usuario', memActiva: false };
@@ -81,13 +83,25 @@ const SignupScreen = ({ navigation }) => {
         onChangeText={setCorreo}
       />
       <Text style={styles.nameField}>Create Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor="#F4F6FC"
-        secureTextEntry
-        value={contrasena}
-        onChangeText={setContrasena}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholderTextColor="#F4F6FC"
+          secureTextEntry={!showPassword}
+          value={contrasena}
+          onChangeText={setContrasena}
+        />
+        <Pressable 
+          style={styles.eyeIconContainer} 
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Icon 
+            name={showPassword ? "visibility" : "visibility-off"} 
+            size={24} 
+            color="#E53935"
+          />
+        </Pressable>
+      </View>
       <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
@@ -168,6 +182,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 4,
     borderRadius: 4,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    borderColor: '#E53935',
+    borderWidth: 2,
+    borderRadius: 5,
+    backgroundColor: '#212121',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 15,
+    color: '#F4F6FC',
+    backgroundColor: 'transparent',
+  },
+  eyeIconContainer: {
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

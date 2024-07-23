@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
 import axios from 'axios';
 import IP from '../IP';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -78,13 +80,25 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setEmail}
       />
       <Text style={styles.nameField}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor="#F4F6FC"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholderTextColor="#F4F6FC"
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <Pressable 
+          style={styles.eyeIconContainer} 
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Icon 
+            name={showPassword ? "visibility" : "visibility-off"} 
+            size={24} 
+            color="#E53935"
+          />
+        </Pressable>
+      </View>
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
@@ -170,6 +184,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 4,
     borderRadius: 4
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    borderColor: '#E53935',
+    borderWidth: 2,
+    borderRadius: 5,
+    backgroundColor: '#212121',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 15,
+    color: '#F4F6FC',
+    backgroundColor: 'transparent',
+  },
+  eyeIconContainer: {
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
