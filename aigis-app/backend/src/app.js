@@ -43,6 +43,7 @@ const PackageRoutes = require('./routes/package.js')
 const PagoRoutes = require('./routes/pago.js');
 const CitaRoutes = require('./routes/citas.js')
 const PaqueteCompradoRoutes = require('./routes/paqueteComprado.js');
+const GraficasRoutes = require('./routes/graficas.js'); // Nueva ruta
 
 app.use('/usuario', UsuarioRoutes)
 app.use('/sensor', SensorRoutes)
@@ -51,6 +52,7 @@ app.use('/packages', PackageRoutes)
 app.use('/pago', PagoRoutes);
 app.use('/cita', CitaRoutes);
 app.use('/paqueteComprado', PaqueteCompradoRoutes);
+app.use('/api', GraficasRoutes); // Usar nueva ruta
 
 // Poner servidor a escuchar paticiones http
 app.listen(port, () => {

@@ -1,9 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import Icon from 'react-native-vector-icons/FontAwesome5'; // Asegúrate de tener esta librería instalada
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Asegúrate de tener esta librería instalada
 
 const UserHomeScreen = ({ navigation }) => {
+  const [data, setData] = useState([]);
+  const [viewMode, setViewMode] = useState('day');
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    getUserId();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchData(viewMode);
+    }
+  }, [viewMode, userId]);
+
+  const getUserId = async () => {
+    try {
+      const id = await AsyncStorage.getItem('userId');
+      setUserId(id);
+    } catch (error) {
+      console.error('Error getting user ID:', error);
+    }
+  };
+
+  const fetchData = async (mode) => {
+    try {
+      const startDate = '2023-07-01';
+      const endDate = '2023-07-14';
+      const response = await axios.get(`http://localhost:3000/api/statistics?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+      const statistics = response.data;
+
+      const processedData = processData(statistics, mode);
+      setData(processedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const processData = (statistics, mode) => {
+    const dataPoints = statistics[0].valores.map(entry => ({
+      date: new Date(entry.fecha).toISOString().split('T')[0],
+      temperature: entry.valor.temperatura
+    }));
+
+    if (mode === 'day') {
+      return dataPoints.map(point => ({
+        date: point.date,
+        temperature: point.temperature
+      }));
+    } else if (mode === 'week') {
+      const weeklyData = dataPoints.reduce((acc, point) => {
+        const week = getWeekNumber(new Date(point.date));
+        if (!acc[week]) {
+          acc[week] = { week, temperature: 0, count: 0 };
+        }
+        acc[week].temperature += point.temperature;
+        acc[week].count += 1;
+        return acc;
+      }, {});
+
+      return Object.values(weeklyData).map(item => ({
+        week: item.week,
+        temperature: item.temperature / item.count
+      }));
+    }
+  };
+
+  const getWeekNumber = (date) => {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -18,25 +92,25 @@ const UserHomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>Electricity Usage</Text>
+        <Text style={styles.chartTitle}>Temperature and Humidity</Text>
         <LineChart
           data={{
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: data.map(item => viewMode === 'day' ? item.date : `Week ${item.week}`),
             datasets: [
               {
-                data: [20, 45, 28, 80, 99, 43, 65, 55, 80, 77, 66, 90],
+                data: data.map(item => item.temperature),
               },
             ],
           }}
           width={Dimensions.get('window').width - 40}
           height={220}
           yAxisLabel=""
-          yAxisSuffix="kWh"
+          yAxisSuffix="°C"
           chartConfig={{
             backgroundColor: '#1f212b',
             backgroundGradientFrom: '#1f212b',
             backgroundGradientTo: '#1f212b',
-            decimalPlaces: 0,
+            decimalPlaces: 2,
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             style: {
@@ -50,6 +124,21 @@ const UserHomeScreen = ({ navigation }) => {
           }}
           style={styles.chart}
         />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.switchButton, viewMode === 'day' && styles.activeButton]}
+          onPress={() => setViewMode('day')}
+        >
+          <Text style={styles.buttonText}>Daily</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.switchButton, viewMode === 'week' && styles.activeButton]}
+          onPress={() => setViewMode('week')}
+        >
+          <Text style={styles.buttonText}>Weekly</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.statsContainer}>
@@ -123,6 +212,24 @@ const styles = StyleSheet.create({
   },
   chart: {
     borderRadius: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  switchButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  activeButton: {
+    backgroundColor: '#2e86c1',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
   statsContainer: {
     flexDirection: 'row',
