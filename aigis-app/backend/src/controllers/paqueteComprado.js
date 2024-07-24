@@ -21,7 +21,7 @@ async function comprarPaquete(req, res) {
           paquete_id
         });
         await sensor.save();
-        return sensor._id;
+        return { sensor_id: sensor._id, tipo: sensor.tipo }; // Almacenar tanto el ID como el nombre del sensor
       })
     );
 
@@ -30,7 +30,7 @@ async function comprarPaquete(req, res) {
       usuario: usuario_id,
       paquete: paquete.paquete,
       ubicacion,
-      sensores: sensores.map(sensorId => ({ tipo: sensorId, estado: 'Activo' }))
+      sensores: sensores
     });
 
     await paqueteComprado.save();
@@ -42,7 +42,7 @@ async function comprarPaquete(req, res) {
     }
 
     // Actualizar paqSelect con el paquete comprado
-    usuario.paqSelect.push({ paquete_id, paquete: paquete.paquete, cantidad: 1 });
+    usuario.paqSelect.push({ paquete_id, paquete: paquete.paquete, cantidad: 1 }); // Añadir el nombre del paquete
 
     // Actualizar sensores del usuario
     usuario.sensores.push(...sensores);

@@ -69,7 +69,7 @@ const PaquetesScreen = () => {
             }));
             console.log(cartData);
             await AsyncStorage.setItem('cartData', JSON.stringify(cartData));
-            navigation.navigate('Pay', {
+            navigation.navigate('PayPack', {
                 cartData,
                 totalAmount: getTotalPrice(),
             });
@@ -77,7 +77,7 @@ const PaquetesScreen = () => {
             Alert.alert('Error', 'Cart is empty');
         }
     };
-
+    
     const clearCart = () => {
         setCart([]);
     };

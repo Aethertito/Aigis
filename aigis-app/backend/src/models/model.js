@@ -10,22 +10,28 @@ const usuarioSchema = new Schema({
   telefono: { type: String },
   giro: { type: String },
   membresia: { type: Schema.Types.ObjectId, ref: 'Membresia' },
-  memCantidad: { type: Number }, // Nuevo campo
-  memPeriodo: { type: String }, // Nuevo campo
-  memDescripcion: { type: String }, // Nuevo campo
+  memCantidad: { type: Number },
+  memPeriodo: { type: String },
+  memDescripcion: { type: String },
   memActiva: { type: Boolean, default: false },
   memFechaInicio: { type: Date },
   memFechaFin: { type: Date },
   paqSelect: [
-    { paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' }, cantidad: { type: Number, required: true } }
+    { 
+      paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' },
+      paquete: { type: String }, 
+      cantidad: { type: Number, required: true }
+    }
   ],
-  sensores: [{ type: Schema.Types.ObjectId, ref: 'Sensor' }]
+  sensores: [{
+    sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor' },
+    tipo: { type: String } 
+  }]
 });
 
 const sensorSchema = new Schema({
   tipo: { type: String, enum: ['RFID', 'Temperature and Humidity', 'Smoke', 'Presence', 'Camera'], required: true },
   descripcion: { type: String, required: true },
-  precio: { type: Number, required: true },
   imagen: { type: String },
   ubicacion: { type: String },
   estado: { type: String, enum: ['active', 'inactive'], default: 'active' },
@@ -60,7 +66,7 @@ const membresiaSchema = new mongoose.Schema({
 
 const pagoSchema = new mongoose.Schema({
   usuario_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  membresia_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Membresia', required: true },
+  membresia_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Membresia' },
   metodoPago: { type: String, required: true },
   estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' },
   fechaPago: { type: Date, default: Date.now}
@@ -71,10 +77,11 @@ const paqueteCompradoSchema = new Schema({
   paquete: { type: String, required: true },
   ubicacion: { type: String, required: true },
   sensores: [{
-    tipo: { type: String, required: true },
-    estado: { type: String, required: true }
+    sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor', required: true },
+    tipo: { type: String, required: true }
   }]
 });
+
 
 const Usuario = model('Usuario', usuarioSchema);
 const Sensor = model('Sensor', sensorSchema);

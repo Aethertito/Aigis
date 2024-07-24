@@ -36,9 +36,9 @@ const PayScreen = () => {
                 const paymentData = {
                     usuario_id: userId,
                     membresia_id: membershipData._id,
-                    paquete_id: null, // Ajusta esto si necesitas un paquete_id
+                    paquete_id: null, // Adjust this if you need a package_id
                     monto: membershipData.costo,
-                    metodoPago: 'Tarjeta',
+                    metodoPago: 'Credit Card',
                     estado: 'complete'
                 };
 
@@ -52,17 +52,17 @@ const PayScreen = () => {
                 setExpiryDate('');
                 setCvv('');
 
-                Alert.alert('Éxito', 'Pago procesado correctamente', [
+                Alert.alert('Success', 'Payment successfully processed', [
                     { text: 'OK', onPress: () => navigation.navigate('Welcome') }
                 ]);
 
-                console.log('Respuesta de la API:', response.data);
+                console.log('API Response:', response.data);
             } catch (error) {
-                console.error('Error al procesar el pago:', error);
-                Alert.alert('Error', 'Ocurrió un error al procesar el pago. Por favor, intenta nuevamente.');
+                console.error('Error processing payment:', error);
+                Alert.alert('Error', 'An error occurred while processing the payment. Please try again.');
             }
         } else {
-            Alert.alert('Error', 'Por favor completa todos los detalles de la tarjeta');
+            Alert.alert('Error', 'Please complete all card details');
         }
     };
 
@@ -76,17 +76,17 @@ const PayScreen = () => {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
                     <Icon name='arrow-back-ios' type='MaterialIcons' color='#E53935' size={24} />
-                    <Text style={styles.iconText}>Volver</Text>
+                    <Text style={styles.iconText}>Back</Text>
                 </TouchableOpacity>
 
                 <View style={styles.imageContainer}>
                     <Image source={require('../../assets/LOGO-Completo.png')} style={styles.image} />
                 </View>
-                <Text style={styles.title}>Información de Pago</Text>
-                <Text style={styles.totalAmount}>Total a pagar: ${totalAmount}</Text>
+                <Text style={styles.title}>Payment Information</Text>
+                <Text style={styles.totalAmount}>Total to pay: ${totalAmount}</Text>
                 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nombre en la Tarjeta</Text>
+                    <Text style={styles.label}>Cardholder Name</Text>
                     <TextInput
                         style={styles.input}
                         placeholderTextColor="#9E9E9E"
@@ -96,7 +96,7 @@ const PayScreen = () => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Número de Tarjeta</Text>
+                    <Text style={styles.label}>Card Number</Text>
                     <TextInput
                         style={styles.input}
                         keyboardType="numeric"
@@ -109,10 +109,10 @@ const PayScreen = () => {
 
                 <View style={styles.rowContainer}>
                     <View style={[styles.inputContainer, { flex: 1, marginRight: 8 }]}>
-                        <Text style={styles.label}>Fecha de Expiración</Text>
+                        <Text style={styles.label}>Expiry Date</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="MM/AA"
+                            placeholder="MM/YY"
                             placeholderTextColor="#9E9E9E"
                             value={expiryDate}
                             onChangeText={setExpiryDate}
@@ -136,7 +136,7 @@ const PayScreen = () => {
                 </View>
 
                 <TouchableOpacity style={styles.payButton} onPress={handlePayment}>
-                    <Text style={styles.payButtonText}>Pagar</Text>
+                    <Text style={styles.payButtonText}>Pay</Text>
                 </TouchableOpacity>
             </ScrollView>
         </KeyboardAvoidingView>

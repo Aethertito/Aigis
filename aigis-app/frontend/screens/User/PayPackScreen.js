@@ -23,9 +23,11 @@ const PayPackScreen = () => {
           const paymentData = {
             usuario_id: userId,
             paquete_id: item.id,
-            ubicacion: 'Sala', // Ajusta esto según la lógica de tu aplicación
-            metodoPago: 'Tarjeta'
+            ubicacion: 'Unspecified', // Ajusta esto según la lógica de tu aplicación
+            metodoPago: 'Credit Card'
           };
+
+          console.log('Datos de pago enviados:', paymentData);
 
           const apiUrl = `http://${IP}:3000/paqueteComprado/comprar`;
           const response = await axios.post(apiUrl, paymentData);
@@ -37,15 +39,15 @@ const PayPackScreen = () => {
         setExpiryDate('');
         setCvv('');
 
-        Alert.alert('Éxito', 'Pago procesado correctamente', [
+        Alert.alert('Success', 'Payment processed successfully', [
           { text: 'OK', onPress: () => navigation.navigate('Welcome') }
         ]);
       } catch (error) {
-        console.error('Error al procesar el pago:', error);
-        Alert.alert('Error', 'Ocurrió un error al procesar el pago. Por favor, intenta nuevamente.');
+        console.error('Error processing payment:', error.response ? error.response.data : error.message);
+        Alert.alert('Error', 'An error occurred while processing the payment. Please try again.');
       }
     } else {
-      Alert.alert('Error', 'Por favor completa todos los detalles de la tarjeta');
+      Alert.alert('Error', 'Please complete all card details');
     }
   };
 

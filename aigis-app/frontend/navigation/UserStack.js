@@ -7,7 +7,10 @@ import EditProfileScreen from '../screens/User/EditProfileScreen';
 import OrdersScreen from '../screens/User/OrdersScreen';
 import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
+import PayPackScreen from '../screens/User/PayPackScreen';
+
 import DrawerUserContent from './DrawerUserStyle';
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -20,6 +23,7 @@ const UserDrawer = () => (
     <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
     <Drawer.Screen name="Cameras" component={CamerasScreen} />
     <Drawer.Screen name="Appointment" component={AppointmentScreen} />
+    <Drawer.Screen name="PayPack" component={PayPackScreen} />
   </Drawer.Navigator>
 );
 

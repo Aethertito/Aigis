@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const PaqueteCompradoController = require('../controllers/paqueteComprado.js');
+const { comprarPaquete } = require('../controllers/paqueteComprado');
 
-// Comprar paquete
-router.post('/', PaqueteCompradoController.comprarPaquete);
+router.post('/comprar', comprarPaquete);
 
 module.exports = router;
