@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IP from '../../IP';
@@ -13,25 +13,33 @@ const PayScreen = () => {
     const [cardTitular, setCardTitular] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
-    const { totalAmount, cartData } = route.params;
+    const [membershipData, setMembershipData] = useState(null);
+
+    useEffect(() => {
+        const fetchMembershipData = async () => {
+            const membershipData = await AsyncStorage.getItem('membershipData');
+            setMembershipData(JSON.parse(membershipData));
+        };
+        fetchMembershipData();
+    }, []);
 
     const handlePayment = async () => {
         if (cardNumber && cardTitular && expiryDate && cvv) {
             try {
-                console.log(cartData)
-
-                const membresiaId = await AsyncStorage.getItem('membresiaId');
-                const packageId = await AsyncStorage.getItem('packageId');
                 const userId = await AsyncStorage.getItem('userId');
-                return
-                
+
+                if (!membershipData) {
+                    Alert.alert('Error', 'No membership data found');
+                    return;
+                }
+
                 const paymentData = {
                     usuario_id: userId,
-                    membresia_id: membresiaId,
-                    paquete_id: packageId,
-                    monto: totalAmount,
-                    metodo_pago: 'Tarjeta',
-                    estado: 'completado'
+                    membresia_id: membershipData._id,
+                    paquete_id: null, // Ajusta esto si necesitas un paquete_id
+                    monto: membershipData.costo,
+                    metodoPago: 'Tarjeta',
+                    estado: 'complete'
                 };
 
                 console.log(paymentData);
@@ -57,6 +65,8 @@ const PayScreen = () => {
             Alert.alert('Error', 'Por favor completa todos los detalles de la tarjeta');
         }
     };
+
+    const totalAmount = membershipData ? membershipData.costo : 0;
 
     return (
         <KeyboardAvoidingView 
@@ -146,7 +156,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        bottom: 55
     },
     iconText: {
         color: '#E53935',

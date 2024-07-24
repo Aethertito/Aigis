@@ -4,37 +4,48 @@ const { Usuario } = require('../models/model.js');
 // Register users
 const signup = async (req, res) => {
     try {
-        console.log('Request body:', req.body);
+        // Collect data from the request
         let params = req.body;
 
         // Check that all required data is provided
         if (!params.nombre || !params.correo || !params.contrasena || !params.rol || !params.direccion || !params.telefono || !params.giro) {
-            console.log('Missing data:', params);
             return res.status(400).json({
                 status: "error",
                 message: "Missing data to submit"
             });
         }
 
+        // Create a user object
+        let usuario = new Usuario({
+            nombre: params.nombre,
+            correo: params.correo,
+            contrasena: params.contrasena,
+            rol: params.rol,
+            direccion: params.direccion,
+            telefono: params.telefono,
+            giro: params.giro,
+            membresia: null, // Inicialmente null
+            memActiva: false, // Inicialmente false
+            memFechaInicio: null, // Inicialmente null
+            memFechaFin: null, // Inicialmente null
+            paqSelect: [], // Inicialmente vacío
+            sensores: [] // Inicialmente vacío
+        });
+
         // Check for duplicate users
         const usuarios = await Usuario.find({
-            correo: params.correo.toLowerCase(),
+            correo: usuario.correo.toLowerCase(),
         });
 
         if (usuarios.length >= 1) {
-            console.log('Email already in use:', params.correo);
-            return res.status(400).json({
+            return res.status(500).json({
                 status: "error",
                 message: "Email is already in use"
             });
         }
 
-        // Create a user object
-        let usuario = new Usuario(params);
-
         // Save user to the database
         const usuarioRegistrado = await usuario.save();
-        console.log('User registered successfully:', usuarioRegistrado);
 
         // Return result
         return res.status(200).json({
@@ -43,7 +54,6 @@ const signup = async (req, res) => {
             usuario: usuarioRegistrado
         });
     } catch (error) {
-        console.error('Error registering user:', error);
         return res.status(500).json({
             status: "error",
             message: "Error registering user",

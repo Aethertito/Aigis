@@ -46,9 +46,9 @@ const LoginScreen = ({ navigation }) => {
         Alert.alert('Welcome', `${user.nombre}`);
 
         // Redirect based on user role
-        if (userRole === 'administrador') {
+        if (userRole === 'administrator') {
           navigation.navigate('AdminStack');
-        } else if (userRole === 'usuario' && user.memActiva) {
+        } else if (userRole === 'user' && user.memActiva) {
           navigation.navigate('UserStack');
         } else {
           navigation.navigate('Options');

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable } from 'react-native';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import IP from '../IP';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -22,6 +23,7 @@ const SignupScreen = ({ navigation }) => {
       const url = `http://${IP}:3000/usuario/signup`;
       const response = await axios.post(url, data);
       if (response.status === 200) {
+        await AsyncStorage.setItem('userId', response.data.usuario._id);
         Alert.alert('Signup', 'Registration completed');
         navigation.navigate('Options');
       }
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 15,
     color: '#F4F6FC',
     borderColor: '#E53935',
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
     backgroundColor: '#212121',
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 5,
-    width: '100%',
+    width: '38%',
     alignItems: 'center',
     marginBottom: 10,
   },
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
     borderColor: '#E53935',
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 5,
     backgroundColor: '#212121',
   },
@@ -211,7 +213,7 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 12,
     paddingHorizontal: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#E53935',
     borderRadius: 5,
     color: '#FFF',
@@ -224,7 +226,7 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
     paddingHorizontal: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#E53935',
     borderRadius: 5,
     color: '#FFF',

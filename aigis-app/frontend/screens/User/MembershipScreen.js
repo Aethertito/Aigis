@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import IP from '../../IP';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -30,7 +31,7 @@ const MembershipScreen = () => {
         setChecked(membershipId === checked ? '' : membershipId);
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (!checked) {
             Alert.alert('Error', 'Please select a membership');
             return;
@@ -38,7 +39,8 @@ const MembershipScreen = () => {
 
         const selectedMembership = memberships.find(membership => membership._id === checked);
         if (selectedMembership) {
-            navigation.navigate('PayScreen', {
+            await AsyncStorage.setItem('membershipData', JSON.stringify(selectedMembership));
+            navigation.navigate('Pay', {
                 membershipData: selectedMembership
             });
         } else {

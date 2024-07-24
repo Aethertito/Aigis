@@ -24,8 +24,6 @@ const storage = multer.diskStorage({
   }
 });
 
-//const upload = multer({storage: storage})
-
 app.use(multer({
   storage: storage
 }).single('image'))
@@ -44,6 +42,7 @@ const MembershipRoutes = require('./routes/membership.js')
 const PackageRoutes = require('./routes/package.js')
 const PagoRoutes = require('./routes/pago.js');
 const CitaRoutes = require('./routes/citas.js')
+const PaqueteCompradoRoutes = require('./routes/paqueteComprado.js');
 
 app.use('/usuario', UsuarioRoutes)
 app.use('/sensor', SensorRoutes)
@@ -51,6 +50,7 @@ app.use('/membership', MembershipRoutes)
 app.use('/packages', PackageRoutes)
 app.use('/pago', PagoRoutes);
 app.use('/cita', CitaRoutes);
+app.use('/paqueteComprado', PaqueteCompradoRoutes);
 
 // Poner servidor a escuchar paticiones http
 app.listen(port, () => {

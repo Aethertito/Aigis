@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/FontAwesome6';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function DrawerUserContent(props) {
@@ -64,16 +65,6 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Orders' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="edit" color={activeItem === 'EditProfile' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Edit Profile"
-                    labelStyle={[styles.label, { color: activeItem === 'EditProfile' ? '#E53935' : '#F4F6FC' }]}
-                    onPress={() => {
-                        setActiveItem('EditProfile');
-                        props.navigation.navigate('EditProfile');
-                    }}
-                    style={activeItem === 'EditProfile' ? styles.activeItem : {}}
-                />
-                <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="camera" color={activeItem === 'Cameras' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Cameras"
                     labelStyle={[styles.label, { color: activeItem === 'Cameras' ? '#E53935' : '#F4F6FC' }]}
@@ -92,6 +83,16 @@ export function DrawerUserContent(props) {
                         props.navigation.navigate('Appointment');
                     }}
                     style={activeItem === 'Appointment' ? styles.activeItem : {}}
+                />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Configurations"
+                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Configurations');
+                        props.navigation.navigate('EditProfile');
+                    }}
+                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
                 />
             </Drawer.Section>
 
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
     },
     logoutSection: {
         marginTop: 'auto',
-        top: 365
     },
     logoutItem: {
         backgroundColor: '#424242', 

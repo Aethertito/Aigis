@@ -109,9 +109,10 @@ const PaquetesScreen = () => {
                             <Text style={styles.textPrice}>Cost:</Text>
                             <Text style={styles.price}>${paquete.precio}.00</Text>
                         </View>
-                        <Button 
-                            title="Add To Cart" 
+                        <Button
                             onPress={() => addToCart(paquete)}
+                            icon={<Icon name="shopping-cart" size={20} color="white" />} 
+                            iconRight 
                             buttonStyle={styles.addButton}
                         />
                     </View>
@@ -226,6 +227,8 @@ const styles = StyleSheet.create({
     addButton: {
         backgroundColor: '#E53935',
         marginTop: 10,
+        width: '15%',
+        marginLeft: '85%'
     },
     cartContainer: {
         backgroundColor: '#212121',
@@ -277,6 +280,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
+        margin: '2%',
     },
     payButton: {
         backgroundColor: '#E53935',

@@ -9,11 +9,10 @@ const usuarioSchema = new Schema({
   direccion: { type: String },
   telefono: { type: String },
   giro: { type: String },
-  membresia: {
-    cantidad: { type: Number },
-    periodo: { type: String },
-    descripcion: { type: String }
-  },
+  membresia: { type: Schema.Types.ObjectId, ref: 'Membresia' },
+  memCantidad: { type: Number }, // Nuevo campo
+  memPeriodo: { type: String }, // Nuevo campo
+  memDescripcion: { type: String }, // Nuevo campo
   memActiva: { type: Boolean, default: false },
   memFechaInicio: { type: Date },
   memFechaFin: { type: Date },
@@ -63,12 +62,18 @@ const pagoSchema = new mongoose.Schema({
   usuario_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
   membresia_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Membresia', required: true },
   metodoPago: { type: String, required: true },
-  estado: { type: String, required: true
-  },
-  createdAt: {
-      type: Date,
-      default: Date.now
-  }
+  estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' },
+  fechaPago: { type: Date, default: Date.now}
+});
+
+const paqueteCompradoSchema = new Schema({
+  usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+  paquete: { type: String, required: true },
+  ubicacion: { type: String, required: true },
+  sensores: [{
+    tipo: { type: String, required: true },
+    estado: { type: String, required: true }
+  }]
 });
 
 const Usuario = model('Usuario', usuarioSchema);
@@ -77,6 +82,7 @@ const Paquete = model('Paquete', paqueteSchema);
 const Estadistica = model('Estadistica', estadisticaSchema);
 const Pago = mongoose.model('Pago', pagoSchema);
 const Membresia = mongoose.model('Membresia', membresiaSchema);
+const PaqueteComprado = mongoose.model('PaqueteComprado', paqueteCompradoSchema);
 
 module.exports = {
   Usuario,
@@ -84,5 +90,6 @@ module.exports = {
   Paquete,
   Estadistica,
   Membresia,
-  Pago
+  Pago,
+  PaqueteComprado
 };

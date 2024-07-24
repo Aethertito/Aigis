@@ -17,12 +17,12 @@ const OptionScreen = () => {
                             color='#E53935'
                             size={24}
                         />
-                        <Text style={styles.iconText}>Back</Text>
+                        <Text style={styles.iconText}>Later</Text>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.title}>Activate your subscription to enjoy all the benefits of our advanced security system. Monitor and protect your company with the latest security technologies.</Text>
+                <Text style={styles.title}>Activate your membership to enjoy all the benefits of our advanced security system. Monitor and protect your company with the latest security technologies.</Text>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Membership')}>
-                    <Text style={styles.buttonText}>Activate Subscription</Text>
+                    <Text style={styles.buttonText}>Activate Membership</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
