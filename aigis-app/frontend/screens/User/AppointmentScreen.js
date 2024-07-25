@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import IP from '../../IP.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNPickerSelect from 'react-native-picker-select';
 
-const availableHours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+const availableHours = [
+  { label: '08:00', value: '08:00' },
+  { label: '09:00', value: '09:00' },
+  { label: '10:00', value: '10:00' },
+  { label: '11:00', value: '11:00' },
+  { label: '12:00', value: '12:00' },
+  { label: '13:00', value: '13:00' },
+  { label: '14:00', value: '14:00' },
+  { label: '15:00', value: '15:00' },
+  { label: '16:00', value: '16:00' },
+  { label: '17:00', value: '17:00' },
+];
 
 const AppointmentScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -39,7 +50,7 @@ const AppointmentScreen = () => {
       const url = `http://${IP}:3000/cita/createCita`;
       const response = await axios.post(url, newAppointment);
       if (response.status === 200) {
-        Alert.alert('Citas', 'Se guardó la cita');
+        Alert.alert('Appointments', 'Appointment saved successfully');
         setAppointments([...appointments, newAppointment]);
         setSelectedDate('');
         setSelectedHour('');
@@ -50,125 +61,146 @@ const AppointmentScreen = () => {
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(error.response?.data?.message || "Algo salió mal con tu registro");
+      setErrorMessage(error.response?.data?.message || "Something went wrong with your registration");
     }
   };
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.name}>Location: {item.location}</Text>
-      <Text style={styles.details}>Colonia: {item.colonia}</Text>
-      <Text style={styles.details}>Calle: {item.calle}</Text>
-      <Text style={styles.details}>Número: {item.numero}</Text>
-      <Text style={styles.details}>Referencia: {item.referencia}</Text>
-      <Text style={styles.details}>Date: {item.date}</Text>
-      <Text style={styles.details}>Hour: {item.hour}</Text>
+      <Text style={styles.name}>Location: {item.colonia}, {item.calle} {item.numero}</Text>
+      <Text style={styles.details}>Reference: {item.referencia}</Text>
+      <Text style={styles.details}>Date: {item.fecha}</Text>
+      <Text style={styles.details}>Hour: {item.hora}</Text>
     </View>
   );
 
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <View style={styles.container}>
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-      <FlatList
-        data={appointments}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
-
-      <Text style={styles.title}>Agendar Cita</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Colonia"
-        value={colonia}
-        onChangeText={setColonia}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Calle"
-        value={calle}
-        onChangeText={setCalle}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Número"
-        value={numero}
-        onChangeText={setNumero}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Referencia"
-        value={referencia}
-        onChangeText={setReferencia}
-        maxLength={50}
-      />
-      <Calendar
-        minDate={today}
-        onDayPress={(day) => setSelectedDate(day.dateString)}
-        markedDates={{
-          [selectedDate]: { selected: true, marked: true, selectedColor: '#E53935' },
-        }}
-        theme={{
-          todayTextColor: '#E53935',
-          selectedDayBackgroundColor: '#E53935',
-        }}
-        style={styles.calendar}
-      />
-      <Picker
-        selectedValue={selectedHour}
-        style={styles.picker}
-        onValueChange={(itemValue) => setSelectedHour(itemValue)}
-      >
-        <Picker.Item label="Seleccionar Hora" value="" />
-        {availableHours.map((hour) => (
-          <Picker.Item key={hour} label={hour} value={hour} />
-        ))}
-      </Picker>
-      <Button title="Confirmar" onPress={handleSchedule} />
-    </View>
+    <ScrollView contentContainerStyle={styles.contentContainer}>
+      <View style={styles.container}>
+        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+        <Text style={styles.title}>Schedule Appointment</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Neighborhood"
+          placeholderTextColor="#9E9E9E"
+          value={colonia}
+          onChangeText={setColonia}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Street"
+          placeholderTextColor="#9E9E9E"
+          value={calle}
+          onChangeText={setCalle}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Number"
+          placeholderTextColor="#9E9E9E"
+          value={numero}
+          onChangeText={setNumero}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Reference"
+          placeholderTextColor="#9E9E9E"
+          value={referencia}
+          onChangeText={setReferencia}
+          maxLength={50}
+        />
+        <Calendar
+          minDate={today}
+          onDayPress={(day) => setSelectedDate(day.dateString)}
+          markedDates={{
+            [selectedDate]: { selected: true, marked: true, selectedColor: '#E53935' },
+          }}
+          theme={{
+            todayTextColor: '#E53935',
+            selectedDayBackgroundColor: '#E53935',
+            calendarBackground: '#424242',
+            dayTextColor: '#F4F6FC',
+            textDisabledColor: '#9E9E9E',
+            monthTextColor: '#F4F6FC',
+            arrowColor: '#E53935',
+            textDayFontWeight: 'bold',
+            textMonthFontWeight: 'bold',
+            textDayHeaderFontWeight: 'bold',
+          }}
+          style={styles.calendar}
+        />
+        <Text style={styles.nameField}>Select Time</Text>
+        <RNPickerSelect
+          onValueChange={(value) => setSelectedHour(value)}
+          items={availableHours}
+          style={pickerSelectStyles}
+          placeholder={{ label: 'Select Time', value: null }}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSchedule}>
+          <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
+        {appointments.length > 0 && (
+          <FlatList
+            data={appointments}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={<Text style={styles.emptyText}>No appointments found</Text>}
+          />
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: '#424242',
     padding: 16,
+    flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#F4F6FC',
     marginBottom: 20,
   },
   item: {
     padding: 16,
     marginVertical: 8,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    backgroundColor: '#212121',
     borderRadius: 8,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#F4F6FC',
   },
   details: {
     fontSize: 16,
+    color: '#F4F6FC',
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#E53935',
     borderWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
     borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+  },
+  nameField: {
+    color: '#F4F6FC',
+    marginBottom: 10,
   },
   calendar: {
     marginBottom: 12,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 12,
+    borderRadius: 8,
   },
   errorText: {
     color: '#F4F6FC',
@@ -176,6 +208,50 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 4,
     borderRadius: 4,
+  },
+  button: {
+    backgroundColor: '#E53935',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#F4F6FC',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  emptyText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#F4F6FC',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
   },
 });
 

@@ -1,5 +1,5 @@
 const path = require('path');
-const { Sensor } = require('../models/model.js');
+const { Sensor, Usuario } = require('../models/model.js');
 const fs = require('fs');
 
 const getSensor = async (req, res) => {
@@ -138,10 +138,39 @@ const deleteSensor = async (req, res) => {
     }
 };
 
+const getSensorByUser = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const usuario = await Usuario.findById(userId).populate('sensores.sensor_id');
+
+        if (!usuario) {
+            return res.status(404).json({ status: "error", message: "User not found" });
+        }
+
+        const sensores = usuario.sensores.map(sensor => ({
+            sensor_id: sensor.sensor_id._id,
+            tipo: sensor.sensor_id.tipo,
+            descripcion: sensor.sensor_id.descripcion,
+            estado: sensor.sensor_id.estado,
+            ubicacion: sensor.sensor_id.ubicacion
+        }));
+
+        return res.status(200).json({ status: "success", sensores });
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error retrieving user's sensors",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getSensor,
     postSensor,
     updateSensor,
     deleteSensor,
-    mostrarImagen
+    mostrarImagen,
+    getSensorByUser
 };

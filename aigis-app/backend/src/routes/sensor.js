@@ -8,4 +8,6 @@ router.post('/', SensorController.postSensor)
 router.put('/:id', SensorController.updateSensor)
 router.delete('/:id', SensorController.deleteSensor)
 
+router.get('/usuario/:userId', SensorController.getSensorByUser);
+
 module.exports = router

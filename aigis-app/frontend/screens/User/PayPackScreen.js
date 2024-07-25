@@ -40,7 +40,7 @@ const PayPackScreen = () => {
         setCvv('');
 
         Alert.alert('Success', 'Payment processed successfully', [
-          { text: 'OK', onPress: () => navigation.navigate('Welcome') }
+          { text: 'OK', onPress: () => navigation.navigate('Home') }
         ]);
       } catch (error) {
         console.error('Error processing payment:', error.response ? error.response.data : error.message);
