@@ -54,7 +54,7 @@ const EditProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
+      <Text style={styles.title}>Company data</Text>
       <Text style={styles.nameField}>Company:</Text>
       <TextInput
         style={styles.input}
