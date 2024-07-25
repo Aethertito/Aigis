@@ -32,13 +32,18 @@ const LocationsScreen = () => {
 
   const updateLocation = async (paqueteId, newLocation) => {
     try {
-      const url = `http://${IP}:3000/paqueteComprado/${paqueteId}`; // Ajusta esta URL según tu API
-      await axios.put(url, { ubicacion: newLocation });
-      fetchPaquetesComprados(); // Actualiza la lista después de la actualización
-      Alert.alert('Success', 'Location updated successfully');
+      const url = `http://${IP}:3000/paqueteComprado/${paqueteId}`;
+      const response = await axios.put(url, { ubicacion: newLocation });
+      
+      if (response.data.status === 'success') {
+        fetchPaquetesComprados(); // Actualiza la lista después de la actualización
+        Alert.alert('Success', 'Location and sensors updated successfully');
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      console.error('Error updating location:', error);
-      Alert.alert('Error', 'Failed to update location');
+      console.error('Error updating location and sensors:', error);
+      Alert.alert('Error', 'Failed to update location and sensors');
     }
   };
 

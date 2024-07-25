@@ -82,23 +82,44 @@ const updateLocation = async (req, res) => {
     const { paqueteId } = req.params;
     const { ubicacion } = req.body;
 
-    // Validar que se proporcione una ubicación
     if (!ubicacion) {
       return res.status(400).json({ status: 'error', message: 'Ubicación no proporcionada' });
     }
 
-    // Buscar y actualizar el paquete comprado
+    // Actualizar el paquete comprado
     const paqueteActualizado = await PaqueteComprado.findByIdAndUpdate(
       paqueteId,
       { ubicacion: ubicacion },
-      { new: true } // Esto hace que devuelva el documento actualizado
+      { new: true }
     );
 
     if (!paqueteActualizado) {
       return res.status(404).json({ status: 'error', message: 'Paquete comprado no encontrado' });
     }
 
-    // Responder con el paquete actualizado
+    // Actualizar o crear instancias de sensores
+    const sensoresActualizados = await Promise.all(paqueteActualizado.sensores.map(async (sensorInfo) => {
+      const sensorActualizado = await Sensor.findByIdAndUpdate(
+        sensorInfo.sensor_id._id,
+        { 
+          ubicacion: ubicacion,
+          estado: 'active',
+          usuario_id: paqueteActualizado.usuario,
+          paquete_id: paqueteActualizado._id
+        },
+        { new: true, upsert: true } // Esto crea el sensor si no existe
+      );
+      return {
+        sensor_id: sensorActualizado,
+        tipo: sensorActualizado.tipo,
+        _id: sensorInfo._id
+      };
+    }));
+
+    // Actualizar el paquete con los sensores actualizados
+    paqueteActualizado.sensores = sensoresActualizados;
+    await paqueteActualizado.save();
+
     res.json({
       status: 'success',
       message: 'Ubicación actualizada con éxito',
@@ -106,7 +127,7 @@ const updateLocation = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error al actualizar la ubicación del paquete:', error);
+    console.error('Error al actualizar la ubicación del paquete y sensores:', error);
     res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
   }
 }
