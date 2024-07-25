@@ -66,8 +66,8 @@ const PaquetesScreen = () => {
                 paquete: item.paquete,
                 cantidad: item.quantity,
                 costo: item.precio * item.quantity,
+                precio: item.precio // Añadir el precio del paquete
             }));
-            console.log(cartData);
             await AsyncStorage.setItem('cartData', JSON.stringify(cartData));
             navigation.navigate('PayPack', {
                 cartData,

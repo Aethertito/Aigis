@@ -24,7 +24,8 @@ const PayPackScreen = () => {
             usuario_id: userId,
             paquete_id: item.id,
             ubicacion: 'Unspecified', // Ajusta esto según la lógica de tu aplicación
-            metodoPago: 'Credit Card'
+            metodoPago: 'Credit Card',
+            precio: item.costo // Asegúrate de que el precio se envíe correctamente
           };
 
           console.log('Datos de pago enviados:', paymentData);

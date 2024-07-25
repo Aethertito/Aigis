@@ -76,11 +76,13 @@ const paqueteCompradoSchema = new Schema({
   usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
   paquete: { type: String, required: true },
   ubicacion: { type: String, required: true },
+  precio: { type: Number, required: true },
   sensores: [{
     sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor', required: true },
     tipo: { type: String, required: true }
-  }]
+  }],
 });
+
 
 
 const Usuario = model('Usuario', usuarioSchema);

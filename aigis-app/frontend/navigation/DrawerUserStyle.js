@@ -27,7 +27,7 @@ export function DrawerUserContent(props) {
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                        <Title style={styles.title}>{userName}</Title>
+                        <Title style={styles.title}>Welcome, {userName}</Title>
                         <Caption style={styles.caption}>{userEmail}</Caption>
                     </View>
                 </View>
