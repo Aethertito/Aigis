@@ -94,6 +94,16 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Configurations' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Ubicaciones"
+                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Configurations');
+                        props.navigation.navigate('Ubicaciones');
+                    }}
+                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
 
             <View style={styles.logoutSection}>

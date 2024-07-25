@@ -77,7 +77,42 @@ const getPaquetePorUsuario = async (req, res) => {
   }
 };
 
+const updateLocation = async (req, res) => {
+  try {
+    const { paqueteId } = req.params;
+    const { ubicacion } = req.body;
+
+    // Validar que se proporcione una ubicación
+    if (!ubicacion) {
+      return res.status(400).json({ status: 'error', message: 'Ubicación no proporcionada' });
+    }
+
+    // Buscar y actualizar el paquete comprado
+    const paqueteActualizado = await PaqueteComprado.findByIdAndUpdate(
+      paqueteId,
+      { ubicacion: ubicacion },
+      { new: true } // Esto hace que devuelva el documento actualizado
+    );
+
+    if (!paqueteActualizado) {
+      return res.status(404).json({ status: 'error', message: 'Paquete comprado no encontrado' });
+    }
+
+    // Responder con el paquete actualizado
+    res.json({
+      status: 'success',
+      message: 'Ubicación actualizada con éxito',
+      paquete: paqueteActualizado
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar la ubicación del paquete:', error);
+    res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
+  }
+}
+
 module.exports = {
   comprarPaquete,
-  getPaquetePorUsuario
+  getPaquetePorUsuario,
+  updateLocation
 };

@@ -33,6 +33,7 @@ const PayPackScreen = () => {
           const apiUrl = `http://${IP}:3000/paqueteComprado/comprar`;
           const response = await axios.post(apiUrl, paymentData);
           console.log('Respuesta de la API:', response.data);
+          navigation.navigate('Home')
         }
 
         setCardNumber('');
