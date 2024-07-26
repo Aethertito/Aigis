@@ -138,7 +138,7 @@ const getUsuario = async (req,res) => {
 
 const getAllUser = async (req, res) => {
     try {
-        const users = await Usuario.find();
+        const users = await Usuario.find({ rol: 'user' });
         return res.status(200).json({
             status: "success",
             users
@@ -154,7 +154,7 @@ const getAllUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const userId = req.params.userId; 
+        const userId = req.params.userId;
         const updateData = req.body;
 
         const userUpdated = await Usuario.findByIdAndUpdate(userId, updateData, { new: true });
@@ -181,10 +181,9 @@ const updateUser = async (req, res) => {
     }
 }
 
-
 const deleteUser = async (req, res) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params.userId;
 
         const userDeleted = await Usuario.findByIdAndDelete(userId);
 

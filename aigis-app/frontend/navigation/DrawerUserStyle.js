@@ -95,14 +95,14 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Configurations' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Ubicaciones"
-                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon name="location-on" color={activeItem === 'Locations Sensors' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Locations Sensors"
+                    labelStyle={[styles.label, { color: activeItem === 'Locations Sensors' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Configurations');
+                        setActiveItem('Locations Sensors');
                         props.navigation.navigate('Ubicaciones');
                     }}
-                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
+                    style={activeItem === 'Locations Sensors' ? styles.activeItem : {}}
                 />
             </Drawer.Section>
 

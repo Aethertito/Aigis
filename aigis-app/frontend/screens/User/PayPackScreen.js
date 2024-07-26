@@ -59,7 +59,7 @@ const PayPackScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Paquetes')} style={styles.iconContainer}>
           <Icon name='arrow-back-ios' type='MaterialIcons' color='#E53935' size={24} />
           <Text style={styles.iconText}>Back</Text>
         </TouchableOpacity>
