@@ -9,6 +9,7 @@ import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import PayPackScreen from '../screens/User/PayPackScreen';
 import Ubicaciones from '../screens/User/Ubicaciones'
+import HelpScreen from '../screens/User/HelpScreen'
 
 import DrawerUserContent from './DrawerUserStyle';
 
@@ -26,6 +27,7 @@ const UserDrawer = () => (
     <Drawer.Screen name="Appointment" component={AppointmentScreen} />
     <Drawer.Screen name="PayPack" component={PayPackScreen} />
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
+    <Drawer.Screen name="Help" component={HelpScreen} />
   </Drawer.Navigator>
 );
 

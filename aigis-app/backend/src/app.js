@@ -43,7 +43,7 @@ const PackageRoutes = require('./routes/package.js')
 const PagoRoutes = require('./routes/pago.js');
 const CitaRoutes = require('./routes/citas.js')
 const PaqueteCompradoRoutes = require('./routes/paqueteComprado.js');
-const GraficasRoutes = require('./routes/graficas.js'); // Nueva ruta
+const GraficasRoutes = require('./routes/graficas.js');
 
 app.use('/usuario', UsuarioRoutes)
 app.use('/sensor', SensorRoutes)

@@ -7,7 +7,7 @@ import EditUserScreen from '../screens/Admin/EditUserScreen';
 import ManageSensorsScreen from '../screens/Admin/ManageSensorsScreen';
 import ManageUsersScreen from '../screens/Admin/ManageUsersScreen';
 import MoreInformationScreen from '../screens/Admin/MoreInformationScreen';
-
+import SupportAdminScreen from '../screens/Admin/SupportAdminScreen';
 
 import DrawerAdminContent from './DrawerAdminStyle';
 
@@ -19,6 +19,7 @@ const AdminDrawer = () => (
     <Drawer.Screen name="Admin Home" component={AdminHomeScreen} />
     <Drawer.Screen name="Manage Sensors" component={ManageSensorsScreen} />
     <Drawer.Screen name="Manage Users" component={ManageUsersScreen} />
+    <Stack.Screen name="Support Admin" component={SupportAdminScreen} />
   </Drawer.Navigator>
 );
 

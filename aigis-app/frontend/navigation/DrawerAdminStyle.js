@@ -49,6 +49,16 @@ export function DrawerAdminContent(props) {
                     }}
                     style={activeItem === 'Manage Users' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="support-agent" color={activeItem === 'Support' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Support"
+                    labelStyle={[styles.label, { color: activeItem === 'Support' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support');
+                        props.navigation.navigate('Support Admin');
+                    }}
+                    style={activeItem === 'Support' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
             <View style={styles.logoutSection}>
                 <DrawerItem 
@@ -97,7 +107,6 @@ const styles = StyleSheet.create({
     },
     logoutSection: {
         marginTop: 'auto',
-        top: 525
     },
     logoutItem: {
         backgroundColor: '#424242', 

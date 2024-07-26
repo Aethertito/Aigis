@@ -83,6 +83,13 @@ const paqueteCompradoSchema = new Schema({
   }],
 });
 
+const ayudaUsuarioSchema = new Schema({
+  correo: { type: String, required: true },
+  titulo: { type: String, required: true },
+  problema: { type: String, required: true },
+  fecha: { type: Date, default: Date.now },
+  usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+});
 
 
 const Usuario = model('Usuario', usuarioSchema);
@@ -92,6 +99,7 @@ const Estadistica = model('Estadistica', estadisticaSchema);
 const Pago = mongoose.model('Pago', pagoSchema);
 const Membresia = mongoose.model('Membresia', membresiaSchema);
 const PaqueteComprado = mongoose.model('PaqueteComprado', paqueteCompradoSchema);
+const AyudaUsuario = mongoose.model('AyudaUsuario', ayudaUsuarioSchema);
 
 module.exports = {
   Usuario,
@@ -100,5 +108,6 @@ module.exports = {
   Estadistica,
   Membresia,
   Pago,
-  PaqueteComprado
+  PaqueteComprado,
+  AyudaUsuario
 };

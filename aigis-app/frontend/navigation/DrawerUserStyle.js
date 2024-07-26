@@ -104,6 +104,16 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Locations Sensors' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="contact-support" color={activeItem === 'Support' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Support"
+                    labelStyle={[styles.label, { color: activeItem === 'Support' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support');
+                        props.navigation.navigate('Help');
+                    }}
+                    style={activeItem === 'Support' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
 
             <View style={styles.logoutSection}>
