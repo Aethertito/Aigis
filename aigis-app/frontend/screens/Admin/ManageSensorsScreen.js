@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl, ActivityIndicator, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import IP from '../../IP';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
@@ -94,16 +94,15 @@ const ManageSensorsScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Manage Sensors</Text>
-        <Picker
-          selectedValue={selectedUser}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSelectedUser(itemValue)}
-        >
-          <Picker.Item label="Select User" value={null} />
-          {users.map(user => (
-            <Picker.Item key={user._id} label={user.nombre} value={user._id} />
-          ))}
-        </Picker>
+        <View style={styles.pickerContainer}>
+          <RNPickerSelect
+            onValueChange={(value) => setSelectedUser(value)}
+            items={users.map(user => ({ label: user.nombre, value: user._id }))}
+            style={pickerSelectStyles}
+            placeholder={{ label: 'Select User', value: null }}
+            value={selectedUser}
+          />
+        </View>
       </View>
       {loading ? (
         <ActivityIndicator size="large" color="#E53935" />
@@ -138,10 +137,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
   },
-  picker: {
-    height: 50,
-    width: 200,
-    color: '#ffffff',
+  pickerContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   item: {
     backgroundColor: '#212121',
@@ -189,6 +187,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#FFF',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    width: '90%',
+    marginLeft: 20
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#FFF',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    width: '100%',
   },
 });
 
