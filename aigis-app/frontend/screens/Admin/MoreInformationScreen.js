@@ -63,6 +63,10 @@ const MoreInformationScreen = ({ route, navigation }) => {
     return acc;
   }, []);
 
+  const hasMembership = userData.memActiva && userData.memActiva !== '';
+  const hasPackages = paquetesAgrupados.length > 0;
+  const hasSensors = sensoresAgrupados.length > 0;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
@@ -90,32 +94,44 @@ const MoreInformationScreen = ({ route, navigation }) => {
           <Text style={styles.sectionTitle}>Membership Info</Text>
           <View style={styles.infoContainer}>
             <Text style={styles.label}>Membership Status: <Text style={styles.value}>{userData.memActiva ? 'Active' : 'Inactive'}</Text></Text>
-            <Text style={styles.label}>Start Date: <Text style={styles.value}>{new Date(userData.memFechaInicio).toLocaleDateString()}</Text></Text>
-            <Text style={styles.label}>End Date: <Text style={styles.value}>{new Date(userData.memFechaFin).toLocaleDateString()}</Text></Text>
-            <Text style={styles.label}>Time Frame: <Text style={styles.value}>{userData.memCantidad} {userData.memPeriodo}</Text></Text>
-            <Text style={styles.label}>Description: <Text style={styles.value}>{userData.memDescripcion}</Text></Text>
+            {hasMembership && (
+              <>
+                <Text style={styles.label}>Start Date: <Text style={styles.value}>{new Date(userData.memFechaInicio).toLocaleDateString()}</Text></Text>
+                <Text style={styles.label}>End Date: <Text style={styles.value}>{new Date(userData.memFechaFin).toLocaleDateString()}</Text></Text>
+                <Text style={styles.label}>Time Frame: <Text style={styles.value}>{userData.memCantidad} {userData.memPeriodo}</Text></Text>
+                <Text style={styles.label}>Description: <Text style={styles.value}>{userData.memDescripcion}</Text></Text>
+              </>
+            )}
           </View>
         </View>
 
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Company Packages</Text>
           <View style={styles.infoContainer}>
-            {paquetesAgrupados.map((paquete, index) => (
-              <View key={index} style={styles.packageContainer}>
-                <Text style={styles.packageLabel}>{paquete.paquete}: <Text style={styles.packageValue}>x{paquete.cantidad}</Text></Text>
-              </View>
-            ))}
+            {hasPackages ? (
+              paquetesAgrupados.map((paquete, index) => (
+                <View key={index} style={styles.packageContainer}>
+                  <Text style={styles.packageLabel}>{paquete.paquete}: <Text style={styles.packageValue}>x{paquete.cantidad}</Text></Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noDataText}>No packages purchased</Text>
+            )}
           </View>
         </View>
 
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Sensors</Text>
           <View style={styles.infoContainer}>
-            {sensoresAgrupados.map((sensor, index) => (
-              <View key={index} style={styles.sensorContainer}>
-                <Text style={styles.sensorLabel}>{sensor.tipo}: <Text style={styles.sensorValue}>x{sensor.cantidad}</Text></Text>
-              </View>
-            ))}
+            {hasSensors ? (
+              sensoresAgrupados.map((sensor, index) => (
+                <View key={index} style={styles.sensorContainer}>
+                  <Text style={styles.sensorLabel}>{sensor.tipo}: <Text style={styles.sensorValue}>x{sensor.cantidad}</Text></Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noDataText}>No sensors purchased</Text>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -129,8 +145,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#424242',
   },
   scrollContent: {
+    flexGrow: 1,
     padding: 16,
-    paddingTop: 0, // Remove top padding to avoid gap with title
+    paddingTop: 0,
   },
   loadingContainer: {
     flex: 1,
@@ -146,7 +163,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    top: 25
+    top: 25,
   },
   iconText: {
     color: '#E53935',
@@ -206,6 +223,11 @@ const styles = StyleSheet.create({
   sensorValue: {
     fontWeight: 'bold',
     color: '#E53935',
+  },
+  noDataText: {
+    fontSize: 16,
+    color: '#F4F6FC',
+    fontStyle: 'italic',
   },
 });
 
