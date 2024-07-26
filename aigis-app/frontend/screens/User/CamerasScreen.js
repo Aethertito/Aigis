@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 const cameras = [
   { id: '1', location: 'Entrance', status: 'Active' },
@@ -11,6 +12,24 @@ const CamerasScreen = () => {
     <View style={styles.item}>
       <Text style={styles.name}>Location: {item.location}</Text>
       <Text style={styles.details}>Status: {item.status}</Text>
+      {item.status === 'Active' && (
+        Platform.OS === 'web' ? (
+          <iframe
+            src="http://192.168.100.228:81/stream"
+            style={styles.webview}
+            allow="autoplay"
+          />
+        ) : (
+          <WebView
+            source={{ uri: 'http://192.168.100.228:81/stream' }}
+            style={styles.webview}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            allowsInlineMediaPlayback={true}
+            mediaPlaybackRequiresUserAction={false}
+          />
+        )
+      )}
     </View>
   );
 
@@ -49,6 +68,10 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 16,
+  },
+  webview: {
+    width: '100%',
+    height: 300, // Ajusta el tamaño del WebView según sea necesario
   },
 });
 

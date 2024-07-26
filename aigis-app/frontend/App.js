@@ -11,6 +11,8 @@ import PaquetesScreen from './screens/User/PaquetesScreen';
 import PayScreen from './screens/User/PayScreen';
 import MembershipScreen from './screens/User/MembershipScreen';
 import OptionScreen from './screens/User/OptionsScreen';
+import CamerasScreen from './screens/User/CamerasScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,7 @@ const App = () => {
         <Stack.Screen name="Pay" component={PayScreen} />
         <Stack.Screen name="Membership" component={MembershipScreen} />
         <Stack.Screen name="Options" component={OptionScreen} />
+        <Stack.Screen name="Cameras" component={CamerasScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
