@@ -48,30 +48,41 @@ const CamerasScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#424242',
     padding: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#F4F6FC',
     marginBottom: 20,
+    alignSelf: 'center',
   },
   item: {
+    backgroundColor: '#212121',
     padding: 16,
     marginVertical: 8,
-    borderColor: '#ccc',
-    borderWidth: 1,
     borderRadius: 8,
+    borderColor: '#E53935',
+    borderWidth: 1,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#F4F6FC',
+    marginBottom: 4,
   },
   details: {
     fontSize: 16,
+    color: '#F4F6FC',
+    marginBottom: 8,
   },
   webview: {
     width: '100%',
-    height: 300, // Ajusta el tamaño del WebView según sea necesario
+    height: 300,
+    borderRadius: 8,
+    borderColor: '#E53935',
+    borderWidth: 1,
   },
 });
 

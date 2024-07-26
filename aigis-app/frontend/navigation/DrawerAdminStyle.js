@@ -59,6 +59,16 @@ export function DrawerAdminContent(props) {
                     }}
                     style={activeItem === 'Support' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="manage-accounts" color={activeItem === 'Manage Users' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="CitasAdmin"
+                    labelStyle={[styles.label, { color: activeItem === 'Manage Users' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Manage Users');
+                        props.navigation.navigate('CitasAdmin');
+                    }}
+                    style={activeItem === 'Manage Users' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
             <View style={styles.logoutSection}>
                 <DrawerItem 

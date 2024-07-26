@@ -91,6 +91,19 @@ const ayudaUsuarioSchema = new Schema({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
 });
 
+const citaSchema = new Schema({
+  usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario' },
+  fecha: { type: Date, required: true },
+  hora: { type: String, required: true, enum: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+  colonia: { type: String, required: true },
+  calle: { type: String, required: true },
+  numero: { type: String, required: true },
+  referencia: { type: String, maxlength: 50 },
+  motivo: {type: String},
+  estado: { type: String, enum: ['pendiente', 'confirmada', 'cancelada'], default: 'pendiente' }
+});
+
+
 
 const Usuario = model('Usuario', usuarioSchema);
 const Sensor = model('Sensor', sensorSchema);
@@ -100,6 +113,7 @@ const Pago = mongoose.model('Pago', pagoSchema);
 const Membresia = mongoose.model('Membresia', membresiaSchema);
 const PaqueteComprado = mongoose.model('PaqueteComprado', paqueteCompradoSchema);
 const AyudaUsuario = mongoose.model('AyudaUsuario', ayudaUsuarioSchema);
+const Cita = mongoose.model('Cita', citaSchema);
 
 module.exports = {
   Usuario,
@@ -109,5 +123,6 @@ module.exports = {
   Membresia,
   Pago,
   PaqueteComprado,
-  AyudaUsuario
+  AyudaUsuario,
+  Cita
 };
