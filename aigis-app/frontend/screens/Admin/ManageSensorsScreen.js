@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   pickerContainer: {
     flex: 1,
@@ -153,11 +153,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   details: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -172,18 +172,18 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   optionButtonText: {
-    color: '#FFF',
+    color: '#F4F6FC',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   noDataText: {
-    color: '#ffffff',
+    color: '#F4F6FC',
     fontSize: 16,
     textAlign: 'center',
   },
   errorText: {
-    color: '#ff0000',
+    color: '#F4F6FC',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
@@ -198,7 +198,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E53935',
     borderRadius: 5,
-    color: '#FFF',
+    color: '#F4F6FC',
     backgroundColor: '#212121',
     paddingRight: 30,
     width: '90%',
@@ -211,7 +211,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E53935',
     borderRadius: 5,
-    color: '#FFF',
+    color: '#F4F6FC',
     backgroundColor: '#212121',
     paddingRight: 30,
     width: '100%',

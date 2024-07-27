@@ -67,6 +67,21 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+  const handleEmailChange = (text) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (text.length <= 50 && emailPattern.test(text)) {
+      setEmail(text);
+    } else if (text.length <= 50) {
+      setEmail(text);
+    }
+  };
+
+  const handlePasswordChange = (text) => {
+    if (text.length <= 25) {
+      setPassword(text);
+    }
+  };
+
   return (
     <View style={styles.overlay}>
       <Text style={styles.title}>Sign In</Text>
@@ -77,7 +92,8 @@ const LoginScreen = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
+        maxLength={50}
       />
       <Text style={styles.nameField}>Password</Text>
       <View style={styles.passwordContainer}>
@@ -86,7 +102,8 @@ const LoginScreen = ({ navigation }) => {
           placeholderTextColor="#F4F6FC"
           secureTextEntry={!showPassword}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={handlePasswordChange}
+          maxLength={40}
         />
         <Pressable 
           style={styles.eyeIconContainer} 
@@ -126,6 +143,8 @@ const styles = StyleSheet.create({
     color: '#F4F6FC',
     left: '3%',
     alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    marginBottom: 2
   },
   overlay: {
     width: '100%',
@@ -164,6 +183,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#F4F6FC',
     fontSize: 16,
+    fontWeight: 'bold'
   },
   linksContainer: {
     justifyContent: 'center',
@@ -177,6 +197,7 @@ const styles = StyleSheet.create({
     color: '#E53935',
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: 'bold'
   },
   errorText: {
     color: '#F4F6FC',

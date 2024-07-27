@@ -20,14 +20,14 @@ export function DrawerAdminContent(props) {
 
             <Drawer.Section style={styles.drawerSection}>
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="home" color={activeItem === 'Admin Home' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Admin Home"
-                    labelStyle={[styles.label, { color: activeItem === 'Admin Home' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon name="home" color={activeItem === 'Home' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Home"
+                    labelStyle={[styles.label, { color: activeItem === 'Home' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Admin Home');
+                        setActiveItem('Home');
                         props.navigation.navigate('Admin Home');
                     }}
-                    style={activeItem === 'Admin Home' ? styles.activeItem : {}}
+                    style={activeItem === 'Home' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="sensor-occupied" color={activeItem === 'Manage Sensors' ? '#E53935' : '#FFF'} size={size} /> )}
@@ -60,14 +60,24 @@ export function DrawerAdminContent(props) {
                     style={activeItem === 'Support' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="manage-accounts" color={activeItem === 'Manage Users' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="CitasAdmin"
-                    labelStyle={[styles.label, { color: activeItem === 'Manage Users' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon name="date-range" color={activeItem === 'Appointments' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Appointments"
+                    labelStyle={[styles.label, { color: activeItem === 'Appointments' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Manage Users');
-                        props.navigation.navigate('CitasAdmin');
+                        setActiveItem('Appointments');
+                        props.navigation.navigate('Manage Appointments');
                     }}
-                    style={activeItem === 'Manage Users' ? styles.activeItem : {}}
+                    style={activeItem === 'Appointments' ? styles.activeItem : {}}
+                />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="payments" color={activeItem === 'Manage Payments' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Manage Payments"
+                    labelStyle={[styles.label, { color: activeItem === 'Manage Payments' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Manage Payments');
+                        props.navigation.navigate('Manage Payments');
+                    }}
+                    style={activeItem === 'Manage Payments' ? styles.activeItem : {}}
                 />
             </Drawer.Section>
             <View style={styles.logoutSection}>

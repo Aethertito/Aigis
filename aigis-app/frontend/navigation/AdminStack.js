@@ -9,6 +9,7 @@ import ManageUsersScreen from '../screens/Admin/ManageUsersScreen';
 import MoreInformationScreen from '../screens/Admin/MoreInformationScreen';
 import SupportAdminScreen from '../screens/Admin/SupportAdminScreen';
 import CitasAdmin from '../screens/Admin/CitasAdmin';
+import PaymentScreen from '../screens/Admin/PaymentScreen';
 
 
 import DrawerAdminContent from './DrawerAdminStyle';
@@ -22,7 +23,8 @@ const AdminDrawer = () => (
     <Drawer.Screen name="Manage Sensors" component={ManageSensorsScreen} />
     <Drawer.Screen name="Manage Users" component={ManageUsersScreen} />
     <Drawer.Screen name="Support Admin" component={SupportAdminScreen} />
-    <Drawer.Screen name="Citas Admin" component={CitasAdmin} />
+    <Drawer.Screen name="Manage Appointments" component={CitasAdmin} />
+    <Drawer.Screen name="Manage Payments" component={PaymentScreen} />
   </Drawer.Navigator>
 );
 

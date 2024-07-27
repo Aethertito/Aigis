@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   item: {
     backgroundColor: '#212121',
@@ -139,11 +139,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   details: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   moreInfo: {
     fontSize: 16,

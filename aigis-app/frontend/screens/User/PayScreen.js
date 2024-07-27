@@ -68,6 +68,38 @@ const PayScreen = () => {
 
     const totalAmount = membershipData ? membershipData.costo : 0;
 
+    const handleCardNumberChange = (text) => {
+        let formattedCardNumber = text.replace(/\D/g, '');
+        if (formattedCardNumber.length > 4 && formattedCardNumber.length <= 8) {
+            formattedCardNumber = `${formattedCardNumber.slice(0, 4)}-${formattedCardNumber.slice(4)}`;
+        } else if (formattedCardNumber.length > 8 && formattedCardNumber.length <= 12) {
+            formattedCardNumber = `${formattedCardNumber.slice(0, 4)}-${formattedCardNumber.slice(4, 8)}-${formattedCardNumber.slice(8)}`;
+        } else if (formattedCardNumber.length > 12) {
+            formattedCardNumber = `${formattedCardNumber.slice(0, 4)}-${formattedCardNumber.slice(4, 8)}-${formattedCardNumber.slice(8, 12)}-${formattedCardNumber.slice(12, 16)}`;
+        }
+        setCardNumber(formattedCardNumber);
+    };
+
+    const handleExpiryDateChange = (text) => {
+        let formattedExpiryDate = text.replace(/\D/g, '');
+        if (formattedExpiryDate.length > 2) {
+            formattedExpiryDate = `${formattedExpiryDate.slice(0, 2)}/${formattedExpiryDate.slice(2, 4)}`;
+        }
+        setExpiryDate(formattedExpiryDate);
+    };
+
+    const handleCardTitularChange = (text) => {
+        if (text.length <= 60) {
+            setCardTitular(text);
+        }
+    };
+
+    const handleCvvChange = (text) => {
+        if (text.length <= 3) {
+            setCvv(text);
+        }
+    };
+
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -91,7 +123,8 @@ const PayScreen = () => {
                         style={styles.input}
                         placeholderTextColor="#9E9E9E"
                         value={cardTitular}
-                        onChangeText={setCardTitular}
+                        onChangeText={handleCardTitularChange}
+                        maxLength={60}
                     />
                 </View>
 
@@ -102,8 +135,8 @@ const PayScreen = () => {
                         keyboardType="numeric"
                         placeholderTextColor="#9E9E9E"
                         value={cardNumber}
-                        onChangeText={setCardNumber}
-                        maxLength={16}
+                        onChangeText={handleCardNumberChange}
+                        maxLength={19}
                     />
                 </View>
 
@@ -113,9 +146,10 @@ const PayScreen = () => {
                         <TextInput
                             style={styles.input}
                             placeholder="MM/YY"
+                            keyboardType="numeric"
                             placeholderTextColor="#9E9E9E"
                             value={expiryDate}
-                            onChangeText={setExpiryDate}
+                            onChangeText={handleExpiryDateChange}
                             maxLength={5}
                         />
                     </View>
@@ -129,7 +163,7 @@ const PayScreen = () => {
                             placeholder="123"
                             secureTextEntry
                             value={cvv}
-                            onChangeText={setCvv}
+                            onChangeText={handleCvvChange}
                             maxLength={3}
                         />
                     </View>
