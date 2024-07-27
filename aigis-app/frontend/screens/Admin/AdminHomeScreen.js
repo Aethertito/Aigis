@@ -107,12 +107,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#212121',
     borderRadius: 10,
-    width: '45%', // Adjusted to take almost half of the screen width
+    width: '45%',
     height: 160,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 10,
-    marginHorizontal: '2.5%', // Adjusted to leave space between cards
+    marginHorizontal: '2.5%',
     padding: 20,
     elevation: 5,
   },

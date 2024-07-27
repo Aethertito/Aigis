@@ -101,7 +101,7 @@ const citaSchema = new Schema({
   numero: { type: String, required: true },
   referencia: { type: String, maxlength: 50 },
   motivo: { type: String },
-  estado: { type: String, enum: ['pending', 'confirmeda', 'canceled'], default: 'pending' }
+  estado: { type: String, enum: ['pending', 'confirmed', 'canceled'], default: 'pending' }
 });
 
 const empleadoSchema = new Schema({
