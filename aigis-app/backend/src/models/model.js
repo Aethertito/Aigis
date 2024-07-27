@@ -70,7 +70,7 @@ const pagoSchema = new mongoose.Schema({
   metodoPago: { type: String, required: true },
   estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' },
   fechaPago: { type: Date, default: Date.now },
-  cantidadPaquetes: { type: Number, required: true } // Nuevo campo para la cantidad de paquetes comprados
+  cantidadPaquetes: { type: Number } // Nuevo campo para la cantidad de paquetes comprados (opcional)
 });
 
 const paqueteCompradoSchema = new Schema({
