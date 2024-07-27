@@ -95,14 +95,34 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Configurations' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Ubicaciones"
-                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon name="location-on" color={activeItem === 'Locations Sensors' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Locations Sensors"
+                    labelStyle={[styles.label, { color: activeItem === 'Locations Sensors' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Configurations');
+                        setActiveItem('Locations Sensors');
                         props.navigation.navigate('Ubicaciones');
                     }}
-                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
+                    style={activeItem === 'Locations Sensors' ? styles.activeItem : {}}
+                />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="contact-support" color={activeItem === 'Support' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Support"
+                    labelStyle={[styles.label, { color: activeItem === 'Support' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support');
+                        props.navigation.navigate('Help');
+                    }}
+                    style={activeItem === 'Support' ? styles.activeItem : {}}
+                />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Support History"
+                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support History');
+                        props.navigation.navigate('SupportHistory');
+                    }}
+                    style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
             </Drawer.Section>
 

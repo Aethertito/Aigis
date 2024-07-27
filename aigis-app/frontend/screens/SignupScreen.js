@@ -35,6 +35,46 @@ const SignupScreen = ({ navigation }) => {
     console.log(data);
   };
 
+  const handleNombreChange = (text) => {
+    if (text.length <= 50) {
+      setNombre(text.charAt(0).toUpperCase() + text.slice(1));
+    }
+  };
+
+  const handleDireccionChange = (text) => {
+    if (text.length <= 50) {
+      setDireccion(text.charAt(0).toUpperCase() + text.slice(1));
+    }
+  };
+
+  const handleTelefonoChange = (text) => {
+    let formattedPhoneNumber = text.replace(/\D/g, ''); // Remove all non-numeric characters
+    if (formattedPhoneNumber.length > 3 && formattedPhoneNumber.length <= 6) {
+      formattedPhoneNumber = `${formattedPhoneNumber.slice(0, 3)}-${formattedPhoneNumber.slice(3)}`;
+    } else if (formattedPhoneNumber.length > 6) {
+      formattedPhoneNumber = `${formattedPhoneNumber.slice(0, 3)}-${formattedPhoneNumber.slice(3, 6)}-${formattedPhoneNumber.slice(6, 10)}`;
+    }
+    setTelefono(formattedPhoneNumber);
+  };
+
+  const handleCorreoChange = (text) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (text.length <= 50) {
+      setCorreo(text);
+      if (!emailPattern.test(text)) {
+        setErrorMessage('Invalid email format. Please use a valid email like example@example.com');
+      } else {
+        setErrorMessage('');
+      }
+    }
+  };
+
+  const handleContrasenaChange = (text) => {
+    if (text.length <= 40) {
+      setContrasena(text);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -44,7 +84,8 @@ const SignupScreen = ({ navigation }) => {
         placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={nombre}
-        onChangeText={setNombre}
+        onChangeText={handleNombreChange}
+        maxLength={50}
       />
       <Text style={styles.nameField}>Address</Text>
       <TextInput
@@ -52,7 +93,8 @@ const SignupScreen = ({ navigation }) => {
         placeholderTextColor="#F4F6FC"
         autoCapitalize='none'
         value={direccion}
-        onChangeText={setDireccion}
+        onChangeText={handleDireccionChange}
+        maxLength={50}
       />
       <Text style={styles.nameField}>Contact Phone Number</Text>
       <TextInput
@@ -61,7 +103,8 @@ const SignupScreen = ({ navigation }) => {
         autoCapitalize='none'
         keyboardType='numeric'
         value={telefono}
-        onChangeText={setTelefono}
+        onChangeText={handleTelefonoChange}
+        maxLength={12}
       />
       <Text style={styles.nameField}>Type of Business</Text>
       <RNPickerSelect
@@ -82,7 +125,8 @@ const SignupScreen = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
         value={correo}
-        onChangeText={setCorreo}
+        onChangeText={handleCorreoChange}
+        maxLength={50}
       />
       <Text style={styles.nameField}>Create Password</Text>
       <View style={styles.passwordContainer}>
@@ -91,7 +135,8 @@ const SignupScreen = ({ navigation }) => {
           placeholderTextColor="#F4F6FC"
           secureTextEntry={!showPassword}
           value={contrasena}
-          onChangeText={setContrasena}
+          onChangeText={handleContrasenaChange}
+          maxLength={40}
         />
         <Pressable 
           style={styles.eyeIconContainer} 
@@ -134,6 +179,8 @@ const styles = StyleSheet.create({
     color: '#F4F6FC',
     left: '3%',
     alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    marginBottom: 2
   },
   title: {
     fontSize: 28,
@@ -163,6 +210,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold'
   },
   loginRedirect: {
     marginTop: 20,
@@ -170,6 +218,7 @@ const styles = StyleSheet.create({
   loginText: {
     color: '#E53935',
     fontSize: 16,
+    fontWeight: 'bold'
   },
   backToWelcome: {
     marginTop: 10,
@@ -177,6 +226,7 @@ const styles = StyleSheet.create({
   backToWelcomeText: {
     color: '#E53935',
     fontSize: 16,
+    fontWeight: 'bold'
   },
   errorText: {
     color: '#F4F6FC',

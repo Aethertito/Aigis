@@ -9,6 +9,11 @@ import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import PayPackScreen from '../screens/User/PayPackScreen';
 import Ubicaciones from '../screens/User/Ubicaciones'
+import HelpScreen from '../screens/User/HelpScreen'
+
+import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
+import PaquetesScreen from '../screens/User/PaquetesScreen';
+
 
 import DrawerUserContent from './DrawerUserStyle';
 
@@ -24,14 +29,18 @@ const UserDrawer = () => (
     <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
     <Drawer.Screen name="Cameras" component={CamerasScreen} />
     <Drawer.Screen name="Appointment" component={AppointmentScreen} />
-    <Drawer.Screen name="PayPack" component={PayPackScreen} />
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
+    <Drawer.Screen name="Help" component={HelpScreen} />
+    <Drawer.Screen name="SupportHistory" component={SupportHistoryScreen} /> 
   </Drawer.Navigator>
 );
+
 
 const UserStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="UserDrawer" component={UserDrawer} />
+    <Stack.Screen name="PayPack" component={PayPackScreen} />
+    <Stack.Screen name="Paquetes" component={PaquetesScreen} />
   </Stack.Navigator>
 );
 

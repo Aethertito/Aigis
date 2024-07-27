@@ -8,7 +8,7 @@ const createCita = async (req, res) => {
         
         let params = req.body
         
-        if (!params.fecha || !params.hora || !params.colonia || !params.calle || !params.numero || !params.referencia) {
+        if (!params.fecha || !params.hora || !params.colonia || !params.calle || !params.numero || !params.referencia || !params.motivo) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Complete todos los campos'
@@ -46,6 +46,32 @@ const createCita = async (req, res) => {
 
 }
 
+const getAllCitas = async (req,res) => {
+    const citas = await Cita.find().populate('usuario_id')
+    return res.json(citas)
+}
+
+const confirmCita = async (req,res) => {
+    try {
+        const { id } = req.params;
+        const updatedCita = await Cita.findByIdAndUpdate(id, { estado: 'Confirm' }, { new: true });
+
+        if (!updatedCita) {
+            return res.status(404).json({ message: 'Cita not found' });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: updatedCita,
+        });
+    } catch (error) {
+        console.error('Error updating cita:', error);
+        res.status(500).json({ message: 'Failed to update cita' });
+    }
+}
+
 module.exports = {
-    createCita
+    createCita,
+    getAllCitas,
+    confirmCita
 }

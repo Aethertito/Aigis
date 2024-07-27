@@ -9,5 +9,6 @@ router.put('/:id', SensorController.updateSensor)
 router.delete('/:id', SensorController.deleteSensor)
 
 router.get('/usuario/:userId', SensorController.getSensorByUser);
+router.put('/:id/updateStatus', SensorController.updateSensorStatus);
 
 module.exports = router

@@ -38,29 +38,33 @@ const ManageUsersScreen = ({ navigation }) => {
 
   const handleDelete = (userId) => {
     Alert.alert(
-      'Confirmación',
-      '¿Estás seguro de que deseas eliminar este usuario?',
+      'Confirmation',
+      'Are you sure you want to delete this user?',
       [
         {
-          text: 'Cancelar',
+          text: 'Cancel',
           style: 'cancel'
         },
         {
-          text: 'Eliminar',
+          text: 'Delete',
           onPress: async () => {
             try {
               const url = `http://${IP}:3000/usuario/${userId}`;
               await axios.delete(url);
               fetchData(); // Actualiza la lista de usuarios
-              Alert.alert('Éxito', 'Usuario eliminado correctamente');
+              Alert.alert('Success', 'User successfully deleted');
             } catch (error) {
-              Alert.alert('Error', 'No se pudo eliminar el usuario');
+              Alert.alert('Error', 'Could not delete user');
               console.log(error)
             }
           }
         }
       ]
     );
+  };
+
+  const handleMoreInfo = (userId) => {
+    navigation.navigate('MoreInfo', { userId });
   };
 
   const renderItem = ({ item }) => (
@@ -72,6 +76,7 @@ const ManageUsersScreen = ({ navigation }) => {
           <Text style={styles.details}>Role: {item.rol}</Text>
           <Text style={styles.details}>Phone: {item.telefono}</Text>
           <Text style={styles.details}>Membership: {item.memActiva ? 'Active' : 'Inactive'}</Text>
+          <Text style={styles.moreInfo} onPress={() => handleMoreInfo(item._id)}>More Information...</Text>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity style={styles.iconButton} onPress={() => handleEdit(item._id)}>
@@ -88,11 +93,7 @@ const ManageUsersScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Manage Users</Text>
-        {/* Puedes descomentar y usar esta parte si tienes una pantalla para añadir nuevos usuarios */}
-        {/* <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddNewUser')}>
-          <Text style={styles.addButtonText}>New</Text>
-        </TouchableOpacity> */}
+        <Text style={styles.title}>Manage Companies</Text>
       </View>
       <FlatList
         data={data}
@@ -119,18 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
-  },
-  addButton: {
-    backgroundColor: '#E53935',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 6,
-  },
-  addButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#F4F6FC',
   },
   item: {
     backgroundColor: '#212121',
@@ -149,11 +139,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#ffffff',
+    color: '#F4F6FC',
   },
   details: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#F4F6FC',
+  },
+  moreInfo: {
+    fontSize: 16,
+    color: '#E53935',
+    textDecorationLine: 'underline',
+    marginTop: 5,
   },
   iconContainer: {
     flexDirection: 'column',

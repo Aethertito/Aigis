@@ -166,11 +166,42 @@ const getSensorByUser = async (req, res) => {
     }
 };
 
+const updateSensorStatus = async (req, res) => {
+    try {
+        const sensorId = req.params.id;
+        const sensor = await Sensor.findById(sensorId);
+
+        if (!sensor) {
+            return res.status(404).json({
+                status: "error",
+                message: "Sensor not found"
+            });
+        }
+
+        sensor.estado = sensor.estado === 'active' ? 'inactive' : 'active';
+        const updatedSensor = await sensor.save();
+
+        return res.status(200).json({
+            status: "success",
+            message: `Sensor ${sensor.estado === 'active' ? 'activated' : 'deactivated'} successfully`,
+            sensor: updatedSensor
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error updating sensor status",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getSensor,
     postSensor,
     updateSensor,
     deleteSensor,
     mostrarImagen,
-    getSensorByUser
+    getSensorByUser,
+    updateSensorStatus
 };

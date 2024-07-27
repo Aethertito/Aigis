@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import IP from '../../IP.js';
@@ -19,6 +19,11 @@ const availableHours = [
   { label: '17:00', value: '17:00' },
 ];
 
+const appointmentReasons = [
+  { label: 'Installation', value: 'installation' },
+  { label: 'Maintenance', value: 'maintenance' },
+];
+
 const AppointmentScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedHour, setSelectedHour] = useState('');
@@ -26,6 +31,7 @@ const AppointmentScreen = () => {
   const [calle, setCalle] = useState('');
   const [numero, setNumero] = useState('');
   const [referencia, setReferencia] = useState('');
+  const [motivo, setMotivo] = useState('');
   const [appointments, setAppointments] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -45,6 +51,7 @@ const AppointmentScreen = () => {
         referencia,
         fecha: selectedDate,
         hora: selectedHour,
+        motivo,
       };
 
       const url = `http://${IP}:3000/cita/createCita`;
@@ -58,6 +65,7 @@ const AppointmentScreen = () => {
         setCalle('');
         setNumero('');
         setReferencia('');
+        setMotivo('');
       }
     } catch (error) {
       console.log(error);
@@ -71,6 +79,7 @@ const AppointmentScreen = () => {
       <Text style={styles.details}>Reference: {item.referencia}</Text>
       <Text style={styles.details}>Date: {item.fecha}</Text>
       <Text style={styles.details}>Hour: {item.hora}</Text>
+      <Text style={styles.details}>Reason: {item.motivo}</Text>
     </View>
   );
 
@@ -136,6 +145,13 @@ const AppointmentScreen = () => {
           items={availableHours}
           style={pickerSelectStyles}
           placeholder={{ label: 'Select Time', value: null }}
+        />
+        <Text style={styles.nameField}>Select Reason</Text>
+        <RNPickerSelect
+          onValueChange={(value) => setMotivo(value)}
+          items={appointmentReasons}
+          style={pickerSelectStyles}
+          placeholder={{ label: 'Select Reason', value: null }}
         />
         <TouchableOpacity style={styles.button} onPress={handleSchedule}>
           <Text style={styles.buttonText}>Confirm</Text>
