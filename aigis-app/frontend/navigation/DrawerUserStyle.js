@@ -31,7 +31,7 @@ export function DrawerUserContent(props) {
                         style={styles.profileImage}
                     />
                     <View style={styles.profileText}>
-                        <Title style={styles.title}>Welcome, {userName}</Title>
+                        <Title style={styles.title}> {userName}</Title>
                         <Caption style={styles.caption}>{userEmail}</Caption>
                     </View>
                 </View>
@@ -169,13 +169,13 @@ export function DrawerUserContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-        backgroundColor: '#1E1E1E',
+        backgroundColor: '#212121',
     },
     userInfoSection: {
-        paddingLeft: 20,
-        paddingTop: 40,
-        paddingBottom: 20,
-        backgroundColor: '#212121',
+        paddingLeft: 8,
+        paddingTop: 15,
+        paddingBottom: 15,
+        backgroundColor: '#313131',
     },
     profileContainer: {
         flexDirection: 'row',
@@ -206,13 +206,10 @@ const styles = StyleSheet.create({
         color: '#F4F6FC',
     },
     activeItem: {
-        backgroundColor: '#212121',
+        backgroundColor: '#424242',
     },
     logoutSection: {
         marginTop: 'auto',
-    },
-    logoutItem: {
-        backgroundColor: '#1E1E1E',
     },
 });
 

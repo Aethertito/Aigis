@@ -26,6 +26,9 @@ const AdminDrawer = () => (
       headerTitleStyle: {
         fontWeight: 'bold',
       },
+      drawerIcon: ({ color, size }) => (
+        <Icon name="menu" color="#E53935" size={size} />
+      ),
     }}
   >
     <Drawer.Screen name="Admin Home" component={AdminHomeScreen} />

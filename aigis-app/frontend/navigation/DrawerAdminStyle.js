@@ -117,13 +117,13 @@ export function DrawerAdminContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-        backgroundColor: '#1E1E1E',
+        backgroundColor: '#212121',
     },
     userInfoSection: {
         paddingLeft: 20,
         paddingTop: 40,
         paddingBottom: 20,
-        backgroundColor: '#212121',
+        backgroundColor: '#313131',
     },
     profileContainer: {
         flexDirection: 'row',
@@ -154,13 +154,10 @@ const styles = StyleSheet.create({
         color: '#F4F6FC',
     },
     activeItem: {
-        backgroundColor: '#212121',
+        backgroundColor: '#424242',
     },
     logoutSection: {
         marginTop: 'auto',
-    },
-    logoutItem: {
-        backgroundColor: '#1E1E1E',
     },
 });
 
