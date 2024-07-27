@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import IP from '../../IP';
 
@@ -24,6 +24,22 @@ const SupportAdminScreen = () => {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    try {
+      const response = await axios.delete(`http://${IP}:3000/support/comment/${commentId}`);
+
+      if (response.data.status === 'success') {
+        setComments(comments.filter(comment => comment._id !== commentId));
+        Alert.alert('Success', 'Support comment deleted successfully');
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting support comment:', error);
+      Alert.alert('Error', 'Failed to delete support comment');
+    }
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <View style={styles.header}>
@@ -33,6 +49,12 @@ const SupportAdminScreen = () => {
       <Text style={styles.email}>Email: {item.usuario_id.correo}</Text>
       <Text style={styles.title}>Problem: {item.titulo}</Text>
       <Text style={styles.problem}>Description: {item.problema}</Text>
+      <TouchableOpacity
+        style={styles.replyButton}
+        onPress={() => deleteComment(item._id)}
+      >
+        <Text style={styles.replyButtonText}>Mark as Resolved</Text>
+      </TouchableOpacity>
     </View>
   );
 

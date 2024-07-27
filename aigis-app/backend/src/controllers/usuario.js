@@ -263,6 +263,32 @@ const getComments = async (req, res) => {
         });
     }
 };
+// Obtener historial de soporte de un usuario
+const getSupportHistory = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const supportRequests = await AyudaUsuario.find({ usuario_id: userId }).sort({ fecha: -1 });
+
+        if (!supportRequests) {
+            return res.status(404).json({
+                status: "error",
+                message: "Support requests not found"
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            supportRequests
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error retrieving support history",
+            error: error.message
+        });
+    }
+};
+
 
     // Export actions
 module.exports = {
@@ -273,5 +299,6 @@ module.exports = {
     getAllUser,
     deleteUser,
     helpUser,
-    getComments
+    getComments,
+    getSupportHistory
 };

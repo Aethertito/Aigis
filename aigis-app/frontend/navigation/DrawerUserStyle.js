@@ -114,6 +114,16 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Support' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Support History"
+                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support History');
+                        props.navigation.navigate('SupportHistory');
+                    }}
+                    style={activeItem === 'Support History' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
 
             <View style={styles.logoutSection}>

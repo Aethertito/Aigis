@@ -14,8 +14,11 @@ router.get('/', UsuarioController.getAllUser);
 router.put('/:userId', UsuarioController.updateUser);
 router.delete('/:userId', UsuarioController.deleteUser);
 
-
+// Ayuda
 router.post('/help', UsuarioController.helpUser);
 router.get('/support/comments', UsuarioController.getComments);
+
+// Historial de soporte de un usuario
+router.get('/:userId/help', UsuarioController.getSupportHistory);
 
 module.exports = router;
