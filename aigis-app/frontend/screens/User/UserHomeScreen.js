@@ -3,15 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from
 import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Asegúrate de tener esta librería instalada
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
 const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [viewMode, setViewMode] = useState('day');
   const [userId, setUserId] = useState(null);
+  const [weather, setWeather] = useState({ temperature: null, location: 'Your Location' });
 
   useEffect(() => {
     getUserId();
+    fetchWeather();
   }, []);
 
   useEffect(() => {
@@ -40,6 +43,16 @@ const UserHomeScreen = ({ navigation }) => {
       setData(processedData);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchWeather = async () => {
+    try {
+      const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=f847590632224d78a8093009242707&q=auto:ip`);
+      const { temp_c, location } = response.data.current;
+      setWeather({ temperature: temp_c, location: location.name });
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
     }
   };
 
@@ -82,12 +95,9 @@ const UserHomeScreen = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.date}>23°C</Text>
-          <Text style={styles.date}>18 Jan 2018</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <Icon name="bell" size={24} color="#fff" />
-          <Icon name="user-circle" size={30} color="#fff" style={styles.userIcon} />
+          <Text style={styles.date}>{weather.temperature}°C</Text>
+          <Text style={styles.date}>{moment().format('DD MMM YYYY')}</Text>
+          <Text style={styles.location}>{weather.location}</Text>
         </View>
       </View>
 
@@ -187,17 +197,15 @@ const styles = StyleSheet.create({
   headerLeft: {
     justifyContent: 'center',
   },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   date: {
     color: '#fff',
     fontSize: 16,
     marginBottom: 5,
   },
-  userIcon: {
-    marginLeft: 15,
+  location: {
+    color: '#fff',
+    fontSize: 16,
+    marginTop: 5,
   },
   chartContainer: {
     backgroundColor: '#292b36',

@@ -14,15 +14,27 @@ import HelpScreen from '../screens/User/HelpScreen'
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
 import PaquetesScreen from '../screens/User/PaquetesScreen';
 
-
 import DrawerUserContent from './DrawerUserStyle';
-
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const UserDrawer = () => (
-  <Drawer.Navigator drawerContent={props => <DrawerUserContent {...props} />}>
+  <Drawer.Navigator
+    drawerContent={props => <DrawerUserContent {...props} />}
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      drawerIcon: ({ color, size }) => (
+        <Icon name="menu" color="#E53935" size={size} />
+      ),
+    }}
+  >
     <Drawer.Screen name="Home" component={UserHomeScreen} />
     <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
     <Drawer.Screen name="Orders" component={OrdersScreen} />
@@ -34,7 +46,6 @@ const UserDrawer = () => (
     <Drawer.Screen name="SupportHistory" component={SupportHistoryScreen} /> 
   </Drawer.Navigator>
 );
-
 
 const UserStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>

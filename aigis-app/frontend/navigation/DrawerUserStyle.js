@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -25,8 +25,12 @@ export function DrawerUserContent(props) {
     return (
         <DrawerContentScrollView {...props} style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
-                <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <View style={{ marginLeft: 15, flexDirection: 'column' }}>
+                <View style={styles.profileContainer}>
+                    <Image
+                        source={require('../assets/corporate-user-icon.png')}
+                        style={styles.profileImage}
+                    />
+                    <View style={styles.profileText}>
                         <Title style={styles.title}>Welcome, {userName}</Title>
                         <Caption style={styles.caption}>{userEmail}</Caption>
                     </View>
@@ -145,14 +149,28 @@ export function DrawerUserContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-        backgroundColor: '#424242',
+        backgroundColor: '#1E1E1E',
     },
     userInfoSection: {
         paddingLeft: 20,
+        paddingTop: 40,
+        paddingBottom: 20,
+        backgroundColor: '#212121',
+    },
+    profileContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+    },
+    profileText: {
+        marginLeft: 15,
     },
     title: {
         fontSize: 16,
-        marginTop: 3,
         fontWeight: 'bold',
         color: '#F4F6FC',
     },
@@ -165,16 +183,16 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     label: {
-        color: '#F4F6FC', 
+        color: '#F4F6FC',
     },
     activeItem: {
-        backgroundColor: '#212121', 
+        backgroundColor: '#212121',
     },
     logoutSection: {
         marginTop: 'auto',
     },
     logoutItem: {
-        backgroundColor: '#424242', 
+        backgroundColor: '#1E1E1E',
     },
 });
 
