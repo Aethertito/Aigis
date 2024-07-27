@@ -128,6 +128,26 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="PremiumPackagesScreen"
+                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support History');
+                        props.navigation.navigate('PremiumPackagesScreen');
+                    }}
+                    style={activeItem === 'Support History' ? styles.activeItem : {}}
+                />
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="AddEmployeeScreen"
+                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Support History');
+                        props.navigation.navigate('AddEmployeeScreen');
+                    }}
+                    style={activeItem === 'Support History' ? styles.activeItem : {}}
+                />
             </Drawer.Section>
 
             <View style={styles.logoutSection}>

@@ -14,6 +14,10 @@ import HelpScreen from '../screens/User/HelpScreen'
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
 import PaquetesScreen from '../screens/User/PaquetesScreen';
 
+import PremiumPackagesScreen from '../screens/User/PremiumPackagesScreen';
+import AddEmployeeScreen from '../screens/User/AddEmployeesScreen';
+import AccessControlScreen from '../screens/User/AccessControlScreen';
+
 import DrawerUserContent from './DrawerUserStyle';
 
 const Drawer = createDrawerNavigator();
@@ -44,6 +48,9 @@ const UserDrawer = () => (
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
     <Drawer.Screen name="Help" component={HelpScreen} />
     <Drawer.Screen name="SupportHistory" component={SupportHistoryScreen} /> 
+    <Drawer.Screen name="PremiumPackagesScreen" component={PremiumPackagesScreen} /> 
+    <Drawer.Screen name="AddEmployeeScreen" component={AddEmployeeScreen} /> 
+    <Drawer.Screen name="AccessControlScreen" component={AccessControlScreen} /> 
   </Drawer.Navigator>
 );
 

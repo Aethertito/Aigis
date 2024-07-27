@@ -1,4 +1,4 @@
-const { PaqueteComprado, Usuario, Pago, Paquete, Sensor } = require('../models/model.js');
+const { PaqueteComprado, Usuario, Pago, Paquete, Sensor, Empleado, AccesoRFID } = require('../models/model.js');
 
 async function comprarPaquete(req, res) {
   const { usuario_id, cartData, metodoPago, totalAmount } = req.body;
@@ -107,7 +107,7 @@ const updateLocation = async (req, res) => {
     const sensoresActualizados = await Promise.all(paqueteActualizado.sensores.map(async (sensorInfo) => {
       const sensorActualizado = await Sensor.findByIdAndUpdate(
         sensorInfo.sensor_id._id,
-        { 
+        {
           ubicacion: ubicacion,
           estado: 'active',
           usuario_id: paqueteActualizado.usuario,
@@ -137,8 +137,151 @@ const updateLocation = async (req, res) => {
   }
 }
 
+const paquetesRfid = async (req, res) => {
+  try {
+    const { userId } = req.params
+
+    const paquetes = await PaqueteComprado.find({
+      usuario: userId,
+      paquete: 'Premium Security'
+    });
+
+    res.status(200).json(paquetes);
+  } catch (error) {
+    console.error('Error al obtener paquetes RFID:', error);
+    res.status(500).json({ mensaje: 'Error al obtener paquetes RFID' });
+  }
+};
+
+const empleadosConAcceso = async (req, res) => {
+  try {
+    const { packageId } = req.params;
+    const accesos = await AccesoRFID.find({ paqueteComprado: packageId })
+      .populate('empleado', 'nombre email telefono');
+
+    const empleadosConAcceso = accesos.map(acceso => ({
+      id: acceso.empleado._id,
+      nombre: acceso.empleado.nombre,
+      email: acceso.empleado.email,
+      telefono: acceso.empleado.telefono,
+    }));
+
+    res.status(200).json(empleadosConAcceso);
+  } catch (error) {
+    console.error('Error al obtener empleados con acceso:', error);
+    res.status(500).json({ mensaje: 'Error al obtener empleados con acceso' });
+  }
+}
+
+const getAllEmpleados = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const empleados = await Empleado.find({ usuario: userId }, 'nombre email telefono');
+    res.status(200).json(empleados);
+  } catch (error) {
+    console.error('Error al obtener todos los empleados:', error);
+    res.status(500).json({ mensaje: 'Error al obtener todos los empleados' });
+  }
+}
+
+const darAcceso = async (req, res) => {
+  try {
+    const { employeeId, packageId } = req.body;
+
+    // Verificar si ya tiene acceso
+    const accesoExistente = await AccesoRFID.findOne({
+      empleado: employeeId,
+      paqueteComprado: packageId
+    });
+
+    if (accesoExistente) {
+      return res.status(400).json({ mensaje: 'El empleado ya tiene acceso a este paquete' });
+    }
+
+    // Crear nuevo acceso
+    const nuevoAcceso = new AccesoRFID({
+      empleado: employeeId,
+      paqueteComprado: packageId
+    });
+    await nuevoAcceso.save();
+
+    res.status(201).json({ mensaje: 'Acceso otorgado con éxito' });
+  } catch (error) {
+    console.error('Error al dar acceso:', error);
+    res.status(500).json({ mensaje: 'Error al dar acceso' });
+  }
+}
+
+const quitarAcceso = async (req, res) => {
+  try {
+    const { employeeId, packageId } = req.body;
+
+    const resultado = await AccesoRFID.findOneAndDelete({
+      empleado: employeeId,
+      paqueteComprado: packageId
+    });
+
+    if (!resultado) {
+      return res.status(404).json({ mensaje: 'No se encontró el acceso para quitar' });
+    }
+
+    res.status(200).json({ mensaje: 'Acceso removido con éxito' });
+  } catch (error) {
+    console.error('Error al quitar acceso:', error);
+    res.status(500).json({ mensaje: 'Error al quitar acceso' });
+  }
+}
+
+const agregarEmpledo = async (req, res) => {
+  try {
+    const { nombre, email, telefono, userId } = req.body;
+
+    // Verificar si el usuario (empleador) existe
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Verificar si ya existe un empleado con ese email
+    const empleadoExistente = await Empleado.findOne({ email });
+    if (empleadoExistente) {
+      return res.status(400).json({ mensaje: 'Ya existe un empleado con ese email' });
+    }
+
+    // Crear nuevo empleado
+    const nuevoEmpleado = new Empleado({
+      nombre,
+      email,
+      telefono,
+      usuario: userId
+    });
+
+    await nuevoEmpleado.save();
+
+    res.status(201).json({
+      mensaje: 'Empleado agregado con éxito',
+      empleado: {
+        id: nuevoEmpleado._id,
+        nombre: nuevoEmpleado.nombre,
+        email: nuevoEmpleado.email,
+        telefono: nuevoEmpleado.telefono
+      }
+    });
+  } catch (error) {
+    console.error('Error al agregar empleado:', error);
+    res.status(500).json({ mensaje: 'Error al agregar empleado' });
+  }
+}
+
+
 module.exports = {
   comprarPaquete,
   getPaquetePorUsuario,
-  updateLocation
+  updateLocation,
+  paquetesRfid,
+  empleadosConAcceso,
+  getAllEmpleados,
+  agregarEmpledo, 
+  quitarAcceso,
+  darAcceso
 };
