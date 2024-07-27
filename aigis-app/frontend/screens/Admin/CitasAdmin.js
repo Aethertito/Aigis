@@ -65,7 +65,7 @@ const CitasAdmin = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#E53935" />
       ) : (
         <>
           <Text style={styles.title2}>Citas</Text>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   confirmButtonText: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontWeight: 'bold',
     textAlign: 'center',
   },

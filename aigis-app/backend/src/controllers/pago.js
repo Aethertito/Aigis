@@ -1,4 +1,4 @@
-const { Pago, Usuario, Membresia } = require('../models/model.js');
+const { Pago, Usuario, Membresia, Paquete } = require('../models/model.js');
 const mongoose = require('mongoose');
 
 async function pago(req, res) {
@@ -71,6 +71,39 @@ async function pago(req, res) {
     }
 }
 
+const getMemPagos = async (req, res) => {
+    try {
+        const pagos = await Usuario.find({ rol: 'user' }).populate('membresia');
+        return res.status(200).json({
+            status: "success",
+            pagos
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error retrieving payments",
+            error: error.message
+        });
+    }
+};
+const getPaqPagos = async (req, res) => {
+    try {
+        const pagos = await Usuario.find({ rol: 'user' }).populate('paqSelect.paquete_id');
+        return res.status(200).json({
+            status: "success",
+            pagos
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error retrieving package payments",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
-    pago
+    pago,
+    getMemPagos,
+    getPaqPagos
 };

@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     cartContainer: {
         backgroundColor: '#212121',
         padding: 10,
-        marginTop: 20,
+        marginTop: 1,
     },
     cartTitle: {
         fontSize: 20,

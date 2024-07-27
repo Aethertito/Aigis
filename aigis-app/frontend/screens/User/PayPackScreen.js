@@ -53,6 +53,18 @@ const PayPackScreen = () => {
     }
   };
 
+  const formatCardNumber = (text) => {
+    const cleaned = text.replace(/\D+/g, ''); // Eliminar todos los caracteres no numéricos
+    const formatted = cleaned.match(/.{1,4}/g)?.join('-') || '';
+    setCardNumber(formatted);
+  };
+
+  const formatExpiryDate = (text) => {
+    const cleaned = text.replace(/\D+/g, ''); // Eliminar todos los caracteres no numéricos
+    const formatted = cleaned.match(/.{1,2}/g)?.join('/') || '';
+    setExpiryDate(formatted.slice(0, 5)); // Limitar a 5 caracteres
+  };
+
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -77,6 +89,7 @@ const PayPackScreen = () => {
             placeholderTextColor="#9E9E9E"
             value={cardTitular}
             onChangeText={setCardTitular}
+            maxLength={60} // Limitar a 60 caracteres
           />
         </View>
 
@@ -87,8 +100,8 @@ const PayPackScreen = () => {
             keyboardType="numeric"
             placeholderTextColor="#9E9E9E"
             value={cardNumber}
-            onChangeText={setCardNumber}
-            maxLength={16}
+            onChangeText={formatCardNumber}
+            maxLength={19} // Limitar a 19 caracteres (incluyendo guiones)
           />
         </View>
 
@@ -99,9 +112,10 @@ const PayPackScreen = () => {
               style={styles.input}
               placeholder="MM/YY"
               placeholderTextColor="#9E9E9E"
+              keyboardType="numeric"
               value={expiryDate}
-              onChangeText={setExpiryDate}
-              maxLength={5}
+              onChangeText={formatExpiryDate}
+              maxLength={5} // Limitar a 5 caracteres
             />
           </View>
 
@@ -115,7 +129,7 @@ const PayPackScreen = () => {
               secureTextEntry
               value={cvv}
               onChangeText={setCvv}
-              maxLength={3}
+              maxLength={3} // Limitar a 3 caracteres
             />
           </View>
         </View>
@@ -141,11 +155,11 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    bottom: 65
   },
   iconText: {
     color: '#E53935',
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 1,
   },
   imageContainer: {
