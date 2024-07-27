@@ -1,12 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
 import axios from 'axios';
 import IP from '../../IP';
+import RNPickerSelect from 'react-native-picker-select';
+import { Calendar } from 'react-native-calendars';
+
+const availableHours = [
+  { label: '08:00', value: '08:00' },
+  { label: '09:00', value: '09:00' },
+  { label: '10:00', value: '10:00' },
+  { label: '11:00', value: '11:00' },
+  { label: '12:00', value: '12:00' },
+  { label: '13:00', value: '13:00' },
+  { label: '14:00', value: '14:00' },
+  { label: '15:00', value: '15:00' },
+  { label: '16:00', value: '16:00' },
+  { label: '17:00', value: '17:00' },
+];
+
+const appointmentReasons = [
+  { label: 'Installation', value: 'installation' },
+  { label: 'Maintenance', value: 'maintenance' },
+];
 
 const SupportAdminScreen = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedComment, setSelectedComment] = useState(null);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedHour, setSelectedHour] = useState('');
+  const [colonia, setColonia] = useState('');
+  const [calle, setCalle] = useState('');
+  const [numero, setNumero] = useState('');
+  const [referencia, setReferencia] = useState('');
+  const [motivo, setMotivo] = useState('');
 
   useEffect(() => {
     fetchComments();
@@ -40,6 +69,54 @@ const SupportAdminScreen = () => {
     }
   };
 
+  const generateAppointment = (comment) => {
+    setSelectedComment(comment);
+    setModalVisible(true);
+  };
+
+  const handleSchedule = async () => {
+    try {
+      const usuario_id = selectedComment.usuario_id._id;
+      if (!usuario_id) {
+        Alert.alert('Error', 'User not identified');
+        return;
+      }
+
+      if (!selectedDate || !selectedHour || !colonia || !calle || !numero || !referencia || !motivo) {
+        Alert.alert('Error', 'Please fill in all fields');
+        return;
+      }
+
+      const newAppointment = {
+        usuario_id,
+        colonia,
+        calle,
+        numero,
+        referencia,
+        fecha: selectedDate,
+        hora: selectedHour,
+        motivo,
+      };
+
+      const url = `http://${IP}:3000/cita/createCita`;
+      const response = await axios.post(url, newAppointment);
+      if (response.status === 200) {
+        Alert.alert('Appointments', 'Appointment saved successfully');
+        setModalVisible(false);
+        setSelectedDate('');
+        setSelectedHour('');
+        setColonia('');
+        setCalle('');
+        setNumero('');
+        setReferencia('');
+        setMotivo('');
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error.response?.data?.message || "Something went wrong with your registration");
+    }
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <View style={styles.header}>
@@ -55,8 +132,16 @@ const SupportAdminScreen = () => {
       >
         <Text style={styles.replyButtonText}>Mark as Resolved</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.generateAppointmentButton}
+        onPress={() => generateAppointment(item)}
+      >
+        <Text style={styles.generateAppointmentButtonText}>Generate Appointment</Text>
+      </TouchableOpacity>
     </View>
   );
+
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <View style={styles.container}>
@@ -72,6 +157,90 @@ const SupportAdminScreen = () => {
         />
       )}
       {error && <Text style={styles.errorText}>{error}</Text>}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Generate Appointment</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Neighborhood"
+              placeholderTextColor="#9E9E9E"
+              value={colonia}
+              onChangeText={setColonia}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Street"
+              placeholderTextColor="#9E9E9E"
+              value={calle}
+              onChangeText={setCalle}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Number"
+              placeholderTextColor="#9E9E9E"
+              value={numero}
+              onChangeText={setNumero}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Reference"
+              placeholderTextColor="#9E9E9E"
+              value={referencia}
+              onChangeText={setReferencia}
+              maxLength={50}
+            />
+            <Calendar
+              minDate={today}
+              onDayPress={(day) => setSelectedDate(day.dateString)}
+              markedDates={{
+                [selectedDate]: { selected: true, marked: true, selectedColor: '#E53935' },
+              }}
+              theme={{
+                todayTextColor: '#E53935',
+                selectedDayBackgroundColor: '#E53935',
+                calendarBackground: '#424242',
+                dayTextColor: '#F4F6FC',
+                textDisabledColor: '#9E9E9E',
+                monthTextColor: '#F4F6FC',
+                arrowColor: '#E53935',
+                textDayFontWeight: 'bold',
+                textMonthFontWeight: 'bold',
+                textDayHeaderFontWeight: 'bold',
+              }}
+              style={styles.calendar}
+            />
+            <Text style={styles.nameField}>Select Time</Text>
+            <RNPickerSelect
+              onValueChange={(value) => setSelectedHour(value || '')}
+              items={availableHours}
+              style={pickerSelectStyles}
+              placeholder={{ label: 'Select Time', value: '' }}
+              value={selectedHour}
+            />
+            <Text style={styles.nameField}>Select Reason</Text>
+            <RNPickerSelect
+              onValueChange={(value) => setMotivo(value || '')}
+              items={appointmentReasons}
+              style={pickerSelectStyles}
+              placeholder={{ label: 'Select Reason', value: '' }}
+              value={motivo}
+            />
+            <TouchableOpacity style={styles.button} onPress={handleSchedule}>
+              <Text style={styles.buttonText}>Confirm</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -137,6 +306,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  generateAppointmentButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  generateAppointmentButtonText: {
+    color: '#F4F6FC',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   noDataText: {
     color: '#F4F6FC',
     fontSize: 16,
@@ -148,6 +329,94 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#424242',
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#F4F6FC',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: '#E53935',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingLeft: 8,
+    borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+  },
+  nameField: {
+    color: '#F4F6FC',
+    marginBottom: 10,
+  },
+  calendar: {
+    marginBottom: 12,
+    borderRadius: 8,
+  },
+  button: {
+    backgroundColor: '#E53935',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#F4F6FC',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    backgroundColor: '#757575',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  cancelButtonText: {
+    color: '#F4F6FC',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 8,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
   },
 });
 

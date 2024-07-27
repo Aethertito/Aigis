@@ -69,7 +69,8 @@ const pagoSchema = new mongoose.Schema({
   membresia_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Membresia' },
   metodoPago: { type: String, required: true },
   estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' },
-  fechaPago: { type: Date, default: Date.now}
+  fechaPago: { type: Date, default: Date.now },
+  cantidadPaquetes: { type: Number, required: true } // Nuevo campo para la cantidad de paquetes comprados
 });
 
 const paqueteCompradoSchema = new Schema({

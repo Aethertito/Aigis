@@ -1,62 +1,70 @@
 const { PaqueteComprado, Usuario, Pago, Paquete, Sensor } = require('../models/model.js');
 
 async function comprarPaquete(req, res) {
-  const { usuario_id, paquete_id, ubicacion, metodoPago } = req.body;
+  const { usuario_id, cartData, metodoPago, totalAmount } = req.body;
 
   try {
-    const paquete = await Paquete.findById(paquete_id);
-    if (!paquete) {
-      return res.status(404).json({ status: "error", message: "Paquete no encontrado" });
-    }
+    const paquetesComprados = [];
+    let totalPaquetes = 0; // Variable para contar el total de paquetes comprados
 
-    const sensores = await Promise.all(
-      paquete.contenido.map(async sensorTipo => {
-        const sensor = new Sensor({
-          tipo: sensorTipo,
-          descripcion: `${sensorTipo} sensor for ${paquete.paquete} package`,
-          estado: 'active',
-          usuario_id,
-          paquete_id
+    for (const item of cartData) {
+      const paquete = await Paquete.findById(item.id);
+      if (!paquete) {
+        return res.status(404).json({ status: "error", message: "Paquete no encontrado" });
+      }
+
+      for (let i = 0; i < item.cantidad; i++) {
+        const sensores = await Promise.all(
+          paquete.contenido.map(async sensorTipo => {
+            const sensor = new Sensor({
+              tipo: sensorTipo,
+              descripcion: `${sensorTipo} sensor for ${paquete.paquete} package`,
+              estado: 'active',
+              usuario_id,
+              paquete_id: item.id
+            });
+            await sensor.save();
+            return { sensor_id: sensor._id, tipo: sensor.tipo };
+          })
+        );
+
+        const paqueteComprado = new PaqueteComprado({
+          usuario: usuario_id,
+          paquete: paquete.paquete,
+          ubicacion: 'Unspecified',
+          sensores: sensores,
+          precio: paquete.precio // Precio individual del paquete
         });
-        await sensor.save();
-        return { sensor_id: sensor._id, tipo: sensor.tipo };
-      })
-    );
 
-    const paqueteComprado = new PaqueteComprado({
-      usuario: usuario_id,
-      paquete: paquete.paquete,
-      ubicacion,
-      sensores: sensores,
-      precio: paquete.precio 
-    });
+        await paqueteComprado.save();
+        paquetesComprados.push(paqueteComprado);
+        totalPaquetes += 1; // Incrementar el contador de paquetes
+      }
 
-    await paqueteComprado.save();
+      const usuario = await Usuario.findById(usuario_id);
+      if (!usuario) {
+        return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
+      }
 
-    const usuario = await Usuario.findById(usuario_id);
-    if (!usuario) {
-      return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
+      usuario.paqSelect.push({ paquete_id: item.id, paquete: paquete.paquete, cantidad: item.cantidad });
+      usuario.sensores.push(...paquetesComprados.flatMap(paquete => paquete.sensores));
+      await usuario.save();
     }
-
-    usuario.paqSelect.push({ paquete_id, paquete: paquete.paquete, cantidad: 1 });
-
-    usuario.sensores.push(...sensores);
-    await usuario.save();
 
     const pago = new Pago({
       usuario_id,
       membresia_id: null,
-      paquete_id,
-      monto: paquete.precio,
       metodoPago,
-      estado: 'complete'
+      estado: 'complete',
+      cantidadPaquetes: totalPaquetes, // Asignar el total de paquetes comprados
+      monto: totalAmount
     });
 
     await pago.save();
 
-    return res.status(200).json({ status: "success", message: "Paquete comprado correctamente", paqueteComprado, pago });
+    return res.status(200).json({ status: "success", message: "Paquetes comprados correctamente", paquetesComprados, pago });
   } catch (error) {
-    return res.status(500).json({ status: "error", message: "Error al comprar el paquete", error: error.message });
+    return res.status(500).json({ status: "error", message: "Error al comprar los paquetes", error: error.message });
   }
 }
 
@@ -86,7 +94,6 @@ const updateLocation = async (req, res) => {
       return res.status(400).json({ status: 'error', message: 'Ubicación no proporcionada' });
     }
 
-    // Actualizar el paquete comprado
     const paqueteActualizado = await PaqueteComprado.findByIdAndUpdate(
       paqueteId,
       { ubicacion: ubicacion },
@@ -97,7 +104,6 @@ const updateLocation = async (req, res) => {
       return res.status(404).json({ status: 'error', message: 'Paquete comprado no encontrado' });
     }
 
-    // Actualizar o crear instancias de sensores
     const sensoresActualizados = await Promise.all(paqueteActualizado.sensores.map(async (sensorInfo) => {
       const sensorActualizado = await Sensor.findByIdAndUpdate(
         sensorInfo.sensor_id._id,
@@ -107,7 +113,7 @@ const updateLocation = async (req, res) => {
           usuario_id: paqueteActualizado.usuario,
           paquete_id: paqueteActualizado._id
         },
-        { new: true, upsert: true } // Esto crea el sensor si no existe
+        { new: true, upsert: true }
       );
       return {
         sensor_id: sensorActualizado,
@@ -116,7 +122,6 @@ const updateLocation = async (req, res) => {
       };
     }));
 
-    // Actualizar el paquete con los sensores actualizados
     paqueteActualizado.sensores = sensoresActualizados;
     await paqueteActualizado.save();
 

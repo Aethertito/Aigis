@@ -2,10 +2,8 @@ const { Cita } = require('../models/model.js')
 
 const createCita = async (req, res) => {
     try {
-
         console.log(req.body)
 
-        
         let params = req.body
         
         if (!params.fecha || !params.hora || !params.colonia || !params.calle || !params.numero || !params.referencia || !params.motivo) {
@@ -43,7 +41,6 @@ const createCita = async (req, res) => {
             error: error.message
         })
     }
-
 }
 
 const getAllCitas = async (req,res) => {
@@ -70,8 +67,28 @@ const confirmCita = async (req,res) => {
     }
 }
 
+const attendCita = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedCita = await Cita.findByIdAndUpdate(id, { estado: 'attended' }, { new: true });
+
+        if (!updatedCita) {
+            return res.status(404).json({ message: 'Cita not found' });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: updatedCita,
+        });
+    } catch (error) {
+        console.error('Error updating cita:', error);
+        res.status(500).json({ message: 'Failed to update cita' });
+    }
+}
+
 module.exports = {
     createCita,
     getAllCitas,
-    confirmCita
+    confirmCita,
+    attendCita
 }

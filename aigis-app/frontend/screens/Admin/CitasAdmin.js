@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import IP from '../../IP'; // Ajusta la ruta según la ubicación de tu archivo IP.js
 
 const CitasAdmin = () => {
   const [citas, setCitas] = useState([]);
@@ -13,7 +14,7 @@ const CitasAdmin = () => {
   const fetchCitas = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://192.168.1.24:3000/cita/');
+      const response = await axios.get(`http://${IP}:3000/cita/`);
       setCitas(response.data);
     } catch (error) {
       console.error('Error fetching citas:', error);
@@ -25,8 +26,8 @@ const CitasAdmin = () => {
 
   const confirmCita = async (citaId) => {
     try {
-      const url = `http://192.168.1.24:3000/cita/${citaId}`;
-      const response = await axios.put(url);
+      const url = `http://${IP}:3000/cita/${citaId}`;
+      const response = await axios.put(url, { estado: 'Confirm' });
 
       if (response.data.status === 'success') {
         fetchCitas(); // Actualiza la lista después de la confirmación
@@ -37,6 +38,23 @@ const CitasAdmin = () => {
     } catch (error) {
       console.error('Error confirming appointment:', error);
       Alert.alert('Error', 'Failed to confirm appointment');
+    }
+  };
+
+  const attendCita = async (citaId) => {
+    try {
+      const url = `http://${IP}:3000/cita/attend/${citaId}`;
+      const response = await axios.put(url, { estado: 'attended' });
+
+      if (response.data.status === 'success') {
+        fetchCitas(); // Actualiza la lista después de marcar como atendida
+        Alert.alert('Success', 'Appointment marked as attended');
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error marking appointment as attended:', error);
+      Alert.alert('Error', 'Failed to mark appointment as attended');
     }
   };
 
@@ -53,12 +71,22 @@ const CitasAdmin = () => {
       <Text style={styles.description}>Referencia: {item.referencia}</Text>
       <Text style={styles.description}>Estado: {item.estado}</Text>
       <Text style={styles.description}>Motivo: {item.motivo}</Text>
-      <TouchableOpacity
-        style={styles.confirmButton}
-        onPress={() => confirmCita(item._id)}
-      >
-        <Text style={styles.confirmButtonText}>Confirm</Text>
-      </TouchableOpacity>
+      {item.estado !== 'attended' && (
+        <>
+          <TouchableOpacity
+            style={styles.confirmButton}
+            onPress={() => confirmCita(item._id)}
+          >
+            <Text style={styles.confirmButtonText}>Confirm</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.attendButton}
+            onPress={() => attendCita(item._id)}
+          >
+            <Text style={styles.attendButtonText}>Mark as Attended</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 
@@ -70,7 +98,7 @@ const CitasAdmin = () => {
         <>
           <Text style={styles.title2}>Citas</Text>
           <FlatList
-            data={citas}
+            data={citas.filter(cita => cita.estado !== 'attended')} // Filtra las citas para mostrar solo las que no están atendidas
             renderItem={renderCita}
             keyExtractor={item => item._id}
             ListEmptyComponent={<Text style={styles.emptyText}>No appointments found</Text>}
@@ -127,6 +155,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   confirmButtonText: {
+    color: '#F4F6FC',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  attendButton: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  attendButtonText: {
     color: '#F4F6FC',
     fontWeight: 'bold',
     textAlign: 'center',
