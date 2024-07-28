@@ -79,12 +79,6 @@ const EditUserScreen = ({ route, navigation }) => {
         onChangeText={setCorreo}
         keyboardType="email-address"
       />
-      <Text style={styles.nameField}>Role: </Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Role"
-        value={rol}
-      />
       <Text style={styles.nameField}>Address: </Text>
       <TextInput
         style={styles.input}
