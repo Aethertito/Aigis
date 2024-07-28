@@ -156,22 +156,24 @@
         try {
             const userId = req.params.userId;
             const updateData = req.body;
-
+    
+            console.log("Datos recibidos para actualizar:", updateData); // Añadir este console.log
+    
             const userUpdated = await Usuario.findByIdAndUpdate(userId, updateData, { new: true });
-
+    
             if (!userUpdated) {
                 return res.status(404).json({
                     status: "error",
                     message: "User not found"
                 });
             }
-
+    
             return res.status(200).json({
                 status: "success",
                 message: "User updated successfully",
                 usuario: userUpdated
             });
-
+    
         } catch (error) {
             return res.status(500).json({
                 status: "error",
@@ -179,7 +181,8 @@
                 error: error.message
             });
         }
-    }
+    };
+    
 
     const deleteUser = async (req, res) => {
         try {

@@ -89,16 +89,6 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Appointment' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Configurations"
-                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
-                    onPress={() => {
-                        setActiveItem('Configurations');
-                        props.navigation.navigate('EditProfile');
-                    }}
-                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
-                />
-                <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="location-on" color={activeItem === 'Locations Sensors' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Locations Sensors"
                     labelStyle={[styles.label, { color: activeItem === 'Locations Sensors' ? '#E53935' : '#F4F6FC' }]}
@@ -151,6 +141,16 @@ export function DrawerUserContent(props) {
             </Drawer.Section>
 
             <View style={styles.logoutSection}>
+                <DrawerItem 
+                    icon={({ color, size }) => ( <Icon2 name="user-gear" color={activeItem === 'Configurations' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Configurations"
+                    labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Configurations');
+                        props.navigation.navigate('EditProfile');
+                    }}
+                    style={activeItem === 'Configurations' ? styles.activeItem : {}}
+                />
                 <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="logout" color='#FFF' size={size} /> )}
                     label="Logout"
