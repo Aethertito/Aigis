@@ -156,11 +156,10 @@ const paquetesRfid = async (req, res) => {
 const empleadosConAcceso = async (req, res) => {
   try {
     const { packageId } = req.params;
-    const accesos = await AccesoRFID.find({ paqueteComprado: packageId })
-      .populate('empleado', 'nombre email telefono');
+    const accesos = await AccesoRFID.find({ paqueteComprado: packageId }).populate('empleado', 'nombre email telefono');
 
     const empleadosConAcceso = accesos.map(acceso => ({
-      id: acceso.empleado._id,
+      _id: acceso.empleado._id,
       nombre: acceso.empleado.nombre,
       email: acceso.empleado.email,
       telefono: acceso.empleado.telefono,
@@ -172,60 +171,48 @@ const empleadosConAcceso = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener empleados con acceso' });
   }
 }
-
-const getAllEmpleados = async (req, res) => {
+const empleadosSinAcceso = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const empleados = await Empleado.find({ usuario: userId }, 'nombre email telefono');
-    res.status(200).json(empleados);
+    const { userId, packageId } = req.params;
+
+    // Obtener todos los empleados del usuario
+    const todosLosEmpleados = await Empleado.find({ usuario: userId }, 'nombre email telefono');
+
+    // Obtener los empleados que ya tienen acceso a algún paquete
+    const accesos = await AccesoRFID.find({ paqueteComprado: packageId }).populate('empleado', '_id');
+    const empleadosConAcceso = accesos.map(acceso => acceso.empleado._id);
+
+    // Filtrar los empleados que no tienen acceso
+    const empleadosSinAcceso = todosLosEmpleados.filter(empleado => 
+      !empleadosConAcceso.includes(empleado._id)
+    );
+
+    res.status(200).json(empleadosSinAcceso);
   } catch (error) {
-    console.error('Error al obtener todos los empleados:', error);
-    res.status(500).json({ mensaje: 'Error al obtener todos los empleados' });
+    console.error('Error al obtener empleados sin acceso:', error);
+    res.status(500).json({ mensaje: 'Error al obtener empleados sin acceso' });
   }
 }
 
 const darAcceso = async (req, res) => {
   try {
     const { employeeId, packageId } = req.body;
-
-    // Verificar si ya tiene acceso
-    const accesoExistente = await AccesoRFID.findOne({
-      empleado: employeeId,
-      paqueteComprado: packageId
-    });
-
-    if (accesoExistente) {
-      return res.status(400).json({ mensaje: 'El empleado ya tiene acceso a este paquete' });
-    }
-
-    // Crear nuevo acceso
-    const nuevoAcceso = new AccesoRFID({
-      empleado: employeeId,
-      paqueteComprado: packageId
-    });
+    const nuevoAcceso = new AccesoRFID({ empleado: employeeId, paqueteComprado: packageId });
     await nuevoAcceso.save();
 
-    res.status(201).json({ mensaje: 'Acceso otorgado con éxito' });
+    res.status(200).json({ mensaje: 'Acceso otorgado exitosamente' });
   } catch (error) {
-    console.error('Error al dar acceso:', error);
-    res.status(500).json({ mensaje: 'Error al dar acceso' });
+    console.error('Error al otorgar acceso:', error);
+    res.status(500).json({ mensaje: 'Error al otorgar acceso' });
   }
 }
 
 const quitarAcceso = async (req, res) => {
   try {
     const { employeeId, packageId } = req.body;
+    await AccesoRFID.findOneAndDelete({ empleado: employeeId, paqueteComprado: packageId });
 
-    const resultado = await AccesoRFID.findOneAndDelete({
-      empleado: employeeId,
-      paqueteComprado: packageId
-    });
-
-    if (!resultado) {
-      return res.status(404).json({ mensaje: 'No se encontró el acceso para quitar' });
-    }
-
-    res.status(200).json({ mensaje: 'Acceso removido con éxito' });
+    res.status(200).json({ mensaje: 'Acceso quitado exitosamente' });
   } catch (error) {
     console.error('Error al quitar acceso:', error);
     res.status(500).json({ mensaje: 'Error al quitar acceso' });
@@ -279,9 +266,9 @@ module.exports = {
   getPaquetePorUsuario,
   updateLocation,
   paquetesRfid,
-  empleadosConAcceso,
-  getAllEmpleados,
   agregarEmpledo, 
+  empleadosConAcceso,
+  empleadosSinAcceso,
+  darAcceso,
   quitarAcceso,
-  darAcceso
 };
