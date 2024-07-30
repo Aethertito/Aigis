@@ -58,15 +58,19 @@ const EditProfileScreen = () => {
     fetchPaquetes();
   }, [refresh]);
 
-  const handleSave = async () => {
+  const handleSave = async (field, value) => {
     const userId = await AsyncStorage.getItem('userId');
-
-    const data = { nombre, correo, contrasena, direccion, telefono };
+    
+    let data = { nombre, correo, contrasena, direccion, telefono };
+    if (field && value) {
+      data[field] = value;
+    }
+  
     const url = `http://${IP}:3000/usuario/${userId}`;
-
+  
     try {
-      console.log("Enviando datos para actualizar:", data); // Añadir este console.log
-
+      console.log("Enviando datos para actualizar:", data);
+  
       const response = await axios.put(url, data);
       if (response.status === 200) {
         Alert.alert('Editar Perfil', 'Cambios guardados');
@@ -117,7 +121,7 @@ const EditProfileScreen = () => {
         break;
     }
     setModalVisible(false);
-    handleSave();
+    handleSave(editField, editValue);
   };
 
   return (
