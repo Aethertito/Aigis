@@ -48,8 +48,8 @@ const UserDrawer = () => (
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
     <Drawer.Screen name="Help" component={HelpScreen} />
     <Drawer.Screen name="SupportHistory" component={SupportHistoryScreen} /> 
-    <Drawer.Screen name="PremiumPackagesScreen" component={PremiumPackagesScreen} /> 
-    <Drawer.Screen name="AddEmployeeScreen" component={AddEmployeeScreen} /> 
+    <Drawer.Screen name="Premium Packages" component={PremiumPackagesScreen} /> 
+    <Drawer.Screen name="Manage Employees" component={AddEmployeeScreen} /> 
     <Drawer.Screen name="AccessControlScreen" component={AccessControlScreen} /> 
   </Drawer.Navigator>
 );

@@ -1,5 +1,5 @@
 const path = require('path');
-const { Sensor, Usuario } = require('../models/model.js');
+const { Sensor, Usuario, PaqueteComprado } = require('../models/model.js');
 const fs = require('fs');
 
 const getSensor = async (req, res) => {
@@ -196,6 +196,46 @@ const updateSensorStatus = async (req, res) => {
     }
 };
 
+const getTemperatureLocation = async (req, res) => {
+    try {
+        const userId = req.query.userId; // Obtener el userId de la solicitud
+
+        // Obtener todos los paquetes comprados con los sensores asociados para el usuario específico
+        const paquetesComprados = await PaqueteComprado.find({ usuario: userId }).populate('sensores.sensor_id');
+
+        // Filtrar y agrupar sensores de "Temperature and Humidity" por ubicación
+        const sensoresAgrupadosPorUbicacion = paquetesComprados.reduce((acc, paquete) => {
+            const ubicacion = paquete.ubicacion || 'Unspecified';
+            const sensoresDeTemperatura = paquete.sensores.filter(sensor => sensor.tipo === 'Temperature and Humidity');
+
+            if (sensoresDeTemperatura.length > 0) {
+                if (!acc[ubicacion]) {
+                    acc[ubicacion] = [];
+                }
+                acc[ubicacion].push(...sensoresDeTemperatura.map(sensor => ({
+                    sensor_id: sensor.sensor_id._id,
+                    tipo: sensor.sensor_id.tipo,
+                    descripcion: sensor.sensor_id.descripcion,
+                    estado: sensor.sensor_id.estado,
+                    ubicacion: paquete.ubicacion
+                })));
+            }
+
+            return acc;
+        }, {});
+
+        return res.status(200).json({ status: "success", sensores: sensoresAgrupadosPorUbicacion });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            status: "error",
+            message: "Error retrieving temperature sensors by location",
+            error: error.message
+        });
+    }
+};
+
+
 module.exports = {
     getSensor,
     postSensor,
@@ -203,5 +243,6 @@ module.exports = {
     deleteSensor,
     mostrarImagen,
     getSensorByUser,
-    updateSensorStatus
+    updateSensorStatus,
+    getTemperatureLocation
 };

@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
+import IP from '../../IP';
 
 const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
@@ -20,7 +21,7 @@ const UserHomeScreen = ({ navigation }) => {
   });
   const [selectedData, setSelectedData] = useState('temperature');
   const [temperatureSensors, setTemperatureSensors] = useState([]);
-  const [selectedSensor, setSelectedSensor] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
     getUserId();
@@ -29,46 +30,52 @@ const UserHomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (userId) {
-      fetchTemperatureSensors();
+      fetchTemperatureSensorsByLocation();
     }
   }, [userId]);
 
   useEffect(() => {
-    if (selectedSensor) {
+    if (selectedLocation) {
       fetchData(viewMode);
     }
-  }, [viewMode, selectedSensor]);
+  }, [viewMode, selectedLocation]);
 
   const getUserId = async () => {
     try {
       const id = await AsyncStorage.getItem('userId');
       setUserId(id);
+      console.log('User ID:', id); // Verificar el ID del usuario
     } catch (error) {
       console.error('Error getting user ID:', error);
     }
   };
 
-  const fetchTemperatureSensors = async () => {
+  const fetchTemperatureSensorsByLocation = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/temperature-sensors?userId=${userId}`);
-      if (response.data && response.data.length > 0) {
-        setTemperatureSensors(response.data);
-        setSelectedSensor(response.data[0]._id); // Seleccionar el primer sensor por defecto
-      } else {
-        setTemperatureSensors([]);
-        setSelectedSensor(null);
-      }
+      if (!userId) return;
+  
+      console.log('Enviando userId:', userId); // Verificar que se está enviando el userId
+  
+      const response = await axios.get(`http://${IP}:3000/sensor/temperature/locations`, {
+        params: { userId: userId } // Asegurar que userId se pasa como parámetro
+      });
+  
+      console.log('Response data:', response.data); // Verificar los datos recibidos
+      setTemperatureSensors(response.data.sensores || []);
+      setLocations(Object.keys(response.data.sensores));
     } catch (error) {
-      console.error('Error fetching temperature sensors:', error);
+      console.error('Error fetching temperature sensors by location:', error);
     }
   };
+  
 
   const fetchData = async (mode) => {
-    if (!selectedSensor) return;
+    if (!selectedLocation || !temperatureSensors[selectedLocation]) return;
     try {
       const startDate = '2023-07-01';
       const endDate = '2023-07-14';
-      const response = await axios.get(`http://localhost:3000/api/statistics?sensorId=${selectedSensor}&startDate=${startDate}&endDate=${endDate}`);
+      const sensorIds = temperatureSensors[selectedLocation].map(sensor => sensor.sensor_id).join(',');
+      const response = await axios.get(`http://${IP}:3000/api/statistics?sensorIds=${sensorIds}&startDate=${startDate}&endDate=${endDate}`);
       const statistics = response.data;
 
       const processedData = processData(statistics, mode);
@@ -133,7 +140,11 @@ const UserHomeScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      style={{ backgroundColor: '#424242' }} // Color de fondo para el ScrollView
+      bounces={false} // Desactiva el efecto de rebote en iOS
+    >
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.date}>{moment(weather.date).format('DD MMM YYYY')}</Text>
@@ -141,29 +152,35 @@ const UserHomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.headerRight}>
           <Text style={styles.temperature}>{weather.temperature}°C</Text>
-          <Image source={{ uri: weather.icon }} style={styles.weatherIcon} />
+          {weather.icon ? (
+            <Image source={{ uri: weather.icon }} style={styles.weatherIcon} />
+          ) : (
+            <View style={[styles.weatherIcon, styles.placeholderIcon]}>
+              <Icon name="cloud" size={30} color="#bbb" />
+            </View>
+          )}
           <Text style={styles.condition}>{weather.condition}</Text>
         </View>
       </View>
 
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Icon name="bolt" size={24} color="#e74c3c" />
+          <Icon name="bolt" size={24} color="#E53935" />
           <Text style={styles.statValue}>174 MW</Text>
           <Text style={styles.statLabel}>Electricity</Text>
         </View>
         <View style={styles.statCard}>
-          <Icon name="tint" size={24} color="#e74c3c" />
+          <Icon name="tint" size={24} color="#E53935" />
           <Text style={styles.statValue}>216 Units</Text>
           <Text style={styles.statLabel}>Water</Text>
         </View>
         <View style={styles.statCard}>
-          <Icon name="wifi" size={24} color="#e74c3c" />
+          <Icon name="wifi" size={24} color="#E53935" />
           <Text style={styles.statValue}>5 Users</Text>
           <Text style={styles.statLabel}>WiFi</Text>
         </View>
         <View style={styles.statCard}>
-          <Icon name="video" size={24} color="#e74c3c" />
+          <Icon name="video" size={24} color="#E53935" />
           <Text style={styles.statValue}>12 Active</Text>
           <Text style={styles.statLabel}>Cameras</Text>
         </View>
@@ -171,15 +188,18 @@ const UserHomeScreen = ({ navigation }) => {
 
       <View style={styles.sensorSelector}>
         <Text style={styles.selectorLabel}>Select Temperature Sensor:</Text>
-        <Picker
-          selectedValue={selectedSensor}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSelectedSensor(itemValue)}
-        >
-          {temperatureSensors.map(sensor => (
-            <Picker.Item key={sensor._id} label={sensor.ubicacion || 'Unspecified location'} value={sensor._id} />
-          ))}
-        </Picker>
+        <RNPickerSelect
+          onValueChange={(value) => {
+            setSelectedLocation(value); // Actualiza la ubicación seleccionada
+            console.log('Ubicación seleccionada:', value); // Log para verificar ubicación seleccionada
+          }}
+          items={Object.keys(temperatureSensors).map(location => ({
+            label: location,
+            value: location,
+          }))}
+          style={pickerSelectStyles}
+          placeholder={{ label: 'Select a location', value: null }}
+        />
       </View>
 
       <View style={styles.buttonContainer}>
@@ -213,9 +233,9 @@ const UserHomeScreen = ({ navigation }) => {
           yAxisLabel=""
           yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
           chartConfig={{
-            backgroundColor: '#333',
-            backgroundGradientFrom: '#333',
-            backgroundGradientTo: '#333',
+            backgroundColor: '#212121',
+            backgroundGradientFrom: '#212121',
+            backgroundGradientTo: '#212121',
             decimalPlaces: 2,
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -225,7 +245,7 @@ const UserHomeScreen = ({ navigation }) => {
             propsForDots: {
               r: '6',
               strokeWidth: '2',
-              stroke: '#e74c3c', // Color rojo
+              stroke: '#E53935', // Color rojo
             },
           }}
           style={styles.chart}
@@ -257,7 +277,7 @@ const UserHomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#424242',
     padding: 20,
   },
   header: {
@@ -271,7 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   date: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontSize: 16,
     marginBottom: 5,
   },
@@ -284,13 +304,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   temperature: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontSize: 20,
     fontWeight: 'bold',
   },
   weatherIcon: {
     width: 50,
     height: 50,
+  },
+  placeholderIcon: {
+    backgroundColor: '#333',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   condition: {
     color: '#bbb',
@@ -303,7 +329,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   statCard: {
-    backgroundColor: '#333',
+    backgroundColor: '#212121',
     borderRadius: 16,
     width: '48%',
     padding: 15,
@@ -311,35 +337,35 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   statValue: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontSize: 24,
     marginVertical: 10,
   },
   statLabel: {
-    color: '#bbb',
+    color: '#F4F6FC',
     fontSize: 16,
   },
   sensorSelector: {
     marginBottom: 20,
   },
   selectorLabel: {
-    color: '#bbb',
+    color: '#F4F6FC',
     fontSize: 16,
     marginBottom: 10,
   },
   picker: {
     height: 50,
-    color: '#fff',
-    backgroundColor: '#333',
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
   },
   chartContainer: {
-    backgroundColor: '#333',
+    backgroundColor: '#212121',
     borderRadius: 16,
     padding: 10,
     marginBottom: 20,
   },
   chartTitle: {
-    color: '#e74c3c',
+    color: '#E53935',
     fontSize: 18,
     marginBottom: 10,
   },
@@ -353,29 +379,58 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   switchButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: '#E53935',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     margin: 5
   },
   activeButton: {
-    backgroundColor: '#c0392b',
+    backgroundColor: '#B71C1C',
   },
   buttonText: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontSize: 16,
   },
   packageButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: '#E53935',
     paddingVertical: 15,
     borderRadius: 30,
     alignItems: 'center',
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: '#F4F6FC',
     fontSize: 18,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+    width: '100%',
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#E53935',
+    borderRadius: 5,
+    color: '#F4F6FC',
+    backgroundColor: '#212121',
+    paddingRight: 30,
+    marginBottom: 20,
+    width: '100%',
   },
 });
 

@@ -117,7 +117,11 @@ const SupportAdminScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => (
+const renderItem = ({ item }) => {
+  if (!item.usuario_id) {
+    return null;
+  }
+  return (
     <View style={styles.item}>
       <View style={styles.header}>
         <Text style={styles.name}>Company: {item.usuario_id.nombre}</Text>
@@ -140,6 +144,8 @@ const SupportAdminScreen = () => {
       </TouchableOpacity>
     </View>
   );
+};
+  
 
   const today = new Date().toISOString().split('T')[0];
 

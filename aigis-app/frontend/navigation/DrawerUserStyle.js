@@ -4,6 +4,7 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/FontAwesome6';
+import Icon3 from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function DrawerUserContent(props) {
@@ -119,24 +120,24 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="PremiumPackagesScreen"
-                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon3 name="package" color={activeItem === 'Premium Packages' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Premium Packages"
+                    labelStyle={[styles.label, { color: activeItem === 'Premium Packages' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Support History');
-                        props.navigation.navigate('PremiumPackagesScreen');
+                        setActiveItem('Premium Packages');
+                        props.navigation.navigate('Premium Packages');
                     }}
-                    style={activeItem === 'Support History' ? styles.activeItem : {}}
+                    style={activeItem === 'Premium Packages' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Support History' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="AddEmployeeScreen"
-                    labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
+                    icon={({ color, size }) => ( <Icon name="supervised-user-circle" color={activeItem === 'Manage Employees' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Manage Employees"
+                    labelStyle={[styles.label, { color: activeItem === 'Manage Employees' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Support History');
-                        props.navigation.navigate('AddEmployeeScreen');
+                        setActiveItem('Manage Employees');
+                        props.navigation.navigate('Manage Employees');
                     }}
-                    style={activeItem === 'Support History' ? styles.activeItem : {}}
+                    style={activeItem === 'Manage Employees' ? styles.activeItem : {}}
                 />
             </Drawer.Section>
 

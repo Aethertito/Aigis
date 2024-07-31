@@ -11,4 +11,7 @@ router.delete('/:id', SensorController.deleteSensor)
 router.get('/usuario/:userId', SensorController.getSensorByUser);
 router.put('/:id/updateStatus', SensorController.updateSensorStatus);
 
+// Nueva ruta para obtener sensores de temperatura agrupados por ubicación
+router.get('/temperature/locations', SensorController.getTemperatureLocation);
+
 module.exports = router
