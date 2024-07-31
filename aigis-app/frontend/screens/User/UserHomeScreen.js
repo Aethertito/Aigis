@@ -73,14 +73,14 @@ const UserHomeScreen = ({ navigation }) => {
       const startDate = '2023-07-01';
       const endDate = '2023-07-14';
       const sensorIds = temperatureSensors[selectedLocation].map(sensor => sensor.sensor_id).join(',');
-      console.log('Fetching data for sensor IDs:', sensorIds); // Verificación de sensor IDs
+      console.log('Fetching data for sensor IDs:', sensorIds);
   
       const response = await axios.get(`http://${IP}:3000/api/statistics`, {
         params: { sensorIds, startDate, endDate }
       });
       const statistics = response.data;
   
-      console.log('Statistics data received:', statistics); // Verificación de los datos recibidos
+      console.log('Statistics data received:', statistics);
       const processedData = processData(statistics, mode);
       setData(processedData);
     } catch (error) {
@@ -115,32 +115,7 @@ const UserHomeScreen = ({ navigation }) => {
       humidity: entry.valor.humedad
     }));
 
-    if (mode === 'day') {
-      return dataPoints;
-    } else if (mode === 'week') {
-      const weeklyData = dataPoints.reduce((acc, point) => {
-        const week = getWeekNumber(new Date(point.date));
-        if (!acc[week]) {
-          acc[week] = { week, temperature: 0, humidity: 0, count: 0 };
-        }
-        acc[week].temperature += point.temperature;
-        acc[week].humidity += point.humidity;
-        acc[week].count += 1;
-        return acc;
-      }, {});
-
-      return Object.values(weeklyData).map(item => ({
-        week: item.week,
-        temperature: item.temperature / item.count,
-        humidity: item.humidity / item.count
-      }));
-    }
-  };
-
-  const getWeekNumber = (date) => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    return dataPoints;
   };
 
   return (
@@ -223,37 +198,40 @@ const UserHomeScreen = ({ navigation }) => {
 
       <View style={styles.chartContainer}>
         <Text style={styles.chartTitle}>{selectedData === 'temperature' ? 'Temperature' : 'Humidity'}</Text>
-        <LineChart
-          data={{
-            labels: data.map(item => viewMode === 'day' ? item.date : `Week ${item.week}`),
-            datasets: [
-              {
-                data: data.map(item => selectedData === 'temperature' ? item.temperature : item.humidity),
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <LineChart
+            data={{
+              labels: data.map(item => viewMode === 'day' ? item.date : `Week ${item.week}`),
+              datasets: [
+                {
+                  data: data.map(item => selectedData === 'temperature' ? item.temperature : item.humidity),
+                },
+              ],
+            }}
+            width={Math.max(data.length * 50, Dimensions.get('window').width)} // Ajusta el ancho para que los datos se puedan desplazar horizontalmente
+            height={220}
+            yAxisLabel=""
+            yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
+            chartConfig={{
+              backgroundColor: '#212121',
+              backgroundGradientFrom: '#212121',
+              backgroundGradientTo: '#212121',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
               },
-            ],
-          }}
-          width={Dimensions.get('window').width - 40}
-          height={220}
-          yAxisLabel=""
-          yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
-          chartConfig={{
-            backgroundColor: '#212121',
-            backgroundGradientFrom: '#212121',
-            backgroundGradientTo: '#212121',
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
-            propsForDots: {
-              r: '6',
-              strokeWidth: '2',
-              stroke: '#E53935',
-            },
-          }}
-          style={styles.chart}
-        />
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: '#E53935',
+              },
+            }}
+            style={styles.chart}
+            fromZero
+          />
+        </ScrollView>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -365,8 +343,9 @@ const styles = StyleSheet.create({
   chartContainer: {
     backgroundColor: '#212121',
     borderRadius: 16,
-    padding: 10,
+    padding: 6,
     marginBottom: 20,
+    overflow: 'hidden',
   },
   chartTitle: {
     color: '#E53935',
