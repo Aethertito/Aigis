@@ -63,38 +63,74 @@
             <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 240px; height: 100%;">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                    <span class="fs-4 fw-bold ">A.I.G.I.S</span>
+                    <span class="fs-4 fw-bold">A.I.G.I.S</span>
                 </a>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active=="Index"? "linkActive" : "")" id="Index" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link text-white @(ViewBag.Active == "Home" ? "linkActive" : "")" asp-controller="Home" asp-action="Index">
                             <i class="fa fa-home mx-2"></i>
-                            Inicio
+                            Home
                         </a>
                     </li>
-                    <li>
-                        <a class="nav-link text-white @(ViewBag.Active=="Charts"? "linkActive" : "")" id="Charts" asp-controller="Home" asp-action="Charts">
-                            <i class="fa fa-database mx-2"></i>
-                            Graficas
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white @(ViewBag.Active=="Orders"? "linkActive" : "")" id="Orders">
-                            <i class="fa fa-table mx-2"></i>
-                            Ordenes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white" id="Products">
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Packages" ? "linkActive" : "")" asp-controller="Home" asp-action="Packages">
                             <i class="fa fa-box mx-2"></i>
-                            Productos
+                            Packages
                         </a>
                     </li>
-                    <li>
-                        <a href="#" class="nav-link text-white" id="Customers">
-                            <i class="fa fa-users mx-2"></i>
-                            Clientes
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Sensors" ? "linkActive" : "")" asp-controller="Home" asp-action="Sensors">
+                            <i class="fa fa-microchip mx-2"></i>
+                            Sensors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Orders" ? "linkActive" : "")" asp-controller="Home" asp-action="Orders">
+                            <i class="fa fa-table mx-2"></i>
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Graphics" ? "linkActive" : "")" asp-controller="Home" asp-action="Charts">
+                            <i class="fa fa-chart-line mx-2"></i>
+                            Graphics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Cameras" ? "linkActive" : "")" asp-controller="Home" asp-action="Cameras">
+                            <i class="fa fa-video mx-2"></i>
+                            Cameras
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Appointment" ? "linkActive" : "")" asp-controller="Home" asp-action="Appointment">
+                            <i class="fa fa-calendar mx-2"></i>
+                            Appointment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "LocationsSensors" ? "linkActive" : "")" asp-controller="Home" asp-action="LocationsSensors">
+                            <i class="fa fa-map-marker-alt mx-2"></i>
+                            Locations Sensors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "Support" ? "linkActive" : "")" asp-controller="Home" asp-action="Support">
+                            <i class="fa fa-life-ring mx-2"></i>
+                            Support
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "SupportHistory" ? "linkActive" : "")" asp-controller="Home" asp-action="SupportHistory">
+                            <i class="fa fa-history mx-2"></i>
+                            Support History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active == "PremiumPackages" ? "linkActive" : "")" asp-controller="Home" asp-action="PremiumPackages">
+                            <i class="fa fa-star mx-2"></i>
+                            Premium Packages
                         </a>
                     </li>
                 </ul>
@@ -110,14 +146,15 @@
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">Test</a></li>
-                        <li><a class="dropdown-item" href="#">Configuración</a></li>
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-white rounded shadow-sm fw-bold" role="button" asp-area="" asp-controller="Login" asp-action="Logout">Cerrar Sesión</a></li>
+                        <li><a class="dropdown-item text-white rounded shadow-sm fw-bold" role="button" asp-controller="Login" asp-action="Logout">Log Out</a></li>
                     </ul>
                 </div>
             </div>
+
+
         }
         else
         {
