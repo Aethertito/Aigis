@@ -1,0 +1,49 @@
+# Build files
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.vspscc
+*.vssscc
+.vscode/
+.vs/
+
+# Configuration files
+appsettings*.json
+appsettings*.Development.json
+
+# Entity Framework Core
+Migrations/
+
+# Database files
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio temporary files
+*.tmp
+*.temp
+
+# Rider
+.idea/
+
+# .NET Core secrets
+secrets.json
+
+# Visual Studio Code directories and files
+.vscode/
+.history/
+*.code-workspace
