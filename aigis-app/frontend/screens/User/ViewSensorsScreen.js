@@ -35,6 +35,7 @@ const ViewSensorsScreen = () => {
   const filteredData = filter === 'All' ? data : data.filter(sensor => sensor.tipo === filter);
 
   const renderItem = ({ item }) => (
+    
     <View style={styles.card}>
       <Text style={styles.title}>{item.tipo}</Text>
       <Text style={styles.description}>{item.descripcion}</Text>
@@ -46,6 +47,7 @@ const ViewSensorsScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title2}>Your Sensors</Text>
+      <Text style={styles.description}>En esta seccion podras visualizar que sensores tienes activos en tu cuenta. Puedes aplicar un filtro segun los sensores que desees revisar</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
         {['All', 'RFID', 'Temperature and Humidity', 'Smoke', 'Presence', 'Camera'].map((item, index) => (
           <TouchableOpacity
