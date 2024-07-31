@@ -20,7 +20,7 @@ const UserHomeScreen = ({ navigation }) => {
     condition: '',
   });
   const [selectedData, setSelectedData] = useState('temperature');
-  const [temperatureSensors, setTemperatureSensors] = useState([]);
+  const [temperatureSensors, setTemperatureSensors] = useState({});
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const UserHomeScreen = ({ navigation }) => {
     try {
       const id = await AsyncStorage.getItem('userId');
       setUserId(id);
-      console.log('User ID:', id); // Verificar el ID del usuario
+      console.log('User ID:', id);
     } catch (error) {
       console.error('Error getting user ID:', error);
     }
@@ -53,21 +53,19 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchTemperatureSensorsByLocation = async () => {
     try {
       if (!userId) return;
-  
-      console.log('Enviando userId:', userId); // Verificar que se está enviando el userId
-  
+
+      console.log('Enviando userId:', userId);
+
       const response = await axios.get(`http://${IP}:3000/sensor/temperature/locations`, {
-        params: { userId: userId } // Asegurar que userId se pasa como parámetro
+        params: { userId: userId }
       });
-  
-      console.log('Response data:', response.data); // Verificar los datos recibidos
-      setTemperatureSensors(response.data.sensores || []);
-      setLocations(Object.keys(response.data.sensores));
+
+      console.log('Response data:', response.data);
+      setTemperatureSensors(response.data.sensores || {});
     } catch (error) {
       console.error('Error fetching temperature sensors by location:', error);
     }
   };
-  
 
   const fetchData = async (mode) => {
     if (!selectedLocation || !temperatureSensors[selectedLocation]) return;
@@ -75,9 +73,14 @@ const UserHomeScreen = ({ navigation }) => {
       const startDate = '2023-07-01';
       const endDate = '2023-07-14';
       const sensorIds = temperatureSensors[selectedLocation].map(sensor => sensor.sensor_id).join(',');
-      const response = await axios.get(`http://${IP}:3000/api/statistics?sensorIds=${sensorIds}&startDate=${startDate}&endDate=${endDate}`);
+      console.log('Fetching data for sensor IDs:', sensorIds); // Verificación de sensor IDs
+  
+      const response = await axios.get(`http://${IP}:3000/api/statistics`, {
+        params: { sensorIds, startDate, endDate }
+      });
       const statistics = response.data;
-
+  
+      console.log('Statistics data received:', statistics); // Verificación de los datos recibidos
       const processedData = processData(statistics, mode);
       setData(processedData);
     } catch (error) {
@@ -91,6 +94,7 @@ const UserHomeScreen = ({ navigation }) => {
       const longitude = -116.828109;
       const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=f847590632224d78a8093009242707&q=${latitude},${longitude}`);
       const { location, current } = response.data;
+      console.log('Weather data:', { location, current });
       setWeather({
         temperature: current.temp_c,
         location: location.name,
@@ -142,8 +146,8 @@ const UserHomeScreen = ({ navigation }) => {
   return (
     <ScrollView 
       contentContainerStyle={styles.container}
-      style={{ backgroundColor: '#424242' }} // Color de fondo para el ScrollView
-      bounces={false} // Desactiva el efecto de rebote en iOS
+      style={{ backgroundColor: '#424242' }}
+      bounces={false}
     >
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -190,8 +194,8 @@ const UserHomeScreen = ({ navigation }) => {
         <Text style={styles.selectorLabel}>Select Temperature Sensor:</Text>
         <RNPickerSelect
           onValueChange={(value) => {
-            setSelectedLocation(value); // Actualiza la ubicación seleccionada
-            console.log('Ubicación seleccionada:', value); // Log para verificar ubicación seleccionada
+            setSelectedLocation(value);
+            console.log('Ubicación seleccionada:', value);
           }}
           items={Object.keys(temperatureSensors).map(location => ({
             label: location,
@@ -245,7 +249,7 @@ const UserHomeScreen = ({ navigation }) => {
             propsForDots: {
               r: '6',
               strokeWidth: '2',
-              stroke: '#E53935', // Color rojo
+              stroke: '#E53935',
             },
           }}
           style={styles.chart}
@@ -387,10 +391,6 @@ const styles = StyleSheet.create({
   },
   activeButton: {
     backgroundColor: '#B71C1C',
-  },
-  buttonText: {
-    color: '#F4F6FC',
-    fontSize: 16,
   },
   packageButton: {
     backgroundColor: '#E53935',

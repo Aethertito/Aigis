@@ -8,7 +8,7 @@ import OrdersScreen from '../screens/User/OrdersScreen';
 import UserHomeScreen from '../screens/User/UserHomeScreen';
 import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import PayPackScreen from '../screens/User/PayPackScreen';
-import Ubicaciones from '../screens/User/Ubicaciones'
+import Ubicaciones   from '../screens/User/Ubicaciones'
 import HelpScreen from '../screens/User/HelpScreen'
 
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
