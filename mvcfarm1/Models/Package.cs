@@ -2,13 +2,10 @@
 {
     public class Package
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
-        public string Image { get; set; }
-        public string Category { get; set; }
-        public string Type { get; set; }
-        public string Status { get; set; }
+        public string Id { get; set; } // Assuming MongoDB _id is a string
+        public string Paquete { get; set; }
+        public string Descripcion { get; set; }
+        public decimal Precio { get; set; }
+        public string[] Contenido { get; set; }
     }
 }

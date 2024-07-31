@@ -1,100 +1,30 @@
-﻿@using System.Security.Claims;
-@using Microsoft.AspNetCore.Http
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-@{
-    ViewData["Title"] = "Index";
-}
-@{
-    ViewBag.Title = "Index";
-    ViewBag.Active = "Index";
+﻿@{
+    ViewData["Title"] = "Paquetes";
 }
 
-<div class="text-center mt-5" style="margin-left: 14rem;">
+<h2>Available Packages</h2>
+<div id="packages-container"></div>
 
-    <h1 class="display-4 text-white fw-bold">Bienvenido</h1>
-    @if (User.Identity!.IsAuthenticated)
-    {
-        <p class="lead text-white">
-            Bienvenido usuario
-            @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).FirstOrDefault()
-        </p>
-    }
-    else
-    {
-        <p class="lead text-white">Please, log in</p>
-    }
-
-    @if (User.IsInRole("Admin"))
-    {
-        <p class="lead text-white">You are an Admin</p>
-    }
-
-
-
-
-    @if (HttpContextAccessor.HttpContext.Session.GetInt32("PackageId") > 0)
-    {
-        <p class="text-white">
-            Ya cuenta con un paquete
-        </p>
-    }
-    else
-    {
-        <h3 class="text-white fw-bold">Contrate un Paquete</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card fondoOscuro">
-                    @* <img class="card-img-top" src="..." alt="Card image cap"> *@
-                    <div class="card-body">
-                        <h5 class="card-title text-white fw-bold">Paquete Basico</h5>
-                        <p class="card-text text-white">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary fondoRojo border-0 fw-bold">CONFIRMAR PAQUETE</a>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-around">
-                            <p class="text-white">Costo:</p>
-                            <p class="text-white">$100</p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card fondoOscuro rounded">
-                    @* <img class="card-img-top" src="..." alt="Card image cap"> *@
-                    <div class="card-body">
-                        <h5 class="card-title text-white fw-bold">Paquete Intermedio</h5>
-                        <p class="card-text text-white">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary fondoRojo border-0 fw-bold">CONFIRMAR PAQUETE</a>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-around">
-                            <p class="text-white">Costo:</p>
-                            <p class="text-white">$100</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card fondoOscuro">
-                    @* <img class="card-img-top" src="..." alt="Card image cap"> *@
-                    <div class="card-body">
-                        <h5 class="card-title text-white fw-bold">Paquete Avanzado</h5>
-                        <p class="card-text text-white">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary fondoRojo border-0 fw-bold">CONFIRMAR PAQUETE</a>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-around">
-                            <p class="text-white">Costo:</p>
-                            <p class="text-white">$100</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-
-
-</div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('https://localhost:7132/api/PackagesApi')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('packages-container');
+                    data.forEach(pkg => {
+                        const packageDiv = document.createElement('div');
+                        packageDiv.className = 'package-item';
+                        packageDiv.innerHTML = `
+                                    <h3>${pkg.paquete}</h3>
+                                    <p>${pkg.descripcion}</p>
+                                    <p>Precio: $${pkg.precio}</p>
+                                    <p>Contenido: ${pkg.contenido.join(', ')}</p>
+                                `;
+                        container.appendChild(packageDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching packages:', error));
+        });
+    </script>
+}

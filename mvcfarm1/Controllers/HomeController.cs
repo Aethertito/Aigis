@@ -1,21 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using mvcfarm1.Models;
+using mvcfarm1.Services;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace mvcfarm1.Controllers
 {
-    //Se puede colocar en cada vista o en general como aqui
     [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public HomeController(ILogger<HomeController> logger)
+        private readonly PackageService _packageService;
+
+        public HomeController(ILogger<HomeController> logger, PackageService packageService)
         {
             _logger = logger;
+            _packageService = packageService;
         }
 
-        //[Authorize]
         public IActionResult Index()
         {
             return View();
@@ -25,13 +28,16 @@ namespace mvcfarm1.Controllers
         {
             return View();
         }
+
         public IActionResult Charts()
         {
             return View();
         }
-        public IActionResult Packages()
+
+        public async Task<IActionResult> Packages()
         {
-            return View(); 
+            var packages = await _packageService.GetAllPackagesAsync();
+            return View(packages);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

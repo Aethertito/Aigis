@@ -504,3 +504,16 @@ C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\obj\Debug\net8.0\refint\mvcfarm1.dll
 C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\obj\Debug\net8.0\mvcfarm1.pdb
 C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\obj\Debug\net8.0\mvcfarm1.genruntimeconfig.cache
 C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\obj\Debug\net8.0\ref\mvcfarm1.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\AWSSDK.Core.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\AWSSDK.SecurityToken.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\DnsClient.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\MongoDB.Bson.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\MongoDB.Driver.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\MongoDB.Driver.Core.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\MongoDB.Libmongocrypt.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\SharpCompress.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\Snappier.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\ZstdSharp.dll
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
+C:\xampp2\htdocs\UTT4B\Aigis\mvcfarm1\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
