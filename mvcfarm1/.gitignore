@@ -1,0 +1,92 @@
+# Compiled binary directories
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files and directories
+.vscode/
+.vs/
+
+# Configuration files
+appsettings*.json
+
+# Entity Framework Core
+Migrations/
+
+# SQL Server database files
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio temporary files
+*.tmp
+*.temp
+
+# Rider
+.idea/
+
+# .NET Core secrets
+secrets.json
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NPM Packages
+node_modules/
+
+# Visual Studio Code directories and files
+.history/
+*.code-workspace
+
+# Exclude the entire .vs directory
+.vs/
+
+# Azure App Service
+.scm/
+
+# Backup files
+*.bak
+
+# Resharper files
+_ReSharper*/
+*.[rR]e[Ss]harper
+
+# DotCover is a JetBrains code coverage tool
+*.dotCover
+
+# User specific files
+*.sln.iml
+*.sln.ide
+*.sln.ide.shared
+
+# User-specific caches
+**/ipch/
+*.aps
+
+# Node modules (if using Node.js)
+node_modules/
+
+# yarn v1
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+yarn.lock
+.pnp.*
+
+# Yarn Integrity file
+.yarn-integrity
