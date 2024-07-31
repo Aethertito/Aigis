@@ -1,0 +1,66 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.fondoGris {
+    background-color: #42423c;
+    
+}
+.cardSize {
+    width: 30rem !important;
+}
+
+.fondoRojo {
+    background-color: #e23a37!important;
+
+}
+
+.fondoOscuro {
+    background-color: #222222;
+    border-color:red;
+}
+
+.graficaDoughnutTamano {
+    width: 30rem !important;
+    height: 30rem !important;
+}
+
+
+.insights {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.6rem;
+}
+
+.nav-link:hover {
+    background-color: #e23a37;
+}
+
+.linkActive {
+    background-color: #e23a37 !important;
+    font-weight: bold;
+}
+
+
+/*hijo
+box-shadow: var(--box-shadow);
+transition: all 300ms ease;*/

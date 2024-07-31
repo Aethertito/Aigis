@@ -1,0 +1,259 @@
+﻿@{
+    ViewData["Title"] = "Charts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Charts";
+    ViewBag.Active = "Charts";
+}
+<div class="mt-5" style="margin-left: 15rem;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card fondoOscuro">
+                <div class="card-header text-white">
+                    <p class="fw-bold" id="tituloGraficaLineal">
+                        Gráfica Lineal por Mes
+                    </p>
+                </div>
+                <div class="card-body rounded bg-dark">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div class="card-footer">
+
+                    <button id="linechartPerMonth" class="btn btn-primary rounded">Por Mes</button>
+                    <button id="linechartPerDay" class="btn btn-success rounded">Por Día</button>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card fondoOscuro">
+                <div class="card-header">
+                    <p class="fw-bold text-white" id="tituloGraficaDona">
+                        Gráfica Dona por Mes
+                    </p>
+                </div>
+                <div class="card-body rounded bg-dark">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+                <div class="card-footer">
+                    <button id="doughnutPerMonth" class="btn btn-primary rounded">Por Mes</button>
+                    <button id="doughnutPerDay" class="btn btn-success rounded">Por Día</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const monthDataArray = [
+        { month: 'Enero', count: 10 },
+        { month: 'Febrero', count: 20 },
+        { month: 'Marzo', count: 15 },
+        { month: 'Abril', count: 25 },
+        { month: 'Mayo', count: 22 },
+        { month: 'Junio', count: 30 }
+    ];
+    const dayDataArray = [
+        { day: 'Lunes', count: 3 },
+        { day: 'Martes', count: 15 },
+        { day: 'Miercoles', count: 17 },
+        { day: 'Jueves', count: 13 },
+        { day: 'Viernes', count: 21 },
+        { day: 'Sabado', count: 18 }
+    ];
+
+
+    //Linechart
+
+    const linechart = document.getElementById('lineChart');
+
+    let mylinechart = new Chart(linechart, {
+        type: 'line',
+        data: {
+            labels: monthDataArray.map(row => row.month),
+            datasets: [
+                {
+                    label: 'Votos por Mes',
+                    data: monthDataArray.map(row => row.count),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var linechartPerMonth = document.getElementById('linechartPerMonth');
+    var linechartPerDay = document.getElementById('linechartPerDay');
+    var tituloGraficaLineal = document.getElementById('tituloGraficaLineal');
+    
+
+    linechartPerMonth.addEventListener('click', function () {
+
+        var linechart = document.getElementById("lineChart").getContext('2d');
+        if (mylinechart) {
+            mylinechart.destroy();
+        }
+
+        mylinechart = new Chart(linechart, {
+            type: 'line',
+            data: {
+                labels: monthDataArray.map(row => row.month),
+                datasets: [
+                    {
+                        label: 'Votos por Mes',
+                        data: monthDataArray.map(row => row.count),
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        tituloGraficaLineal.innerHTML = "Gráfica Lineal por Mes";
+    });
+
+    linechartPerDay.addEventListener('click', function () {
+        var linechart = document.getElementById("lineChart").getContext('2d');
+        if (mylinechart) {
+            mylinechart.destroy();
+        }
+
+        mylinechart = new Chart(linechart, {
+            type: 'line',
+            data: {
+                labels: dayDataArray.map(row => row.day),
+                datasets: [
+                    {
+                        label: 'Votos por Dia',
+                        data: dayDataArray.map(row => row.count),
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        tituloGraficaLineal.innerHTML = "Gráfica Lineal por Día";
+    });
+
+
+    // Doughtnutchart
+
+    const doughnutchart = document.getElementById('doughnutChart');
+
+    let myDoughnut = new Chart(doughnutchart, {
+        type: 'doughnut',
+        data: {
+            // labels: monthDataArray.map(row => row.month),
+            datasets: [
+                {
+                    label: 'Votos por Mes',
+                    data: monthDataArray.map(row => row.count),
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var doughnutPerMonth = document.getElementById('doughnutPerMonth');
+    var doughnutPerDay = document.getElementById('doughnutPerDay');
+    var tituloGraficaDona = document.getElementById('tituloGraficaDona');
+
+    doughnutPerMonth.addEventListener('click', function () {
+        var doughnutchart = document.getElementById("doughnutChart").getContext('2d');
+        if (myDoughnut) {
+            myDoughnut.destroy();
+        }
+
+        myDoughnut = new Chart(doughnutchart, {
+            type: 'doughnut',
+            data: {
+                // labels: monthDataArray.map(row => row.month),
+                datasets: [
+                    {
+                        label: 'Votos por Mes',
+                        data: monthDataArray.map(row => row.count),
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        tituloGraficaDona.innerHTML = "Gráfica Dona por Mes";
+    });
+
+    doughnutPerDay.addEventListener('click', function () {
+
+        var doughnutchart = document.getElementById("doughnutChart").getContext('2d');
+        if (myDoughnut) {
+            myDoughnut.destroy();
+        }
+
+        myDoughnut = new Chart(doughnutchart, {
+            type: 'doughnut',
+            data: {
+                // labels: monthDataArray.map(row => row.month),
+                datasets: [
+                    {
+                        label: 'Votos por Dia',
+                        data: dayDataArray.map(row => row.count),
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        tituloGraficaDona.innerHTML = "Gráfica Dona por Día";
+    });
+
+
+
+
+
+
+
+</script>
+

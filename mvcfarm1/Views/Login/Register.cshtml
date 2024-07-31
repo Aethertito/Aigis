@@ -1,0 +1,103 @@
+﻿@model mvcfarm1.Models.Company
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<html>
+<head>
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+</head>
+<body>
+
+    
+
+    @* Registrar y solicitar Id,Name,Username y Password *@
+    <h1>Register</h1>
+    <hr />
+    <div class="card cardSize mx-auto">
+        <div class="card-header">
+            Register a new Company
+        </div>
+        <div class="card-body fondoGris">
+           
+                    <form asp-action="Register" asp-controller="Login">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" class="form-control" placeholder="Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Phone" class="control-label"></label>
+                            <input asp-for="Phone" class="form-control" placeholder="Phone" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CP" class="control-label"></label>
+                            <input asp-for="CP" class="form-control" placeholder="CP" />
+                            <span asp-validation-for="CP" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BusinessLine" class="control-label"></label>
+                            <select asp-for="BusinessLine" class="form-select">
+                                <option>Select Business Line...</option>
+                                <option>Education</option>
+                                <option>Technology</option>
+                                <option>Farm</option>
+                                <option>HealthCare</option>
+                                <option>Automotive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group d-none">
+                            <label asp-for="Role" class="control-label"></label>
+                            <input asp-for="Role" class="form-control" placeholder="Role" value="Usuario" />
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-group d-none">
+                            <label asp-for="PackageId" class="control-label"></label>
+                            <input asp-for="PackageId" class="form-control" value="0" />
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        @if (ViewData["Error"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @ViewData["Error"]
+                            </div>
+                        }
+                        <div class="form-group d-flex justify-content-center flex-column align-items-center">
+                            <a class="text-primary align-self-end" asp-area="" asp-controller="Login" asp-action="Login">Return to Login</a>
+                            <input type="submit" value="Register" class="btn btn-primary my-2" />
+                        </div>
+
+                    </form>
+             
+        </div>
+
+    </div>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

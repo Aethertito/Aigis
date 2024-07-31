@@ -1,0 +1,154 @@
+﻿@using System.Security.Claims;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - A.I.G.I.S</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/mvcfarm1.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body class="fondoGris">
+    <style>
+        .salir{
+            margin-left: auto;
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 200px;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            border-right: 1px solid #162636;
+            height: 100%;
+        }
+
+    </style>
+    <header>
+        @if (@ViewData["Title"] != "Login" && @ViewData["Title"] != "Register")
+        {
+            @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">A.I.G.I.S</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Charts">Charts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">About</a>
+                            </li>
+                            <li class="nav-item bg-danger salir rounded">
+                                <a class="btn btn-danger text-white rounded shadow-sm fw-bold" role="button" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav> *@
+
+
+            <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 240px; height: 100%;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4 fw-bold ">A.I.G.I.S</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white @(ViewBag.Active=="Index"? "linkActive" : "")" id="Index" asp-controller="Home" asp-action="Index">
+                            <i class="fa fa-home mx-2"></i>
+                            Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-white @(ViewBag.Active=="Charts"? "linkActive" : "")" id="Charts" asp-controller="Home" asp-action="Charts">
+                            <i class="fa fa-database mx-2"></i>
+                            Graficas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white @(ViewBag.Active=="Orders"? "linkActive" : "")" id="Orders">
+                            <i class="fa fa-table mx-2"></i>
+                            Ordenes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white" id="Products">
+                            <i class="fa fa-box mx-2"></i>
+                            Productos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white" id="Customers">
+                            <i class="fa fa-users mx-2"></i>
+                            Clientes
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                                @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).FirstOrDefault()
+                            }
+                        </strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">Test</a></li>
+                        <li><a class="dropdown-item" href="#">Configuración</a></li>
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-white rounded shadow-sm fw-bold" role="button" asp-area="" asp-controller="Login" asp-action="Logout">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        else
+        {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">AIGIS</a>                  
+                </div>
+            </nav>
+        }
+        
+    </header>
+    <div class="container ">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top bg-dark footer text-muted">
+        <div class="container">            
+            &copy; 2024 - Empresa de Seguridad - <a asp-area="" asp-controller="Home" asp-action="Privacy">Aviso de Privacidad</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+
+
+    </script>
+</body>
+</html>
