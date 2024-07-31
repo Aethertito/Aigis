@@ -66,8 +66,6 @@ namespace mvcfarm1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PackageId");
-
                     b.ToTable("Company", (string)null);
                 });
 
@@ -109,17 +107,6 @@ namespace mvcfarm1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Package", (string)null);
-                });
-
-            modelBuilder.Entity("mvcfarm1.Models.Company", b =>
-                {
-                    b.HasOne("mvcfarm1.Models.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Package");
                 });
 #pragma warning restore 612, 618
         }
