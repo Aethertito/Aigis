@@ -83,7 +83,7 @@ const ManageSensorsScreen = ({ navigation }) => {
           onPress={() => updateSensorStatus(item.sensor_id)}
         >
           <Text style={styles.optionButtonText}>
-            {item.estado === 'active' ? 'Deactivate' : 'Activate'}
+            {item.estado === 'active' ? 'Desactivate' : 'Activate'}
           </Text>
         </TouchableOpacity>
       </View>

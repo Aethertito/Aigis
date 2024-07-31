@@ -10,15 +10,27 @@ import MoreInformationScreen from '../screens/Admin/MoreInformationScreen';
 import SupportAdminScreen from '../screens/Admin/SupportAdminScreen';
 import CitasAdmin from '../screens/Admin/CitasAdmin';
 import PaymentScreen from '../screens/Admin/PaymentScreen';
-
-
 import DrawerAdminContent from './DrawerAdminStyle';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const AdminDrawer = () => (
-  <Drawer.Navigator drawerContent={props => <DrawerAdminContent {...props} />}>
+  <Drawer.Navigator
+    drawerContent={props => <DrawerAdminContent {...props} />}
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      drawerIcon: ({ color, size }) => (
+        <Icon name="menu" color="#E53935" size={size} />
+      ),
+    }}
+  >
     <Drawer.Screen name="Admin Home" component={AdminHomeScreen} />
     <Drawer.Screen name="Manage Sensors" component={ManageSensorsScreen} />
     <Drawer.Screen name="Manage Users" component={ManageUsersScreen} />

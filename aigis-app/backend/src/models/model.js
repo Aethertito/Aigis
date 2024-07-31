@@ -17,15 +17,15 @@ const usuarioSchema = new Schema({
   memFechaInicio: { type: Date },
   memFechaFin: { type: Date },
   paqSelect: [
-    { 
+    {
       paquete_id: { type: Schema.Types.ObjectId, ref: 'Paquete' },
-      paquete: { type: String }, 
+      paquete: { type: String },
       cantidad: { type: Number, required: true }
     }
   ],
   sensores: [{
     sensor_id: { type: Schema.Types.ObjectId, ref: 'Sensor' },
-    tipo: { type: String } 
+    tipo: { type: String }
   }]
 });
 
@@ -59,7 +59,7 @@ const paqueteSchema = new Schema({
 
 const membresiaSchema = new mongoose.Schema({
   cantidad: { type: Number, required: true },
-  periodo: { type: String, required: true},
+  periodo: { type: String, required: true },
   descripcion: { type: String, required: true },
   costo: { type: Number, required: true }
 });
@@ -69,7 +69,8 @@ const pagoSchema = new mongoose.Schema({
   membresia_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Membresia' },
   metodoPago: { type: String, required: true },
   estado: { type: String, enum: ['complete', 'pending', 'failed'], default: 'pending' },
-  fechaPago: { type: Date, default: Date.now}
+  fechaPago: { type: Date, default: Date.now },
+  cantidadPaquetes: { type: Number } // Nuevo campo para la cantidad de paquetes comprados (opcional)
 });
 
 const paqueteCompradoSchema = new Schema({
@@ -99,9 +100,28 @@ const citaSchema = new Schema({
   calle: { type: String, required: true },
   numero: { type: String, required: true },
   referencia: { type: String, maxlength: 50 },
-  motivo: {type: String},
-  estado: { type: String, enum: ['pending', 'confirmeda', 'canceled'], default: 'pending' }
+  motivo: { type: String },
+  estado: { type: String, enum: ['pending', 'confirmed', 'canceled'], default: 'pending' }
 });
+
+const empleadoSchema = new Schema({
+  nombre: { type: String, required: true },
+  email: { type: String, },
+  telefono: { type: String },
+  usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+}, { timestamps: true })
+
+const accesoRFIDSchema = new Schema({
+  empleado: { type: mongoose.Schema.Types.ObjectId, ref: 'Empleado', require: true },
+  paqueteComprado: { type: mongoose.Schema.Types.ObjectId, ref: 'PaqueteComprado', required: true },
+  codigoTarjeta: { type: String },
+}, { timestamps: true })
+
+const registroAcceso = new Schema({
+  accesoRFID: { type: mongoose.Schema.Types.ObjectId, ref: 'AccesoRFID', required: true },
+  fechaHora: { type: Date, default: Date.now },
+  tipoAcceso: { type: String, enum: ['Entry', 'Exit', 'Failed'] }
+})
 
 
 
@@ -114,6 +134,9 @@ const Membresia = mongoose.model('Membresia', membresiaSchema);
 const PaqueteComprado = mongoose.model('PaqueteComprado', paqueteCompradoSchema);
 const AyudaUsuario = mongoose.model('AyudaUsuario', ayudaUsuarioSchema);
 const Cita = mongoose.model('Cita', citaSchema);
+const Empleado = model('Empleado', empleadoSchema)
+const AccesoRFID = model('AccesoRFID', accesoRFIDSchema)
+const RegistroRFID = model('RegistroRFID', registroAcceso)
 
 module.exports = {
   Usuario,
@@ -124,5 +147,8 @@ module.exports = {
   Pago,
   PaqueteComprado,
   AyudaUsuario,
-  Cita
+  Cita,
+  Empleado,
+  AccesoRFID,
+  RegistroRFID
 };

@@ -19,22 +19,20 @@ const PayPackScreen = () => {
     if (cardNumber && cardTitular && expiryDate && cvv) {
       try {
         const userId = await AsyncStorage.getItem('userId');
-        for (const item of cartData) {
-          const paymentData = {
-            usuario_id: userId,
-            paquete_id: item.id,
-            ubicacion: 'Unspecified', // Ajusta esto según la lógica de tu aplicación
-            metodoPago: 'Credit Card',
-            precio: item.costo // Asegúrate de que el precio se envíe correctamente
-          };
 
-          console.log('Datos de pago enviados:', paymentData);
+        const paymentData = {
+          usuario_id: userId,
+          cartData,
+          metodoPago: 'Credit Card',
+          totalAmount
+        };
 
-          const apiUrl = `http://${IP}:3000/paqueteComprado/comprar`;
-          const response = await axios.post(apiUrl, paymentData);
-          console.log('Respuesta de la API:', response.data);
-          navigation.navigate('Home')
-        }
+        console.log('Datos de pago enviados:', paymentData);
+
+        const apiUrl = `http://${IP}:3000/paqueteComprado/comprar`;
+        const response = await axios.post(apiUrl, paymentData);
+        console.log('Respuesta de la API:', response.data);
+        navigation.navigate('Home');
 
         setCardNumber('');
         setCardTitular('');

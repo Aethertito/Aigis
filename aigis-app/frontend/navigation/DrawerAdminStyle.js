@@ -1,33 +1,51 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function DrawerAdminContent(props) {
     const [activeItem, setActiveItem] = useState('');
+    const [adminName, setAdminName] = useState('Admin Name');
+    const [adminEmail, setAdminEmail] = useState('@adminusername');
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const name = await AsyncStorage.getItem('adminName') || 'Admin Name';
+            const email = await AsyncStorage.getItem('adminEmail') || '@adminusername';
+            setAdminName(name);
+            setAdminEmail(email);
+        };
+
+        fetchUserData();
+    }, []);
 
     return (
         <DrawerContentScrollView {...props} style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
-                <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                        <Title style={styles.title}>Admin Name</Title>
-                        <Caption style={styles.caption}>@adminusername</Caption>
+                <View style={styles.profileContainer}>
+                    <Image
+                        source={require('../assets/admin-icon.png')}
+                        style={styles.profileImage}
+                    />
+                    <View style={styles.profileText}>
+                        <Title style={styles.title}>{adminName}</Title>
+                        <Caption style={styles.caption}>{adminEmail}</Caption>
                     </View>
                 </View>
             </View>
 
             <Drawer.Section style={styles.drawerSection}>
                 <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="home" color={activeItem === 'Home' ? '#E53935' : '#FFF'} size={size} /> )}
+                    icon={({ color, size }) => ( <Icon name="home" color={activeItem === 'Admin Home' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Home"
-                    labelStyle={[styles.label, { color: activeItem === 'Home' ? '#E53935' : '#F4F6FC' }]}
+                    labelStyle={[styles.label, { color: activeItem === 'Admin Home' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
-                        setActiveItem('Home');
+                        setActiveItem('Admin Home');
                         props.navigation.navigate('Admin Home');
                     }}
-                    style={activeItem === 'Home' ? styles.activeItem : {}}
+                    style={activeItem === 'Admin Home' ? styles.activeItem : {}}
                 />
                 <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="sensor-occupied" color={activeItem === 'Manage Sensors' ? '#E53935' : '#FFF'} size={size} /> )}
@@ -86,7 +104,6 @@ export function DrawerAdminContent(props) {
                     label="Logout"
                     labelStyle={styles.label}
                     onPress={() => {
-                        //Algo para cerrar sesion
                         props.navigation.navigate('Welcome');
                         console.log('Logout pressed');
                     }}
@@ -100,14 +117,28 @@ export function DrawerAdminContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-        backgroundColor: '#424242',
+        backgroundColor: '#212121',
     },
     userInfoSection: {
         paddingLeft: 20,
+        paddingTop: 40,
+        paddingBottom: 20,
+        backgroundColor: '#313131',
+    },
+    profileContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+    },
+    profileText: {
+        marginLeft: 15,
     },
     title: {
         fontSize: 16,
-        marginTop: 3,
         fontWeight: 'bold',
         color: '#F4F6FC',
     },
@@ -120,16 +151,13 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     label: {
-        color: '#F4F6FC', 
+        color: '#F4F6FC',
     },
     activeItem: {
-        backgroundColor: '#212121', 
+        backgroundColor: '#424242',
     },
     logoutSection: {
         marginTop: 'auto',
-    },
-    logoutItem: {
-        backgroundColor: '#424242', 
     },
 });
 

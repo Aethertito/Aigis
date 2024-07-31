@@ -29,7 +29,6 @@ const OrdersScreen = () => {
     <View style={styles.item}>
       <Text style={styles.name}>{item.paquete}</Text>
       <Text style={styles.price}>Price: ${item.precio}.00</Text>
-      <Text style={styles.details}>Location: {item.ubicacion}</Text>
       <Text style={styles.details}>Sensors:</Text>
       {item.sensores.map((sensor, index) => (
         <Text key={index} style={styles.sensor}>{sensor.tipo}</Text>

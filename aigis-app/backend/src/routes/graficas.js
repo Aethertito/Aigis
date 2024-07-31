@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const graficasController = require('../controllers/graficasController');
+const { getSensorStatistics, getTemperatureSensors } = require('../controllers/graficasController');
 
-router.get('/statistics', graficasController.getSensorStatistics);
+router.get('/statistics', getSensorStatistics);
+router.get('/temperature-sensors', getTemperatureSensors);
 
 module.exports = router;

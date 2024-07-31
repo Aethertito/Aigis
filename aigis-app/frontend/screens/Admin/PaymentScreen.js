@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F4F6FC',
     alignSelf: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',

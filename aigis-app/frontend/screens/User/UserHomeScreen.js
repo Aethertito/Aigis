@@ -1,24 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Asegúrate de tener esta librería instalada
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
+import { Picker } from '@react-native-picker/picker';
 
 const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [viewMode, setViewMode] = useState('day');
   const [userId, setUserId] = useState(null);
+  const [weather, setWeather] = useState({
+    temperature: null,
+    location: '',
+    date: '',
+    icon: '',
+    condition: '',
+  });
+  const [selectedData, setSelectedData] = useState('temperature');
+  const [temperatureSensors, setTemperatureSensors] = useState([]);
+  const [selectedSensor, setSelectedSensor] = useState(null);
 
   useEffect(() => {
     getUserId();
+    fetchWeather();
   }, []);
 
   useEffect(() => {
     if (userId) {
+      fetchTemperatureSensors();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (selectedSensor) {
       fetchData(viewMode);
     }
-  }, [viewMode, userId]);
+  }, [viewMode, selectedSensor]);
 
   const getUserId = async () => {
     try {
@@ -29,11 +48,27 @@ const UserHomeScreen = ({ navigation }) => {
     }
   };
 
+  const fetchTemperatureSensors = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/temperature-sensors?userId=${userId}`);
+      if (response.data && response.data.length > 0) {
+        setTemperatureSensors(response.data);
+        setSelectedSensor(response.data[0]._id); // Seleccionar el primer sensor por defecto
+      } else {
+        setTemperatureSensors([]);
+        setSelectedSensor(null);
+      }
+    } catch (error) {
+      console.error('Error fetching temperature sensors:', error);
+    }
+  };
+
   const fetchData = async (mode) => {
+    if (!selectedSensor) return;
     try {
       const startDate = '2023-07-01';
       const endDate = '2023-07-14';
-      const response = await axios.get(`http://localhost:3000/api/statistics?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+      const response = await axios.get(`http://localhost:3000/api/statistics?sensorId=${selectedSensor}&startDate=${startDate}&endDate=${endDate}`);
       const statistics = response.data;
 
       const processedData = processData(statistics, mode);
@@ -43,31 +78,50 @@ const UserHomeScreen = ({ navigation }) => {
     }
   };
 
+  const fetchWeather = async () => {
+    try {
+      const latitude = 32.455544;
+      const longitude = -116.828109;
+      const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=f847590632224d78a8093009242707&q=${latitude},${longitude}`);
+      const { location, current } = response.data;
+      setWeather({
+        temperature: current.temp_c,
+        location: location.name,
+        date: location.localtime,
+        icon: `https:${current.condition.icon}`,
+        condition: current.condition.text
+      });
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
   const processData = (statistics, mode) => {
+    if (!statistics || statistics.length === 0) return [];
     const dataPoints = statistics[0].valores.map(entry => ({
       date: new Date(entry.fecha).toISOString().split('T')[0],
-      temperature: entry.valor.temperatura
+      temperature: entry.valor.temperatura,
+      humidity: entry.valor.humedad
     }));
 
     if (mode === 'day') {
-      return dataPoints.map(point => ({
-        date: point.date,
-        temperature: point.temperature
-      }));
+      return dataPoints;
     } else if (mode === 'week') {
       const weeklyData = dataPoints.reduce((acc, point) => {
         const week = getWeekNumber(new Date(point.date));
         if (!acc[week]) {
-          acc[week] = { week, temperature: 0, count: 0 };
+          acc[week] = { week, temperature: 0, humidity: 0, count: 0 };
         }
         acc[week].temperature += point.temperature;
+        acc[week].humidity += point.humidity;
         acc[week].count += 1;
         return acc;
       }, {});
 
       return Object.values(weeklyData).map(item => ({
         week: item.week,
-        temperature: item.temperature / item.count
+        temperature: item.temperature / item.count,
+        humidity: item.humidity / item.count
       }));
     }
   };
@@ -82,34 +136,86 @@ const UserHomeScreen = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.date}>23°C</Text>
-          <Text style={styles.date}>18 Jan 2018</Text>
+          <Text style={styles.date}>{moment(weather.date).format('DD MMM YYYY')}</Text>
+          <Text style={styles.location}>{weather.location}</Text>
         </View>
         <View style={styles.headerRight}>
-          <Icon name="bell" size={24} color="#fff" />
-          <Icon name="user-circle" size={30} color="#fff" style={styles.userIcon} />
+          <Text style={styles.temperature}>{weather.temperature}°C</Text>
+          <Image source={{ uri: weather.icon }} style={styles.weatherIcon} />
+          <Text style={styles.condition}>{weather.condition}</Text>
         </View>
       </View>
 
+      <View style={styles.statsContainer}>
+        <View style={styles.statCard}>
+          <Icon name="bolt" size={24} color="#e74c3c" />
+          <Text style={styles.statValue}>174 MW</Text>
+          <Text style={styles.statLabel}>Electricity</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Icon name="tint" size={24} color="#e74c3c" />
+          <Text style={styles.statValue}>216 Units</Text>
+          <Text style={styles.statLabel}>Water</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Icon name="wifi" size={24} color="#e74c3c" />
+          <Text style={styles.statValue}>5 Users</Text>
+          <Text style={styles.statLabel}>WiFi</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Icon name="video" size={24} color="#e74c3c" />
+          <Text style={styles.statValue}>12 Active</Text>
+          <Text style={styles.statLabel}>Cameras</Text>
+        </View>
+      </View>
+
+      <View style={styles.sensorSelector}>
+        <Text style={styles.selectorLabel}>Select Temperature Sensor:</Text>
+        <Picker
+          selectedValue={selectedSensor}
+          style={styles.picker}
+          onValueChange={(itemValue) => setSelectedSensor(itemValue)}
+        >
+          {temperatureSensors.map(sensor => (
+            <Picker.Item key={sensor._id} label={sensor.ubicacion || 'Unspecified location'} value={sensor._id} />
+          ))}
+        </Picker>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.switchButton, selectedData === 'temperature' && styles.activeButton]}
+          onPress={() => setSelectedData('temperature')}
+        >
+          <Text style={styles.buttonText}>Temperature</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.switchButton, selectedData === 'humidity' && styles.activeButton]}
+          onPress={() => setSelectedData('humidity')}
+        >
+          <Text style={styles.buttonText}>Humidity</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>Temperature and Humidity</Text>
+        <Text style={styles.chartTitle}>{selectedData === 'temperature' ? 'Temperature' : 'Humidity'}</Text>
         <LineChart
           data={{
             labels: data.map(item => viewMode === 'day' ? item.date : `Week ${item.week}`),
             datasets: [
               {
-                data: data.map(item => item.temperature),
+                data: data.map(item => selectedData === 'temperature' ? item.temperature : item.humidity),
               },
             ],
           }}
           width={Dimensions.get('window').width - 40}
           height={220}
           yAxisLabel=""
-          yAxisSuffix="°C"
+          yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
           chartConfig={{
-            backgroundColor: '#1f212b',
-            backgroundGradientFrom: '#1f212b',
-            backgroundGradientTo: '#1f212b',
+            backgroundColor: '#333',
+            backgroundGradientFrom: '#333',
+            backgroundGradientTo: '#333',
             decimalPlaces: 2,
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -119,7 +225,7 @@ const UserHomeScreen = ({ navigation }) => {
             propsForDots: {
               r: '6',
               strokeWidth: '2',
-              stroke: '#ffa726',
+              stroke: '#e74c3c', // Color rojo
             },
           }}
           style={styles.chart}
@@ -141,29 +247,6 @@ const UserHomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Icon name="bolt" size={24} color="#fff" />
-          <Text style={styles.statValue}>174 MW</Text>
-          <Text style={styles.statLabel}>Electricity</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="tint" size={24} color="#fff" />
-          <Text style={styles.statValue}>216 Units</Text>
-          <Text style={styles.statLabel}>Water</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="wifi" size={24} color="#fff" />
-          <Text style={styles.statValue}>5 Users</Text>
-          <Text style={styles.statLabel}>WiFi</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="video" size={24} color="#fff" />
-          <Text style={styles.statValue}>12 Active</Text>
-          <Text style={styles.statLabel}>Cameras</Text>
-        </View>
-      </View>
-
       <TouchableOpacity style={styles.packageButton} onPress={() => navigation.navigate('Paquetes')}>
         <Text style={styles.buttonText}>View Packages</Text>
       </TouchableOpacity>
@@ -174,7 +257,7 @@ const UserHomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#1f212b',
+    backgroundColor: '#1a1a1a',
     padding: 20,
   },
   header: {
@@ -187,48 +270,30 @@ const styles = StyleSheet.create({
   headerLeft: {
     justifyContent: 'center',
   },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   date: {
     color: '#fff',
     fontSize: 16,
     marginBottom: 5,
   },
-  userIcon: {
-    marginLeft: 15,
+  location: {
+    color: '#bbb',
+    fontSize: 16,
+    marginTop: 5,
   },
-  chartContainer: {
-    backgroundColor: '#292b36',
-    borderRadius: 16,
-    padding: 10,
-    marginBottom: 20,
+  headerRight: {
+    alignItems: 'center',
   },
-  chartTitle: {
+  temperature: {
     color: '#fff',
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  chart: {
-    borderRadius: 16,
+  weatherIcon: {
+    width: 50,
+    height: 50,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  switchButton: {
-    backgroundColor: '#3498db',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-  },
-  activeButton: {
-    backgroundColor: '#2e86c1',
-  },
-  buttonText: {
-    color: '#fff',
+  condition: {
+    color: '#bbb',
     fontSize: 16,
   },
   statsContainer: {
@@ -238,7 +303,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   statCard: {
-    backgroundColor: '#292b36',
+    backgroundColor: '#333',
     borderRadius: 16,
     width: '48%',
     padding: 15,
@@ -251,11 +316,58 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   statLabel: {
+    color: '#bbb',
+    fontSize: 16,
+  },
+  sensorSelector: {
+    marginBottom: 20,
+  },
+  selectorLabel: {
+    color: '#bbb',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  picker: {
+    height: 50,
+    color: '#fff',
+    backgroundColor: '#333',
+  },
+  chartContainer: {
+    backgroundColor: '#333',
+    borderRadius: 16,
+    padding: 10,
+    marginBottom: 20,
+  },
+  chartTitle: {
+    color: '#e74c3c',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  chart: {
+    borderRadius: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+    flexWrap: 'wrap'
+  },
+  switchButton: {
+    backgroundColor: '#e74c3c',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    margin: 5
+  },
+  activeButton: {
+    backgroundColor: '#c0392b',
+  },
+  buttonText: {
     color: '#fff',
     fontSize: 16,
   },
   packageButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#e74c3c',
     paddingVertical: 15,
     borderRadius: 30,
     alignItems: 'center',

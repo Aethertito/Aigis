@@ -14,15 +14,31 @@ import HelpScreen from '../screens/User/HelpScreen'
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
 import PaquetesScreen from '../screens/User/PaquetesScreen';
 
+import PremiumPackagesScreen from '../screens/User/PremiumPackagesScreen';
+import AddEmployeeScreen from '../screens/User/AddEmployeesScreen';
+import AccessControlScreen from '../screens/User/AccessControlScreen';
 
 import DrawerUserContent from './DrawerUserStyle';
-
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const UserDrawer = () => (
-  <Drawer.Navigator drawerContent={props => <DrawerUserContent {...props} />}>
+  <Drawer.Navigator
+    drawerContent={props => <DrawerUserContent {...props} />}
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#212121',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      drawerIcon: ({ color, size }) => (
+        <Icon name="menu" color="#E53935" size={size} />
+      ),
+    }}
+  >
     <Drawer.Screen name="Home" component={UserHomeScreen} />
     <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
     <Drawer.Screen name="Orders" component={OrdersScreen} />
@@ -32,9 +48,11 @@ const UserDrawer = () => (
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
     <Drawer.Screen name="Help" component={HelpScreen} />
     <Drawer.Screen name="SupportHistory" component={SupportHistoryScreen} /> 
+    <Drawer.Screen name="PremiumPackagesScreen" component={PremiumPackagesScreen} /> 
+    <Drawer.Screen name="AddEmployeeScreen" component={AddEmployeeScreen} /> 
+    <Drawer.Screen name="AccessControlScreen" component={AccessControlScreen} /> 
   </Drawer.Navigator>
 );
-
 
 const UserStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
