@@ -1,45 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using mvcfarm1.Data;
 using mvcfarm1.Models;
-
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace mvcfarm1.Controllers
 {
     public class LoginController : Controller
     {
         private readonly mvcfarmDBContext _mvcfarmDBContext;
-        //[ViewData]
-        //public string isAdmin { get; set; }
 
         public LoginController(mvcfarmDBContext MvcfarmDBContext)
         {
             _mvcfarmDBContext = MvcfarmDBContext;
         }
+
         public IActionResult Login()
         {
-            if(User.Identity!.IsAuthenticated)
+            if (User.Identity!.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
             return View();
         }
 
-        //[Authorize(Roles = "Admin, User")]
         [HttpPost]
         public async Task<IActionResult> Login(Company model)
         {
-            if (model.Email != null && model.Password != null && model.Email != "" && model.Password != "")
+            if (!string.IsNullOrEmpty(model.Email) && !string.IsNullOrEmpty(model.Password))
             {
                 var user = _mvcfarmDBContext.Company
-                                .Where(u => u.Email == model.Email && u.Password == model.Password)
-                                .FirstOrDefault();
+                                .FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
                 if (user != null)
                 {
-                    if (user.PackageId != null && user.PackageId > 0)
+                    if (user.PackageId != 0)
                         HttpContext.Session.SetInt32("PackageId", user.PackageId);
                     else
                         HttpContext.Session.Clear();
@@ -62,22 +55,20 @@ namespace mvcfarm1.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-
             }
 
-            ViewData["Error"] = "Error, current user doesn't exists!";
+            ViewData["Error"] = "Error, current user doesn't exist!";
             return View();
         }
 
-  
-        public async Task<IActionResult> Logout() {
+        public async Task<IActionResult> Logout()
+        {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
             return RedirectToAction("Login");
         }
 
         [HttpGet]
-        public IActionResult Register() 
+        public IActionResult Register()
         {
             return View();
         }
@@ -87,28 +78,17 @@ namespace mvcfarm1.Controllers
         {
             if (ModelState.IsValid)
             {
-                _mvcfarmDBContext.Company.Add(company);
-                await _mvcfarmDBContext.SaveChangesAsync();                
-            }
+                company.Role = "User";  // Setting default role
+                company.PackageId = 0;  // Default package ID
 
-            if (company.Id != 0) 
-            {
+                _mvcfarmDBContext.Company.Add(company);
+                await _mvcfarmDBContext.SaveChangesAsync();
+
                 return RedirectToAction("Login");
             }
 
-            ViewData["Error"] = "Error cant register the user";
-
-            return View();
+            ViewData["Error"] = "Error: Unable to register the user.";
+            return View(company);
         }
-
-        //public IActionResult Success()
-        //{
-        //    return View();
-        //}
-
-        //public IActionResult Fail()
-        //{
-        //    return View();
-        //}
     }
 }

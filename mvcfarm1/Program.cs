@@ -1,7 +1,6 @@
 using mvcfarm1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using mvcfarm1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(
-    options =>
-    {
-        options.IdleTimeout = TimeSpan.FromHours(1);
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-    });
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddDbContext<mvcfarmDBContext>(options =>
 {
@@ -30,9 +28,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Login/Logout";
         options.AccessDeniedPath = "/Login/Login";
     });
-
-// Registro del servicio de MongoDB
-builder.Services.AddSingleton<PackageService>();
 
 var app = builder.Build();
 
@@ -54,6 +49,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
