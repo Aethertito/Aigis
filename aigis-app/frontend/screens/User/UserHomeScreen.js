@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
@@ -20,8 +21,10 @@ const UserHomeScreen = ({ navigation }) => {
     condition: '',
   });
   const [selectedData, setSelectedData] = useState('temperature');
-  const [temperatureSensors, setTemperatureSensors] = useState({});
+  const [sensors, setSensors] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [maxSmoke, setMaxSmoke] = useState(null);
+  const [presenceDetected, setPresenceDetected] = useState('No presence data available');
 
   useEffect(() => {
     getUserId();
@@ -30,7 +33,9 @@ const UserHomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (userId) {
-      fetchTemperatureSensorsByLocation();
+      fetchUserSensors();
+      fetchMaxSmokeValue();
+      fetchPresenceData();
     }
   }, [userId]);
 
@@ -40,6 +45,12 @@ const UserHomeScreen = ({ navigation }) => {
     }
   }, [viewMode, selectedLocation]);
 
+  useEffect(() => {
+    if (userId) {
+      fetchUserSensors();
+    }
+  }, [userId]);
+
   const getUserId = async () => {
     try {
       const id = await AsyncStorage.getItem('userId');
@@ -47,60 +58,6 @@ const UserHomeScreen = ({ navigation }) => {
       console.log('User ID:', id);
     } catch (error) {
       console.error('Error getting user ID:', error);
-    }
-  };
-
-  const fetchTemperatureSensorsByLocation = async () => {
-    try {
-      if (!userId) return;
-
-      console.log('Enviando userId:', userId);
-
-      const response = await axios.get(`http://${IP}:3000/sensor/temperature/locations`, {
-        params: { userId: userId }
-      });
-
-      console.log('Response data:', response.data);
-      setTemperatureSensors(response.data.sensores || {});
-    } catch (error) {
-      console.error('Error fetching temperature sensors by location:', error);
-    }
-  };
-
-  const fetchData = async (mode) => {
-    if (!selectedLocation || !temperatureSensors[selectedLocation]) return;
-    try {
-      // Configurar fechas para el modo seleccionado
-      const endDate = new Date();
-      let startDate;
-      if (mode === 'day') {
-        startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-      } else {
-        // Modo semana (últimos 7 días)
-        startDate = new Date(endDate);
-        startDate.setDate(startDate.getDate() - 7);
-      }
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(23, 59, 59, 999);
-
-      const sensorIds = temperatureSensors[selectedLocation].map(sensor => sensor.sensor_id).join(',');
-      console.log('Fetching data for sensor IDs:', sensorIds);
-  
-      if (!sensorIds) {
-        console.log('No sensor IDs found for the selected location.');
-        return;
-      }
-
-      const response = await axios.get(`http://${IP}:3000/api/statistics`, {
-        params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
-      });
-      const statistics = response.data;
-  
-      console.log('Statistics data received:', statistics);
-      const processedData = processData(statistics, mode);
-      setData(processedData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
     }
   };
 
@@ -123,17 +80,142 @@ const UserHomeScreen = ({ navigation }) => {
     }
   };
 
-  const processData = (statistics, mode) => {
-    if (!statistics || statistics.length === 0) return [];
-    const dataPoints = statistics[0].valores.map(entry => ({
-      date: new Date(entry.fecha).toISOString().split('T')[0],
-      temperature: entry.valor.temperatura,
-      humidity: entry.valor.humedad
-    }));
+  const fetchUserSensors = async () => {
+    try {
+      if (!userId) return;
 
-    return dataPoints;
+      console.log('Enviando userId:', userId);
+
+      const response = await axios.get(`http://${IP}:3000/api/sensors`, {
+        params: { userId: userId }
+      });
+
+      console.log('Response data:', response.data);
+      setSensors(response.data.sensores || []);
+    } catch (error) {
+      console.error('Error fetching user sensors:', error);
+    }
+  };
+  
+  const fetchData = async (mode) => {
+    if (!selectedLocation || !sensors.length) return;
+    try {
+      const endDate = new Date();
+      let startDate;
+
+      if (mode === 'day') {
+        startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      } else {
+        startDate = new Date(endDate);
+        startDate.setDate(startDate.getDate() - 7);
+      }
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+
+      const temperatureSensors = sensors.filter(sensor => sensor.tipo === 'Temperature and Humidity');
+      const sensorIds = temperatureSensors.map(sensor => sensor._id).join(',');
+      console.log('Fetching data for sensor IDs:', sensorIds);
+  
+      if (!sensorIds) {
+        console.log('No sensor IDs found for the selected location.');
+        return;
+      }
+
+      const response = await axios.get(`http://${IP}:3000/api/statistics`, {
+        params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
+      });
+      const statistics = response.data;
+  
+      console.log('Statistics data received:', statistics);
+      const processedData = processData(statistics, mode);
+      setData(processedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
+  const processData = (statistics, mode) => {
+    if (!statistics || statistics.length === 0) return [];
+
+    const groupedData = {};
+
+    statistics.forEach(stat => {
+      stat.valores.forEach(entry => {
+        const date = new Date(entry.fecha);
+        let key;
+        if (mode === 'day') {
+          key = date.toISOString().split('T')[0]; // YYYY-MM-DD
+        } else {
+          const week = moment(date).isoWeek(); // Week number
+          key = `Week ${week}`;
+        }
+
+        if (!groupedData[key]) {
+          groupedData[key] = { temperature: 0, humidity: 0, count: 0 };
+        }
+
+        groupedData[key].temperature += entry.valor.temperatura || 0;
+        groupedData[key].humidity += entry.valor.humedad || 0;
+        groupedData[key].count += 1;
+      });
+    });
+
+    return Object.keys(groupedData).map(key => ({
+      date: key,
+      temperature: groupedData[key].temperature / groupedData[key].count,
+      humidity: groupedData[key].humidity / groupedData[key].count,
+    }));
+  };
+
+  const fetchMaxSmokeValue = async () => {
+    try {
+      if (!userId) return;
+    
+      console.log('Fetching max smoke value for user:', userId);
+    
+      const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
+        params: { userId: userId }
+      });
+    
+      console.log('Response data:', response.data);
+    
+      if (response.data && response.data.maxValue !== undefined) {
+        console.log('Received max smoke value:', response.data.maxValue);
+        setMaxSmoke(response.data.maxValue);
+      } else {
+        console.log('No smoke sensors found or no max value returned.');
+        setMaxSmoke(null); // O puedes usar un valor alternativo como 'N/A'
+      }
+    } catch (error) {
+      console.error('Error fetching max smoke value:', error);
+      setMaxSmoke(null); // Asegura que el estado se establezca incluso en caso de error
+    }
+  };
+  
+  const fetchPresenceData = async () => {
+    try {
+      if (!userId) return;
+  
+      console.log('Fetching presence data for user:', userId);
+  
+      const response = await axios.get(`http://${IP}:3000/api/sensor/presence`, {
+        params: { userId: userId }
+      });
+  
+      console.log('Response data:', response.data);
+  
+      if (response.data && response.data.valores && response.data.valores.length > 0) {
+        const latestPresence = response.data.valores[response.data.valores.length - 1].valor;
+        setPresenceDetected(latestPresence === 1 ? 'Presence detected' : 'No presence detected');
+      } else {
+        setPresenceDetected('No presence data available');
+      }
+    } catch (error) {
+      console.error('Error fetching presence data:', error);
+      setPresenceDetected('Error fetching presence data');
+    }
+  };
+  
   return (
     <ScrollView 
       contentContainerStyle={styles.container}
@@ -159,26 +241,34 @@ const UserHomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Icon name="bolt" size={24} color="#E53935" />
-          <Text style={styles.statValue}>174 MW</Text>
-          <Text style={styles.statLabel}>Electricity</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="tint" size={24} color="#E53935" />
-          <Text style={styles.statValue}>216 Units</Text>
-          <Text style={styles.statLabel}>Water</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="wifi" size={24} color="#E53935" />
-          <Text style={styles.statValue}>5 Users</Text>
-          <Text style={styles.statLabel}>WiFi</Text>
-        </View>
-        <View style={styles.statCard}>
-          <Icon name="video" size={24} color="#E53935" />
-          <Text style={styles.statValue}>12 Active</Text>
-          <Text style={styles.statLabel}>Cameras</Text>
-        </View>
+        {sensors.some(sensor => sensor.tipo === 'RFID') && (
+          <View style={styles.statCard}>
+            <Icon2 name="account-check" size={24} color="#E53935" />
+            <Text style={styles.statValue}>RFID</Text>
+            <Text style={styles.statLabel}>Check In</Text>
+          </View>
+        )}
+        {sensors.some(sensor => sensor.tipo === 'Smoke') && (
+          <View style={styles.statCard}>
+            <Icon2 name="smoke-detector" size={24} color="#E53935" />
+            <Text style={styles.statValue}>{maxSmoke !== null ? `${maxSmoke} %` : 'N/A'}</Text>
+            <Text style={styles.statLabel}>Higher Smoke Value</Text>
+          </View>
+        )}
+        {sensors.some(sensor => sensor.tipo === 'RFID') && (
+          <View style={styles.statCard}>
+            <Icon2 name="exit-run" size={24} color="#E53935" />
+            <Text style={styles.statValue}>RFID</Text>
+            <Text style={styles.statLabel}>Check Out</Text>
+          </View>
+        )}
+        {sensors.some(sensor => sensor.tipo === 'Presence') && (
+          <View style={styles.statCardCentered}>
+            <Icon2 name="motion-sensor" size={24} color="#E53935" />
+            <Text style={styles.statValue}>{presenceDetected}</Text>
+            <Text style={styles.statLabel}>Presence</Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.sensorSelector}>
@@ -188,9 +278,9 @@ const UserHomeScreen = ({ navigation }) => {
             setSelectedLocation(value);
             console.log('Ubicación seleccionada:', value);
           }}
-          items={Object.keys(temperatureSensors).map(location => ({
-            label: location,
-            value: location,
+          items={sensors.filter(sensor => sensor.tipo === 'Temperature and Humidity').map(sensor => ({
+            label: sensor.ubicacion || 'Unknown location',
+            value: sensor.ubicacion,
           }))}
           style={pickerSelectStyles}
           placeholder={{ label: 'Select a location', value: null }}
@@ -217,14 +307,14 @@ const UserHomeScreen = ({ navigation }) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <LineChart
             data={{
-              labels: data.map(item => viewMode === 'day' ? item.date : `Week ${item.week}`),
+              labels: data.map(item => viewMode === 'day' ? item.date : item.date),
               datasets: [
                 {
                   data: data.map(item => selectedData === 'temperature' ? item.temperature : item.humidity),
                 },
               ],
             }}
-            width={Math.max(data.length * 50, Dimensions.get('window').width)} // Ajusta el ancho para que los datos se puedan desplazar horizontalmente
+            width={Math.max(data.length * 50, Dimensions.get('window').width)} 
             height={220}
             yAxisLabel=""
             yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
@@ -334,14 +424,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  statCardCentered: {
+    backgroundColor: '#212121',
+    borderRadius: 16,
+    width: '48%',
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
   statValue: {
     color: '#F4F6FC',
     fontSize: 24,
     marginVertical: 10,
+    textAlign: 'center',
   },
   statLabel: {
     color: '#F4F6FC',
     fontSize: 16,
+    textAlign: 'center',
   },
   sensorSelector: {
     marginBottom: 20,
