@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\services\\packageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:services\\packageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\packages.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -30,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 286,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,20 +42,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-07-31T23:03:43.258Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "PackageService.cs",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\PackageService.cs",
               "RelativeDocumentMoniker": "Services\\PackageService.cs",
               "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\PackageService.cs",
               "RelativeToolTip": "Services\\PackageService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAAAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-31T06:30:05.615Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Package.cs",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Package.cs",
               "RelativeDocumentMoniker": "Models\\Package.cs",
@@ -64,7 +81,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Packages.cshtml",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Packages.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Packages.cshtml",
@@ -72,25 +89,24 @@
               "RelativeToolTip": "Views\\Home\\Packages.cshtml",
               "ViewState": "AQIAABIAAAAAAAAAAAAuwB4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-31T06:22:22.103Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-31T06:22:22.103Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "PackagesApiController.cs",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\ApiControllers\\PackagesApiController.cs",
               "RelativeDocumentMoniker": "ApiControllers\\PackagesApiController.cs",
               "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\ApiControllers\\PackagesApiController.cs",
               "RelativeToolTip": "ApiControllers\\PackagesApiController.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAAABsAAAAAAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAUwBAAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-31T06:22:08.974Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -98,8 +114,7 @@
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AQIAABEAAAAAAAAAAAAswCYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-07-31T06:17:52.227Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-31T06:17:52.227Z"
             }
           ]
         }
