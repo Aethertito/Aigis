@@ -37,6 +37,9 @@ const SupportHistoryScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Support History</Text>
+      <Text style={styles.infoText}>
+        Review the history of your help comments.
+      </Text>
       {loading ? (
         <ActivityIndicator size="large" color="#E53935" />
       ) : (
@@ -58,11 +61,17 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#424242',
   },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 4,
+    textAlign: 'center'
+  },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#ffffff',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   item: {
     backgroundColor: '#212121',

@@ -142,6 +142,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 4,
+  },
 });
 
 export default HelpScreen;

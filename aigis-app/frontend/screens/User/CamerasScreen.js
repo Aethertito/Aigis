@@ -36,6 +36,9 @@ const CamerasScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>View Cameras</Text>
+      <Text style={styles.infoText}>
+        Monitor your work areas.
+      </Text>
       <FlatList
         data={cameras}
         // renderItem={renderItem}
@@ -51,11 +54,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#424242',
     padding: 16,
   },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 8,
+    alignSelf: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#F4F6FC',
-    marginBottom: 20,
+    marginBottom: 5,
     alignSelf: 'center',
   },
   item: {

@@ -92,6 +92,12 @@ const LocationsScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title2}>Purchased Packages</Text>
+      <Text style={styles.infoText2}>
+        Assign locations to your purchased security packages.
+      </Text>
+      <Text style={styles.infoText}>
+        To change the location of a package, please schedule an appointment with our technical team.
+      </Text>
       <FlatList
         data={paquetesComprados}
         renderItem={renderPaquete}
@@ -108,6 +114,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#424242',
     padding: 10,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 8,
+    textAlign: 'center'
+  },
+  infoText2: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 2,
+    textAlign: 'center',
   },
   listContentContainer: {
     flexGrow: 1,

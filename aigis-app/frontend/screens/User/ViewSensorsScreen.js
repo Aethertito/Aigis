@@ -31,11 +31,9 @@ const ViewSensorsScreen = () => {
     }, [])
   );
 
-  // Filtrar los datos basados en el tipo seleccionado
   const filteredData = filter === 'All' ? data : data.filter(sensor => sensor.tipo === filter);
 
   const renderItem = ({ item }) => (
-    
     <View style={styles.card}>
       <Text style={styles.title}>{item.tipo}</Text>
       <Text style={styles.description}>{item.descripcion}</Text>
@@ -47,7 +45,6 @@ const ViewSensorsScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title2}>Your Sensors</Text>
-      <Text style={styles.description}>En esta seccion podras visualizar que sensores tienes activos en tu cuenta. Puedes aplicar un filtro segun los sensores que desees revisar</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
         {['All', 'RFID', 'Temperature and Humidity', 'Smoke', 'Presence', 'Camera'].map((item, index) => (
           <TouchableOpacity
@@ -59,6 +56,9 @@ const ViewSensorsScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <Text style={styles.infoText}>
+      Here you can see the active sensors associated with your account. Use the filter to review different types of sensors.
+      </Text>
       <FlatList
         data={filteredData}
         renderItem={renderItem}
@@ -151,6 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: '#F4F6FC',
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 8,
+    textAlign: 'center'
   },
 });
 

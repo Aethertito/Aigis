@@ -39,6 +39,12 @@ const OrdersScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Orders</Text>
+      <Text style={styles.infoText2}>
+        Review the security packages you've purchased. Details about your order, including the price and contents, are displayed.
+      </Text>
+      <Text style={styles.infoText}>
+        If you encounter any issues with your order, please don't hesitate to contact technical support.
+      </Text>
       {loading ? (
         <Text style={styles.loading}>Loading...</Text>
       ) : (
@@ -46,7 +52,7 @@ const OrdersScreen = () => {
           data={orders}
           renderItem={renderItem}
           keyExtractor={item => item._id}
-          key={orders.length}  // Esto obliga a una nueva renderización cuando cambie la longitud de la lista
+          key={orders.length}
           numColumns={2}
           columnWrapperStyle={styles.row}
           ListEmptyComponent={<Text style={styles.emptyText}>No orders found</Text>}
@@ -62,11 +68,23 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#424242',
   },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  infoText2: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#F4F6FC',
-    marginBottom: 20,
+    marginBottom: 5,
     alignSelf: 'center',
   },
   row: {

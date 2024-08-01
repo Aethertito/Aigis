@@ -90,6 +90,9 @@ const AppointmentScreen = () => {
       <View style={styles.container}>
         {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
         <Text style={styles.title}>Schedule Appointment</Text>
+          <Text style={styles.infoText}>
+            Schedule an appointment for the installation or maintenance of your sensors.
+          </Text>
         <TextInput
           style={styles.input}
           placeholder="Neighborhood"
@@ -175,6 +178,12 @@ const styles = StyleSheet.create({
     padding: 16,
     flex: 1,
   },
+  infoText: {
+    fontSize: 14,
+    color: '#F4F6FC',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
   contentContainer: {
     flexGrow: 1,
     justifyContent: 'flex-start',
@@ -183,7 +192,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#F4F6FC',
-    marginBottom: 20,
+    marginBottom: 5,
+    textAlign: 'center',
   },
   item: {
     padding: 16,
