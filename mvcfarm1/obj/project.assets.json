@@ -8343,19 +8343,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "C:\\Users\\DELL\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+      "projectUniqueName": "C:\\xampp3\\htdocs\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
       "projectName": "mvcfarm1",
-      "projectPath": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\obj\\",
+      "projectPath": "C:\\xampp3\\htdocs\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+      "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+      "outputPath": "C:\\xampp3\\htdocs\\Aigis\\mvcfarm1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8429,7 +8429,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
