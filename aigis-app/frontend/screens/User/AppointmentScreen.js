@@ -86,13 +86,13 @@ const AppointmentScreen = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer}>
+    <ScrollView contentContainerStyle={styles.contentContainer} bounces={false}>
       <View style={styles.container}>
         {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
         <Text style={styles.title}>Schedule Appointment</Text>
-          <Text style={styles.infoText}>
-            Schedule an appointment for the installation or maintenance of your sensors.
-          </Text>
+        <Text style={styles.infoText}>
+          Schedule an appointment for the installation or maintenance of your sensors.
+        </Text>
         <TextInput
           style={styles.input}
           placeholder="Neighborhood"
@@ -187,9 +187,17 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     justifyContent: 'flex-start',
+    backgroundColor: '#424242',
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    color: '#F4F6FC',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  title3: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#F4F6FC',
     marginBottom: 5,
@@ -241,6 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#F4F6FC',

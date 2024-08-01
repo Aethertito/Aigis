@@ -45,6 +45,9 @@ const ViewSensorsScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title2}>Your Sensors</Text>
+      <Text style={styles.infoText}>
+        Here you can see the active sensors associated with your account. Use the filter to review different types of sensors.
+      </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer}>
         {['All', 'RFID', 'Temperature and Humidity', 'Smoke', 'Presence', 'Camera'].map((item, index) => (
           <TouchableOpacity
@@ -56,9 +59,6 @@ const ViewSensorsScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <Text style={styles.infoText}>
-      Here you can see the active sensors associated with your account. Use the filter to review different types of sensors.
-      </Text>
       <FlatList
         data={filteredData}
         renderItem={renderItem}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F4F6FC',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: 4,
   },
   description: {
     fontSize: 14,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 14,
     color: '#F4F6FC',
-    marginBottom: 8,
+    marginBottom: 10,
     textAlign: 'center'
   },
 });

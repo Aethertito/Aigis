@@ -31,7 +31,7 @@ exports.getTemperatureSensors = async (req, res) => {
             temperatureSensors[ubicacion] = [];
           }
           temperatureSensors[ubicacion].push({
-            _id: sensor.sensor_id._id,
+            sensor_id: sensor.sensor_id._id,
             descripcion: sensor.sensor_id.descripcion,
           });
         }
@@ -59,9 +59,21 @@ exports.getSensorStatistics = async (req, res) => {
 
   try {
     // Asegurar que todos los IDs son válidos ObjectId
-    const sensorIdArray = sensorIds.split(',').map(id => new mongoose.Types.ObjectId(id));
+    const sensorIdArray = sensorIds.split(',').map(id => {
+      try {
+        return new mongoose.Types.ObjectId(id);
+      } catch (error) {
+        console.error('Invalid sensor ID:', id);
+        return null;
+      }
+    }).filter(id => id !== null);
 
     console.log('Valid sensor IDs:', sensorIdArray);
+
+    if (sensorIdArray.length === 0) {
+      console.log('No valid sensor IDs found');
+      return res.status(400).json({ message: 'No valid sensor IDs found' });
+    }
 
     const statistics = await Estadistica.find({
       sensor_id: { $in: sensorIdArray },

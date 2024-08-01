@@ -28,9 +28,9 @@ const SupportHistoryScreen = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{item.titulo}</Text>
-      <Text style={styles.date}>{new Date(item.fecha).toLocaleDateString()}</Text>
-      <Text style={styles.description}>{item.problema}</Text>
+      <Text style={styles.title}>Title: {item.titulo}</Text>
+      <Text style={styles.date}>Date: {new Date(item.fecha).toLocaleDateString()}</Text>
+      <Text style={styles.description}>Description: {item.problema}</Text>
     </View>
   );
 
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     marginBottom: 10,
+    textAlign: 'center'
   },
   item: {
     backgroundColor: '#212121',
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#E53935',
-    textAlign: 'center'
   },
   date: {
     fontSize: 14,

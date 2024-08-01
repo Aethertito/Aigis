@@ -70,13 +70,29 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchData = async (mode) => {
     if (!selectedLocation || !temperatureSensors[selectedLocation]) return;
     try {
-      const startDate = '2023-07-01';
-      const endDate = '2023-07-14';
+      // Configurar fechas para el modo seleccionado
+      const endDate = new Date();
+      let startDate;
+      if (mode === 'day') {
+        startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      } else {
+        // Modo semana (últimos 7 días)
+        startDate = new Date(endDate);
+        startDate.setDate(startDate.getDate() - 7);
+      }
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+
       const sensorIds = temperatureSensors[selectedLocation].map(sensor => sensor.sensor_id).join(',');
       console.log('Fetching data for sensor IDs:', sensorIds);
   
+      if (!sensorIds) {
+        console.log('No sensor IDs found for the selected location.');
+        return;
+      }
+
       const response = await axios.get(`http://${IP}:3000/api/statistics`, {
-        params: { sensorIds, startDate, endDate }
+        params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
       });
       const statistics = response.data;
   

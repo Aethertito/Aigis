@@ -9,7 +9,7 @@ const createCita = async (req, res) => {
         if (!params.fecha || !params.hora || !params.colonia || !params.calle || !params.numero || !params.referencia || !params.motivo) {
             return res.status(400).json({
                 status: 'error',
-                message: 'Complete todos los campos'
+                message: 'Complete all fields'
             })
         }
         
@@ -23,7 +23,7 @@ const createCita = async (req, res) => {
         if (existeCita.length >= 1) {
             return res.status(500).json({
                 status: 'error',
-                message: 'Ya existe una cita con esa fecha'
+                message: 'There is already an appointment with that date'
             })
         }
 
@@ -31,13 +31,13 @@ const createCita = async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Se guardo la cita',
+            message: 'The appointment was saved',
             saveCita
         })
     } catch (error) {
         return res.status(500).json({
             status: 'error',
-            message: 'Error al guardar cita',
+            message: 'Error saving appointment',
             error: error.message
         })
     }

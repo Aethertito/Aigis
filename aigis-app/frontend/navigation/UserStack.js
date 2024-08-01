@@ -10,13 +10,14 @@ import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import PayPackScreen from '../screens/User/PayPackScreen';
 import Ubicaciones   from '../screens/User/Ubicaciones'
 import HelpScreen from '../screens/User/HelpScreen'
+// import AppointmentHistoryScreen from '../screens/User/AppointmentHistoryScreen'
 
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
 import PaquetesScreen from '../screens/User/PaquetesScreen';
 
-import PremiumPackagesScreen from '../screens/User/PremiumPackagesScreen';
-import AddEmployeeScreen from '../screens/User/AddEmployeesScreen';
-import AccessControlScreen from '../screens/User/AccessControlScreen';
+// import PremiumPackagesScreen from '../screens/User/PremiumPackagesScreen';
+// import AddEmployeeScreen from '../screens/User/AddEmployeesScreen';
+// import AccessControlScreen from '../screens/User/AccessControlScreen';
 
 import DrawerUserContent from './DrawerUserStyle';
 
@@ -42,15 +43,16 @@ const UserDrawer = () => (
     <Drawer.Screen name="Home" component={UserHomeScreen} />
     <Drawer.Screen name="Sensors" component={ViewSensorsScreen} />
     <Drawer.Screen name="Orders" component={OrdersScreen} />
-    <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
+    <Drawer.Screen name="Information" component={EditProfileScreen} />
     <Drawer.Screen name="Cameras" component={CamerasScreen} />
     <Drawer.Screen name="Appointment" component={AppointmentScreen} />
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
     <Drawer.Screen name="Help" component={HelpScreen} />
-    <Drawer.Screen name="Support History" component={SupportHistoryScreen} /> 
-    <Drawer.Screen name="Premium Packages" component={PremiumPackagesScreen} /> 
+    <Drawer.Screen name="Support History" component={SupportHistoryScreen} />
+    {/* <Drawer.Screen name="Appointments History" component={AppointmentHistoryScreen} /> */}
+    {/* <Drawer.Screen name="Premium Packages" component={PremiumPackagesScreen} />  */}
     {/* <Drawer.Screen name="Manage Employees" component={AddEmployeeScreen} />  */}
-    <Drawer.Screen name="AccessControlScreen" component={AccessControlScreen} /> 
+    {/* <Drawer.Screen name="AccessControlScreen" component={AccessControlScreen} />  */}
   </Drawer.Navigator>
 );
 

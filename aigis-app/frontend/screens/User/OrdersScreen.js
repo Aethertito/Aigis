@@ -42,9 +42,6 @@ const OrdersScreen = () => {
       <Text style={styles.infoText2}>
         Review the security packages you've purchased. Details about your order, including the price and contents, are displayed.
       </Text>
-      <Text style={styles.infoText}>
-        If you encounter any issues with your order, please don't hesitate to contact technical support.
-      </Text>
       {loading ? (
         <Text style={styles.loading}>Loading...</Text>
       ) : (
@@ -58,6 +55,9 @@ const OrdersScreen = () => {
           ListEmptyComponent={<Text style={styles.emptyText}>No orders found</Text>}
         />
       )}
+      <Text style={styles.infoText}>
+        If you encounter any issues with your order, please don't hesitate to contact technical support.
+      </Text>
     </View>
   );
 };

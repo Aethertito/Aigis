@@ -95,9 +95,6 @@ const LocationsScreen = () => {
       <Text style={styles.infoText2}>
         Assign locations to your purchased security packages.
       </Text>
-      <Text style={styles.infoText}>
-        To change the location of a package, please schedule an appointment with our technical team.
-      </Text>
       <FlatList
         data={paquetesComprados}
         renderItem={renderPaquete}
@@ -105,6 +102,9 @@ const LocationsScreen = () => {
         ListEmptyComponent={<Text style={styles.emptyText}>No purchased packages found</Text>}
         contentContainerStyle={styles.listContentContainer}
       />
+            <Text style={styles.infoText}>
+        To change the location of a package, please schedule an appointment with our technical team.
+      </Text>
     </View>
   );
 };

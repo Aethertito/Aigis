@@ -119,7 +119,17 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
-                <DrawerItem 
+                {/* <DrawerItem 
+                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Appointments History' ? '#E53935' : '#FFF'} size={size} /> )}
+                    label="Appointments History"
+                    labelStyle={[styles.label, { color: activeItem === 'Appointments History' ? '#E53935' : '#F4F6FC' }]}
+                    onPress={() => {
+                        setActiveItem('Appointments History');
+                        props.navigation.navigate('Appointments History');
+                    }}
+                    style={activeItem === 'Appointments History' ? styles.activeItem : {}}
+                /> */}
+                {/* <DrawerItem 
                     icon={({ color, size }) => ( <Icon3 name="package" color={activeItem === 'Premium Packages' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Premium Packages"
                     labelStyle={[styles.label, { color: activeItem === 'Premium Packages' ? '#E53935' : '#F4F6FC' }]}
@@ -128,7 +138,7 @@ export function DrawerUserContent(props) {
                         props.navigation.navigate('Premium Packages');
                     }}
                     style={activeItem === 'Premium Packages' ? styles.activeItem : {}}
-                />
+                /> */}
                 {/* <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="supervised-user-circle" color={activeItem === 'Manage Employees' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Manage Employees"
@@ -148,7 +158,7 @@ export function DrawerUserContent(props) {
                     labelStyle={[styles.label, { color: activeItem === 'Configurations' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
                         setActiveItem('Configurations');
-                        props.navigation.navigate('EditProfile');
+                        props.navigation.navigate('Information');
                     }}
                     style={activeItem === 'Configurations' ? styles.activeItem : {}}
                 />
