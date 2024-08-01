@@ -115,7 +115,7 @@ export function DrawerUserContent(props) {
                     labelStyle={[styles.label, { color: activeItem === 'Support History' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
                         setActiveItem('Support History');
-                        props.navigation.navigate('SupportHistory');
+                        props.navigation.navigate('Support History');
                     }}
                     style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
@@ -129,16 +129,16 @@ export function DrawerUserContent(props) {
                     }}
                     style={activeItem === 'Premium Packages' ? styles.activeItem : {}}
                 />
-                <DrawerItem 
+                {/* <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="supervised-user-circle" color={activeItem === 'Manage Employees' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Manage Employees"
-                    labelStyle={[styles.label, { color: activeItem === 'Manage Employees' ? '#E53935' : '#F4F6FC' }]}
+                   labelStyle={[styles.label, { color: activeItem === 'Manage Employees' ? '#E53935' : '#F4F6FC' }]}
                     onPress={() => {
                         setActiveItem('Manage Employees');
                         props.navigation.navigate('Manage Employees');
                     }}
                     style={activeItem === 'Manage Employees' ? styles.activeItem : {}}
-                />
+                />  */}
             </Drawer.Section>
 
             <View style={styles.logoutSection}>

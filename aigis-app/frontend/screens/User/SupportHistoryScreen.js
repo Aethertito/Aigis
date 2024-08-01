@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#E53935',
+    textAlign: 'center'
   },
   date: {
     fontSize: 14,
