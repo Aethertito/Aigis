@@ -1,11 +1,21 @@
-﻿namespace mvcfarm1.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace mvcfarm1.Models
 {
     public class Package
     {
-        public string Id { get; set; } // Assuming MongoDB _id is a string
-        public string Paquete { get; set; }
-        public string Descripcion { get; set; }
-        public decimal Precio { get; set; }
-        public string[] Contenido { get; set; }
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        [Required]
+        public int Price { get; set; }
+
+        public string Content { get; set; }
     }
 }

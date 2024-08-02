@@ -1,10 +1,10 @@
 using mvcfarm1.Data;
+using mvcfarm1.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDistributedMemoryCache();
@@ -15,25 +15,26 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddDbContext<mvcfarmDBContext>(options =>
+builder.Services.AddDbContext<YourDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Conexion"));
 });
 
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login/Login";
+        options.LoginPath = "/Account/Login";
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
-        options.LogoutPath = "/Login/Logout";
-        options.AccessDeniedPath = "/Login/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
     });
 
 var app = builder.Build();
 
 app.UseSession();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

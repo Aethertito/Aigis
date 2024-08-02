@@ -3,13 +3,12 @@ using mvcfarm1.Models;
 
 namespace mvcfarm1.Data
 {
-    public class mvcfarmDBContext : DbContext
+    public class YourDbContext : DbContext
     {
-        public mvcfarmDBContext(DbContextOptions<mvcfarmDBContext> options)
-            : base(options)
-        {
-        }
+        public YourDbContext(DbContextOptions<YourDbContext> options) : base(options) { }
 
-        public DbSet<Company> Company { get; set; }
+
+        public DbSet<Package> Packages { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }

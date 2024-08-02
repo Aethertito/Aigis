@@ -1,24 +1,51 @@
-﻿using MongoDB.Driver;
-using mvcfarm1.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using mvcfarm1.Data;
+using mvcfarm1.Models;
 
 namespace mvcfarm1.Services
 {
-    public class PackageService
+    public class PackageService : IPackageService
     {
-        private readonly IMongoCollection<Package> _packages;
+        private readonly YourDbContext _context;
 
-        public PackageService(IConfiguration config)
+        public PackageService(YourDbContext context)
         {
-            var client = new MongoClient(config.GetConnectionString("MongoDB:ConnectionString"));
-            var database = client.GetDatabase(config.GetSection("MongoDB:DatabaseName").Value);
-            _packages = database.GetCollection<Package>("paquetes");
+            _context = context;
         }
 
-        public async Task<List<Package>> GetAllPackagesAsync()
+        public async Task<IEnumerable<Package>> GetAllPackagesAsync()
         {
-            return await _packages.Find(package => true).ToListAsync();
+            return await _context.Packages.ToListAsync();
+        }
+
+        public async Task<Package> GetPackageByIdAsync(int id)
+        {
+            return await _context.Packages.FindAsync(id);
+        }
+
+        public async Task<Package> CreatePackageAsync(Package package)
+        {
+            _context.Packages.Add(package);
+            await _context.SaveChangesAsync();
+            return package;
+        }
+
+        public async Task UpdatePackageAsync(Package package)
+        {
+            _context.Entry(package).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePackageAsync(int id)
+        {
+            var package = await _context.Packages.FindAsync(id);
+            if (package != null)
+            {
+                _context.Packages.Remove(package);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

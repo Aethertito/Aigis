@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using mvcfarm1.Services;
 using System.Threading.Tasks;
+using mvcfarm1.Services;
 
 namespace mvcfarm1.Controllers
 {
     public class PackagesController : Controller
     {
-        private readonly PackageService _packageService;
+        private readonly IPackageService _packageService;
 
-        public PackagesController(PackageService packageService)
+        public PackagesController(IPackageService packageService)
         {
             _packageService = packageService;
         }
