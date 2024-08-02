@@ -25,8 +25,8 @@ const UserHomeScreen = ({ navigation }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [maxSmoke, setMaxSmoke] = useState(null);
   const [presenceDetected, setPresenceDetected] = useState('No presence data available');
-  const [checkInMessage, setCheckInMessage] = useState('N/A');
-  const [checkOutMessage, setCheckOutMessage] = useState('N/A');
+  const [checkInMessage, setCheckInMessage] = useState('No check-in data available');
+  const [checkOutMessage, setCheckOutMessage] = useState('No check-out data available');
   const [weeklySmokeData, setWeeklySmokeData] = useState([]);
 
   useEffect(() => {
@@ -51,13 +51,7 @@ const UserHomeScreen = ({ navigation }) => {
   }, [viewMode, selectedLocation]);
 
   useEffect(() => {
-    if (userId) {
-      fetchUserSensors();
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    console.log('Weekly Smoke Data:', weeklySmokeData);
+    // console.log('Weekly Smoke Data:', weeklySmokeData);
   }, [weeklySmokeData]);
 
   const getUserId = async () => {
@@ -137,24 +131,21 @@ const UserHomeScreen = ({ navigation }) => {
     }
   };  
 
-// Cambios en el procesamiento de datos para asegurarse de que todos los puntos se muestren, incluso si los valores son iguales.
-const processData = (statistics, mode) => {
-  if (!statistics || statistics.length === 0) return [];
+  const processData = (statistics, mode) => {
+    if (!statistics || statistics.length === 0) return [];
 
-  // Mapeo de datos para incluir todos los puntos
-  const mappedData = statistics.flatMap(stat =>
-    stat.valores.map(entry => ({
-      date: mode === 'day' ? entry.fecha.split('T')[0] : `Week ${moment(entry.fecha).isoWeek()}`,
-      temperature: entry.valor.temperatura || 0,
-      humidity: entry.valor.humedad || 0,
-    }))
-  );
+    const mappedData = statistics.flatMap(stat =>
+      stat.valores.map(entry => ({
+        date: mode === 'day' ? entry.fecha.split('T')[0] : `Week ${moment(entry.fecha).isoWeek()}`,
+        temperature: entry.valor.temperatura || 0,
+        humidity: entry.valor.humedad || 0,
+      }))
+    );
 
-  // Sin agrupar los datos para asegurar que todos los puntos se muestren, incluso si los valores son iguales.
-  console.log('Mapped Data:', mappedData);
+    console.log('Mapped Data:', mappedData);
 
-  return mappedData;
-};
+    return mappedData;
+  };
 
   const fetchMaxSmokeValue = async () => {
     try {
@@ -165,7 +156,7 @@ const processData = (statistics, mode) => {
       });
   
       if (response.data && response.data.maxValue !== undefined) {
-        console.log('Max smoke value:', response.data.maxValue);
+        // console.log('Max smoke value:', response.data.maxValue);
         setMaxSmoke(response.data.maxValue);
       } else {
         console.log('No smoke data found');
@@ -187,7 +178,7 @@ const processData = (statistics, mode) => {
   
       if (response.data && response.data.valores && response.data.valores.length > 0) {
         const sortedValues = response.data.valores.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        console.log('Sorted presence values:', sortedValues);
+        // console.log('Sorted presence values:', sortedValues);
         const latestPresence = sortedValues[0].valor;
         setPresenceDetected(latestPresence === 1 ? 'Presence detected' : 'No presence detected');
       } else {
@@ -203,57 +194,66 @@ const processData = (statistics, mode) => {
   const fetchRFIDEvents = async () => {
     try {
       if (!userId) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/sensor/rfid/events`, {
         params: { userId: userId }
       });
-  
+
       if (response.data && response.data.length > 0) {
-        // Ordenar por fecha y loguear los eventos
-        const events = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        console.log('RFID events:', events);
-        setCheckInMessage('Entry registered');
-        setCheckOutMessage('Exit registered');
+        const sortedEvents = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        const lastCheckIn = sortedEvents.find(event => event.tipo === 'entrada');
+        const lastCheckOut = sortedEvents.find(event => event.tipo === 'salida');
+
+        if (lastCheckIn) {
+          const formattedCheckInDate = moment(lastCheckIn.fecha).format("HH:mm");
+          setCheckInMessage(`Entry registered at ${formattedCheckInDate}`);
+        } else {
+          setCheckInMessage('No check-in data available');
+        }
+
+        if (lastCheckOut) {
+          const formattedCheckOutDate = moment(lastCheckOut.fecha).format("HH:mm");
+          setCheckOutMessage(`Exit registered at ${formattedCheckOutDate}`);
+        } else {
+          setCheckOutMessage('No check-out data available');
+        }
       } else {
-        console.log('No RFID events found');
-        setCheckInMessage('N/A');
-        setCheckOutMessage('N/A');
+        setCheckInMessage('No check-in data available');
+        setCheckOutMessage('No check-out data available');
       }
     } catch (error) {
-      console.error('Error fetching RFID events:', error);
-      setCheckInMessage('Error fetching RFID events');
-      setCheckOutMessage('Error fetching RFID events');
+      console.error('Error fetching RFID events:', error.response ? error.response.data : error.message);
+      setCheckInMessage('Error fetching check-in data');
+      setCheckOutMessage('Error fetching check-out data');
     }
   };
 
-const fetchWeeklyMaxSmokeValues = async () => {
-  try {
-    if (!userId) return;
+  const fetchWeeklyMaxSmokeValues = async () => {
+    try {
+      if (!userId) return;
 
-    const response = await axios.get(`http://${IP}:3000/api/smoke/weeklyMax`, {
-      params: { userId: userId }
-    });
+      const response = await axios.get(`http://${IP}:3000/api/smoke/weeklyMax`, {
+        params: { userId: userId }
+      });
 
-    if (response.data) {
-      console.log('Weekly max smoke data:', response.data);
-      const colors = ['#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#FFA07A', '#FF8C00', '#FF4500'];
-      setWeeklySmokeData(response.data.map((day, index) => ({
-        name: moment(day.date).format('ddd'), // Nombre del día (Mon, Tue, etc.)
-        maxSmoke: day.maxValue !== null ? day.maxValue : 0,
-        color: colors[index], // Asignar un color fijo para cada día
-        legendFontColor: "#F4F6FC",
-        legendFontSize: 15
-      })));
-    } else {
-      console.log('No weekly smoke data found');
+      if (response.data && response.data.length > 0) {
+        const colors = ['#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#FFA07A', '#FF8C00', '#FF4500'];
+        const data = response.data.map((day, index) => ({
+          name: `Day ${index + 1}`, // Puedes modificar esto para mostrar una etiqueta más significativa
+          maxSmoke: day.valor !== null ? day.valor : 0,
+          color: colors[index % colors.length],
+          legendFontColor: "#F4F6FC",
+          legendFontSize: 15
+        }));
+        setWeeklySmokeData(data);
+      } else {
+        setWeeklySmokeData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching weekly max smoke values:', error);
       setWeeklySmokeData([]);
     }
-  } catch (error) {
-    console.error('Error fetching weekly max smoke values:', error);
-    setWeeklySmokeData([]);
-  }
-};
-
+  };
 
   const classifySmokeLevel = (value) => {
     if (value === null || value === undefined) return 'Unknown';
@@ -403,14 +403,9 @@ const fetchWeeklyMaxSmokeValues = async () => {
       {weeklySmokeData.length > 0 && sensors.some(sensor => sensor.tipo === 'Smoke') && (
         <View style={styles.chartContainer}>
           <Text style={styles.chartTitle}>Weekly Smoke Concentration</Text>
+          {weeklySmokeData.length > 0 ? (
           <PieChart
-            data={weeklySmokeData.map(item => ({
-              name: item.name,
-              maxSmoke: item.maxSmoke,
-              color: item.color,
-              legendFontColor: item.legendFontColor,
-              legendFontSize: item.legendFontSize,
-            }))}
+            data={weeklySmokeData}
             width={Dimensions.get('window').width - 40}
             height={220}
             chartConfig={{
@@ -422,6 +417,9 @@ const fetchWeeklyMaxSmokeValues = async () => {
             paddingLeft="15"
             absolute
           />
+        ) : (
+          <Text style={{ color: '#FFF' }}>No data available</Text>
+        )}
         </View>
       )}
 

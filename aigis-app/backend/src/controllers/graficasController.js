@@ -219,39 +219,41 @@ exports.getPresenceData = async (req, res) => {
   }
 };
 
-exports.getRFIDEvents = async (req, res) => {
-  const { sensorId, startDate, endDate } = req.query;
-
-  console.log('Request received for RFID events:', { sensorId, startDate, endDate });
-
+// Controlador para obtener eventos RFID
+exports.getRFID = async (req, res) => {
   try {
-    // Verificar que el ID del sensor sea un ObjectId válido
-    if (!mongoose.Types.ObjectId.isValid(sensorId)) {
-      return res.status(400).json({ message: 'Invalid sensor ID' });
+    const { userId } = req.query;
+
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
-    // Convertir a ObjectId
-    const sensorObjectId = new mongoose.Types.ObjectId(sensorId);
+    console.log('Fetching RFID events for userId:', userId);
 
-    // Buscar eventos de RFID en el rango de fechas
-    const events = await Estadistica.find({
-      sensor_id: sensorObjectId,
-      tipo: 'RFID',
-      'valores.fecha': { $gte: new Date(startDate), $lte: new Date(endDate) }
-    });
+    // Encuentra los eventos de RFID para el sensor del usuario
+    const eventos = await Estadistica.find({
+      'sensor_id': new mongoose.Types.ObjectId(userId), // Asegúrate de que estás buscando por el campo correcto y con el tipo de datos correcto
+      'tipo': 'RFID',
+    }).sort({ 'historial.fecha': -1 });
 
-    if (!events || events.length === 0) {
-      console.log('No RFID events found for the given date range.');
+    if (!eventos || eventos.length === 0) {
+      console.log('No RFID events found for userId:', userId);
       return res.status(404).json({ message: 'No RFID events found.' });
     }
 
-    console.log('RFID events found:', events);
-    res.status(200).json(events);
+    console.log('RFID events fetched:', eventos);
+
+    const lastCheckIn = eventos[0].historial.find(event => event.tipo === 'entrada');
+    const lastCheckOut = eventos[0].historial.find(event => event.tipo === 'salida');
+
+    res.status(200).json({ checkIn: lastCheckIn, checkOut: lastCheckOut });
+
   } catch (error) {
     console.error('Error fetching RFID events:', error);
     res.status(500).json({ message: 'Error fetching RFID events', error });
   }
 };
+
 
 // Controlador para obtener los valores máximos de humo de los últimos 7 días
 exports.getWeeklyMaxSmokeValues = async (req, res) => {
