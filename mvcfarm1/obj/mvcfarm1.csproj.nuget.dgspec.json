@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\misam\\Desktop\\Aigis\\mvcfarm1\\mvcfarm1.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\web-proyecto\\Aigis\\mvcfarm1\\mvcfarm1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\misam\\Desktop\\Aigis\\mvcfarm1\\mvcfarm1.csproj": {
+    "C:\\Users\\Admin\\Desktop\\web-proyecto\\Aigis\\mvcfarm1\\mvcfarm1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\misam\\Desktop\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\web-proyecto\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
         "projectName": "mvcfarm1",
-        "projectPath": "C:\\Users\\misam\\Desktop\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
-        "packagesPath": "C:\\Users\\misam\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\misam\\Desktop\\Aigis\\mvcfarm1\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\web-proyecto\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\web-proyecto\\Aigis\\mvcfarm1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\misam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -63,6 +62,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.3, )"
+            },
+            "MongoDB.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.3, )"
             }
           },
           "imports": [
@@ -84,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
