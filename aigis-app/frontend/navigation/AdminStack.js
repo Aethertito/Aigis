@@ -22,7 +22,7 @@ const AdminDrawer = () => (
       headerStyle: {
         backgroundColor: '#212121',
       },
-      headerTintColor: '#fff',
+      headerTintColor: '#F4F6FC',
       headerTitleStyle: {
         fontWeight: 'bold',
       },

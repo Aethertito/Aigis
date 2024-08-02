@@ -1,20 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const { getTemperatureSensors, getSensorStatistics, getMaxSmokeValue, getUserSensors, getPresenceData } = require('../controllers/graficasController');
+const {
+    getTemperatureSensors,
+    getSensorStatistics,
+    getMaxSmokeValue,
+    getUserSensors,
+    getPresenceData,
+    getRFIDEvents,
+    getWeeklyMaxSmokeValues
+} = require('../controllers/graficasController');
 
-// Ruta para obtener sensores de temperatura por ubicación
+// Rutas de los sensores de temperatura
 router.get('/sensor/temperature/locations', getTemperatureSensors);
 
-// Ruta para obtener estadísticas de sensores
+// Rutas de las estadísticas de los sensores
 router.get('/statistics', getSensorStatistics);
 
-// Ruta para obtener el valor máximo del sensor de humo
+// Rutas del valor máximo del sensor de humo
 router.get('/sensor/smoke/max', getMaxSmokeValue);
 
-// Ruta para obtener todos los sensores de un usuario
+// Rutas para obtener sensores de usuario
 router.get('/sensors', getUserSensors);
 
-// Ruta para obtener datos de presencia
+// Rutas para obtener datos de presencia
 router.get('/sensor/presence', getPresenceData);
+
+// Rutas para obtener eventos RFID
+router.get('/sensor/rfid/events', getRFIDEvents);
+
+// Rutas para obtener el valor máximo semanal del humo
+router.get('/smoke/weeklyMax', getWeeklyMaxSmokeValues);
 
 module.exports = router;

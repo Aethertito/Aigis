@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import IP from '../../IP';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,7 +12,6 @@ const EditUserScreen = ({ route, navigation }) => {
   const [rol, setRol] = useState('');
   const [loading, setLoading] = useState(false);
   const userId = route.params?.userId;
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -36,9 +35,41 @@ const EditUserScreen = ({ route, navigation }) => {
     fetchUserData();
   }, [userId]);
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const formatPhoneNumber = (phone) => {
+    // Remove any non-digit characters
+    const cleaned = phone.replace(/\D/g, '');
+    // Apply formatting if there are enough digits
+    if (cleaned.length > 6) {
+      return cleaned.replace(/(\d{3})(\d{3})(\d{0,4})/, '$1-$2-$3');
+    } else if (cleaned.length > 3) {
+      return cleaned.replace(/(\d{3})(\d{0,3})/, '$1-$2');
+    } else {
+      return cleaned;
+    }
+  };
+
+  const handlePhoneChange = (text) => {
+    setTelefono(formatPhoneNumber(text));
+  };
+
   const handleSave = async () => {
     if (!correo || !telefono) {
       Alert.alert('Error', 'Email and telephone fields are required.');
+      return;
+    }
+
+    if (!validateEmail(correo)) {
+      Alert.alert('Error', 'Please enter a valid email address.');
+      return;
+    }
+
+    if (telefono.length < 12) { // Expected length with format XXX-XXX-XXXX
+      Alert.alert('Error', 'Please enter a valid phone number (XXX-XXX-XXXX).');
       return;
     }
 
@@ -70,6 +101,8 @@ const EditUserScreen = ({ route, navigation }) => {
         style={styles.input}
         placeholder="Enterprise"
         value={nombre}
+        maxLength={50}
+        onChangeText={setNombre}
       />
       <Text style={styles.nameField}>Email: </Text>
       <TextInput
@@ -78,6 +111,7 @@ const EditUserScreen = ({ route, navigation }) => {
         value={correo}
         onChangeText={setCorreo}
         keyboardType="email-address"
+        maxLength={50}
       />
       <Text style={styles.nameField}>Address: </Text>
       <TextInput
@@ -85,6 +119,7 @@ const EditUserScreen = ({ route, navigation }) => {
         placeholder="Address"
         value={direccion}
         onChangeText={setDireccion}
+        maxLength={100}
       />
       <Text style={styles.nameField}>Phone Number: </Text>
       <TextInput
@@ -92,7 +127,8 @@ const EditUserScreen = ({ route, navigation }) => {
         placeholder="Phone Number"
         value={telefono}
         keyboardType="phone-pad"
-        onChangeText={setTelefono}
+        onChangeText={handlePhoneChange}
+        maxLength={12} // 10 digits + 2 dashes
       />
       <Button
         title={loading ? "Saving..." : "Save"}

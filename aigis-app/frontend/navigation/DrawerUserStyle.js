@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -22,6 +22,31 @@ export function DrawerUserContent(props) {
 
         fetchUserData();
     }, []);
+    
+    const handleLogout = async () => {
+        try {
+            // Elimina datos de usuario almacenados en AsyncStorage
+            await AsyncStorage.removeItem('userId');
+            await AsyncStorage.removeItem('userName');
+            await AsyncStorage.removeItem('userEmail');
+            
+            // Muestra la alerta de cierre de sesión
+            Alert.alert(
+                "Success",
+                "Successfully logged out.",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+            );
+
+            // Navega a la pantalla de bienvenida o de inicio de sesión
+            props.navigation.navigate('Welcome');
+            console.log('User logged out and redirected to Welcome screen');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
 
     return (
         <DrawerContentScrollView {...props} style={styles.drawerContent}>
@@ -120,26 +145,6 @@ export function DrawerUserContent(props) {
                     style={activeItem === 'Support History' ? styles.activeItem : {}}
                 />
                 {/* <DrawerItem 
-                    icon={({ color, size }) => ( <Icon name="history" color={activeItem === 'Appointments History' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Appointments History"
-                    labelStyle={[styles.label, { color: activeItem === 'Appointments History' ? '#E53935' : '#F4F6FC' }]}
-                    onPress={() => {
-                        setActiveItem('Appointments History');
-                        props.navigation.navigate('Appointments History');
-                    }}
-                    style={activeItem === 'Appointments History' ? styles.activeItem : {}}
-                /> */}
-                {/* <DrawerItem 
-                    icon={({ color, size }) => ( <Icon3 name="package" color={activeItem === 'Premium Packages' ? '#E53935' : '#FFF'} size={size} /> )}
-                    label="Premium Packages"
-                    labelStyle={[styles.label, { color: activeItem === 'Premium Packages' ? '#E53935' : '#F4F6FC' }]}
-                    onPress={() => {
-                        setActiveItem('Premium Packages');
-                        props.navigation.navigate('Premium Packages');
-                    }}
-                    style={activeItem === 'Premium Packages' ? styles.activeItem : {}}
-                /> */}
-                {/* <DrawerItem 
                     icon={({ color, size }) => ( <Icon name="supervised-user-circle" color={activeItem === 'Manage Employees' ? '#E53935' : '#FFF'} size={size} /> )}
                     label="Manage Employees"
                    labelStyle={[styles.label, { color: activeItem === 'Manage Employees' ? '#E53935' : '#F4F6FC' }]}
@@ -166,10 +171,7 @@ export function DrawerUserContent(props) {
                     icon={({ color, size }) => ( <Icon name="logout" color='#FFF' size={size} /> )}
                     label="Logout"
                     labelStyle={styles.label}
-                    onPress={() => {
-                        props.navigation.navigate('Welcome');
-                        console.log('Logout pressed');
-                    }}
+                    onPress={handleLogout}
                     style={styles.logoutItem}
                 />
             </View>

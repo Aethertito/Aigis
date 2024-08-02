@@ -73,12 +73,12 @@ const EditProfileScreen = () => {
   
       const response = await axios.put(url, data);
       if (response.status === 200) {
-        Alert.alert('Editar Perfil', 'Cambios guardados');
+        Alert.alert('Edit profile', 'Changes saved');
         setRefresh(!refresh);
       }
     } catch (error) {
       console.log(error);
-      Alert.alert('Error', 'No se pudo actualizar el perfil');
+      Alert.alert('Error', 'Could not update profile');
     }
   };
 

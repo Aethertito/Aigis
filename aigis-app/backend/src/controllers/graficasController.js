@@ -52,28 +52,12 @@ exports.getTemperatureSensors = async (req, res) => {
   }
 };
 
+// Asegurar que la consulta para estadísticas de sensores traiga todos los datos
 exports.getSensorStatistics = async (req, res) => {
   const { sensorIds, startDate, endDate } = req.query;
 
-  console.log('Request received with parameters:', { sensorIds, startDate, endDate });
-
   try {
-    // Asegurar que todos los IDs son válidos ObjectId
-    const sensorIdArray = sensorIds.split(',').map(id => {
-      try {
-        return new mongoose.Types.ObjectId(id);
-      } catch (error) {
-        console.error('Invalid sensor ID:', id);
-        return null;
-      }
-    }).filter(id => id !== null);
-
-    console.log('Valid sensor IDs:', sensorIdArray);
-
-    if (sensorIdArray.length === 0) {
-      console.log('No valid sensor IDs found');
-      return res.status(400).json({ message: 'No valid sensor IDs found' });
-    }
+    const sensorIdArray = sensorIds.split(',').map(id => new mongoose.Types.ObjectId(id));
 
     const statistics = await Estadistica.find({
       sensor_id: { $in: sensorIdArray },
@@ -81,14 +65,11 @@ exports.getSensorStatistics = async (req, res) => {
     });
 
     if (!statistics.length) {
-      console.log('No statistics found for the given sensor and date range.');
       return res.status(404).json({ message: 'No statistics found for the given sensor and date range.' });
     }
 
-    console.log('Statistics found:', statistics);
     res.status(200).json(statistics);
   } catch (error) {
-    console.error('Error fetching statistics:', error);
     res.status(500).json({ message: 'Error fetching statistics', error });
   }
 };
@@ -235,5 +216,98 @@ exports.getPresenceData = async (req, res) => {
   } catch (error) {
     console.error('Error fetching presence data:', error);
     res.status(500).json({ message: 'Error fetching presence data', error });
+  }
+};
+
+exports.getRFIDEvents = async (req, res) => {
+  const { sensorId, startDate, endDate } = req.query;
+
+  console.log('Request received for RFID events:', { sensorId, startDate, endDate });
+
+  try {
+    // Verificar que el ID del sensor sea un ObjectId válido
+    if (!mongoose.Types.ObjectId.isValid(sensorId)) {
+      return res.status(400).json({ message: 'Invalid sensor ID' });
+    }
+
+    // Convertir a ObjectId
+    const sensorObjectId = new mongoose.Types.ObjectId(sensorId);
+
+    // Buscar eventos de RFID en el rango de fechas
+    const events = await Estadistica.find({
+      sensor_id: sensorObjectId,
+      tipo: 'RFID',
+      'valores.fecha': { $gte: new Date(startDate), $lte: new Date(endDate) }
+    });
+
+    if (!events || events.length === 0) {
+      console.log('No RFID events found for the given date range.');
+      return res.status(404).json({ message: 'No RFID events found.' });
+    }
+
+    console.log('RFID events found:', events);
+    res.status(200).json(events);
+  } catch (error) {
+    console.error('Error fetching RFID events:', error);
+    res.status(500).json({ message: 'Error fetching RFID events', error });
+  }
+};
+
+// Controlador para obtener los valores máximos de humo de los últimos 7 días
+exports.getWeeklyMaxSmokeValues = async (req, res) => {
+  try {
+    const { userId } = req.query;
+
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid or missing user ID.' });
+    }
+
+    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "Smoke" }).populate('sensores.sensor_id');
+
+    if (!paquetesComprados || paquetesComprados.length === 0) {
+      return res.status(404).json({ message: 'No smoke sensors found for this user.' });
+    }
+
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 7);
+
+    const weeklyMaxValues = [];
+
+    for (let i = 0; i < 7; i++) {
+      const dayStart = new Date(startDate);
+      dayStart.setDate(startDate.getDate() + i);
+      dayStart.setHours(0, 0, 0, 0);
+
+      const dayEnd = new Date(dayStart);
+      dayEnd.setHours(23, 59, 59, 999);
+
+      let maxSmoke = null;
+
+      for (const paquete of paquetesComprados) {
+        for (const sensor of paquete.sensores) {
+          if (sensor.sensor_id && sensor.sensor_id.tipo === 'Smoke') {
+            const estadisticas = await Estadistica.find({
+              sensor_id: sensor.sensor_id,
+              'valores.fecha': { $gte: dayStart, $lte: dayEnd }
+            });
+
+            for (const estadistica of estadisticas) {
+              for (const valor of estadistica.valores) {
+                if (valor.valor !== null && typeof valor.valor === 'number') {
+                  maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, valor.valor) : valor.valor;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      weeklyMaxValues.push({ date: dayStart, valor: maxSmoke });
+    }
+
+    res.status(200).json(weeklyMaxValues);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching weekly max smoke values', error });
   }
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
+import { LineChart, PieChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
@@ -25,6 +25,9 @@ const UserHomeScreen = ({ navigation }) => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [maxSmoke, setMaxSmoke] = useState(null);
   const [presenceDetected, setPresenceDetected] = useState('No presence data available');
+  const [checkInMessage, setCheckInMessage] = useState('N/A');
+  const [checkOutMessage, setCheckOutMessage] = useState('N/A');
+  const [weeklySmokeData, setWeeklySmokeData] = useState([]);
 
   useEffect(() => {
     getUserId();
@@ -36,6 +39,8 @@ const UserHomeScreen = ({ navigation }) => {
       fetchUserSensors();
       fetchMaxSmokeValue();
       fetchPresenceData();
+      fetchRFIDEvents();
+      fetchWeeklyMaxSmokeValues();
     }
   }, [userId]);
 
@@ -50,6 +55,10 @@ const UserHomeScreen = ({ navigation }) => {
       fetchUserSensors();
     }
   }, [userId]);
+
+  useEffect(() => {
+    console.log('Weekly Smoke Data:', weeklySmokeData);
+  }, [weeklySmokeData]);
 
   const getUserId = async () => {
     try {
@@ -67,7 +76,6 @@ const UserHomeScreen = ({ navigation }) => {
       const longitude = -116.828109;
       const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=f847590632224d78a8093009242707&q=${latitude},${longitude}`);
       const { location, current } = response.data;
-      console.log('Weather data:', { location, current });
       setWeather({
         temperature: current.temp_c,
         location: location.name,
@@ -84,25 +92,22 @@ const UserHomeScreen = ({ navigation }) => {
     try {
       if (!userId) return;
 
-      console.log('Enviando userId:', userId);
-
       const response = await axios.get(`http://${IP}:3000/api/sensors`, {
         params: { userId: userId }
       });
 
-      console.log('Response data:', response.data);
       setSensors(response.data.sensores || []);
     } catch (error) {
       console.error('Error fetching user sensors:', error);
     }
   };
-  
+
   const fetchData = async (mode) => {
     if (!selectedLocation || !sensors.length) return;
     try {
       const endDate = new Date();
       let startDate;
-
+  
       if (mode === 'day') {
         startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
       } else {
@@ -111,103 +116,82 @@ const UserHomeScreen = ({ navigation }) => {
       }
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
-
+  
       const temperatureSensors = sensors.filter(sensor => sensor.tipo === 'Temperature and Humidity');
       const sensorIds = temperatureSensors.map(sensor => sensor._id).join(',');
-      console.log('Fetching data for sensor IDs:', sensorIds);
   
-      if (!sensorIds) {
-        console.log('No sensor IDs found for the selected location.');
-        return;
-      }
-
+      if (!sensorIds) return;
+  
       const response = await axios.get(`http://${IP}:3000/api/statistics`, {
         params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
       });
       const statistics = response.data;
   
-      console.log('Statistics data received:', statistics);
+      // Verificación de los datos recibidos
+      console.log('Statistics received:', statistics);
+  
       const processedData = processData(statistics, mode);
       setData(processedData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  };  
 
-  const processData = (statistics, mode) => {
-    if (!statistics || statistics.length === 0) return [];
+// Cambios en el procesamiento de datos para asegurarse de que todos los puntos se muestren, incluso si los valores son iguales.
+const processData = (statistics, mode) => {
+  if (!statistics || statistics.length === 0) return [];
 
-    const groupedData = {};
+  // Mapeo de datos para incluir todos los puntos
+  const mappedData = statistics.flatMap(stat =>
+    stat.valores.map(entry => ({
+      date: mode === 'day' ? entry.fecha.split('T')[0] : `Week ${moment(entry.fecha).isoWeek()}`,
+      temperature: entry.valor.temperatura || 0,
+      humidity: entry.valor.humedad || 0,
+    }))
+  );
 
-    statistics.forEach(stat => {
-      stat.valores.forEach(entry => {
-        const date = new Date(entry.fecha);
-        let key;
-        if (mode === 'day') {
-          key = date.toISOString().split('T')[0]; // YYYY-MM-DD
-        } else {
-          const week = moment(date).isoWeek(); // Week number
-          key = `Week ${week}`;
-        }
+  // Sin agrupar los datos para asegurar que todos los puntos se muestren, incluso si los valores son iguales.
+  console.log('Mapped Data:', mappedData);
 
-        if (!groupedData[key]) {
-          groupedData[key] = { temperature: 0, humidity: 0, count: 0 };
-        }
-
-        groupedData[key].temperature += entry.valor.temperatura || 0;
-        groupedData[key].humidity += entry.valor.humedad || 0;
-        groupedData[key].count += 1;
-      });
-    });
-
-    return Object.keys(groupedData).map(key => ({
-      date: key,
-      temperature: groupedData[key].temperature / groupedData[key].count,
-      humidity: groupedData[key].humidity / groupedData[key].count,
-    }));
-  };
+  return mappedData;
+};
 
   const fetchMaxSmokeValue = async () => {
     try {
       if (!userId) return;
-    
-      console.log('Fetching max smoke value for user:', userId);
-    
+  
       const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
         params: { userId: userId }
       });
-    
-      console.log('Response data:', response.data);
-    
+  
       if (response.data && response.data.maxValue !== undefined) {
-        console.log('Received max smoke value:', response.data.maxValue);
+        console.log('Max smoke value:', response.data.maxValue);
         setMaxSmoke(response.data.maxValue);
       } else {
-        console.log('No smoke sensors found or no max value returned.');
-        setMaxSmoke(null); // O puedes usar un valor alternativo como 'N/A'
+        console.log('No smoke data found');
+        setMaxSmoke(null);
       }
     } catch (error) {
       console.error('Error fetching max smoke value:', error);
-      setMaxSmoke(null); // Asegura que el estado se establezca incluso en caso de error
+      setMaxSmoke(null);
     }
   };
-  
+
   const fetchPresenceData = async () => {
     try {
       if (!userId) return;
-  
-      console.log('Fetching presence data for user:', userId);
   
       const response = await axios.get(`http://${IP}:3000/api/sensor/presence`, {
         params: { userId: userId }
       });
   
-      console.log('Response data:', response.data);
-  
       if (response.data && response.data.valores && response.data.valores.length > 0) {
-        const latestPresence = response.data.valores[response.data.valores.length - 1].valor;
+        const sortedValues = response.data.valores.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        console.log('Sorted presence values:', sortedValues);
+        const latestPresence = sortedValues[0].valor;
         setPresenceDetected(latestPresence === 1 ? 'Presence detected' : 'No presence detected');
       } else {
+        console.log('No presence data available');
         setPresenceDetected('No presence data available');
       }
     } catch (error) {
@@ -215,7 +199,69 @@ const UserHomeScreen = ({ navigation }) => {
       setPresenceDetected('Error fetching presence data');
     }
   };
+
+  const fetchRFIDEvents = async () => {
+    try {
+      if (!userId) return;
   
+      const response = await axios.get(`http://${IP}:3000/api/sensor/rfid/events`, {
+        params: { userId: userId }
+      });
+  
+      if (response.data && response.data.length > 0) {
+        // Ordenar por fecha y loguear los eventos
+        const events = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        console.log('RFID events:', events);
+        setCheckInMessage('Entry registered');
+        setCheckOutMessage('Exit registered');
+      } else {
+        console.log('No RFID events found');
+        setCheckInMessage('N/A');
+        setCheckOutMessage('N/A');
+      }
+    } catch (error) {
+      console.error('Error fetching RFID events:', error);
+      setCheckInMessage('Error fetching RFID events');
+      setCheckOutMessage('Error fetching RFID events');
+    }
+  };
+
+const fetchWeeklyMaxSmokeValues = async () => {
+  try {
+    if (!userId) return;
+
+    const response = await axios.get(`http://${IP}:3000/api/smoke/weeklyMax`, {
+      params: { userId: userId }
+    });
+
+    if (response.data) {
+      console.log('Weekly max smoke data:', response.data);
+      const colors = ['#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#FFA07A', '#FF8C00', '#FF4500'];
+      setWeeklySmokeData(response.data.map((day, index) => ({
+        name: moment(day.date).format('ddd'), // Nombre del día (Mon, Tue, etc.)
+        maxSmoke: day.maxValue !== null ? day.maxValue : 0,
+        color: colors[index], // Asignar un color fijo para cada día
+        legendFontColor: "#F4F6FC",
+        legendFontSize: 15
+      })));
+    } else {
+      console.log('No weekly smoke data found');
+      setWeeklySmokeData([]);
+    }
+  } catch (error) {
+    console.error('Error fetching weekly max smoke values:', error);
+    setWeeklySmokeData([]);
+  }
+};
+
+
+  const classifySmokeLevel = (value) => {
+    if (value === null || value === undefined) return 'Unknown';
+    if (value < 100) return 'Low';
+    if (value < 200) return 'Medium';
+    return 'High';
+  };
+
   return (
     <ScrollView 
       contentContainerStyle={styles.container}
@@ -244,7 +290,7 @@ const UserHomeScreen = ({ navigation }) => {
         {sensors.some(sensor => sensor.tipo === 'RFID') && (
           <View style={styles.statCard}>
             <Icon2 name="account-check" size={24} color="#E53935" />
-            <Text style={styles.statValue}>RFID</Text>
+            <Text style={styles.statValue}>{checkInMessage}</Text>
             <Text style={styles.statLabel}>Check In</Text>
           </View>
         )}
@@ -252,13 +298,13 @@ const UserHomeScreen = ({ navigation }) => {
           <View style={styles.statCard}>
             <Icon2 name="smoke-detector" size={24} color="#E53935" />
             <Text style={styles.statValue}>{maxSmoke !== null ? `${maxSmoke} %` : 'N/A'}</Text>
-            <Text style={styles.statLabel}>Higher Smoke Value</Text>
+            <Text style={styles.statLabel}>{classifySmokeLevel(maxSmoke)} Smoke Concentration</Text>
           </View>
         )}
         {sensors.some(sensor => sensor.tipo === 'RFID') && (
           <View style={styles.statCard}>
             <Icon2 name="exit-run" size={24} color="#E53935" />
-            <Text style={styles.statValue}>RFID</Text>
+            <Text style={styles.statValue}>{checkOutMessage}</Text>
             <Text style={styles.statLabel}>Check Out</Text>
           </View>
         )}
@@ -276,7 +322,6 @@ const UserHomeScreen = ({ navigation }) => {
         <RNPickerSelect
           onValueChange={(value) => {
             setSelectedLocation(value);
-            console.log('Ubicación seleccionada:', value);
           }}
           items={sensors.filter(sensor => sensor.tipo === 'Temperature and Humidity').map(sensor => ({
             label: sensor.ubicacion || 'Unknown location',
@@ -305,16 +350,16 @@ const UserHomeScreen = ({ navigation }) => {
       <View style={styles.chartContainer}>
         <Text style={styles.chartTitle}>{selectedData === 'temperature' ? 'Temperature' : 'Humidity'}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <LineChart
+        <LineChart
             data={{
-              labels: data.map(item => viewMode === 'day' ? item.date : item.date),
+              labels: data.map(item => item.date), // Asegurarse de que todas las fechas están siendo representadas
               datasets: [
                 {
                   data: data.map(item => selectedData === 'temperature' ? item.temperature : item.humidity),
                 },
               ],
             }}
-            width={Math.max(data.length * 50, Dimensions.get('window').width)} 
+            width={Math.max(data.length * 50, Dimensions.get('window').width)}
             height={220}
             yAxisLabel=""
             yAxisSuffix={selectedData === 'temperature' ? "°C" : "%"}
@@ -354,6 +399,31 @@ const UserHomeScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Weekly</Text>
         </TouchableOpacity>
       </View>
+
+      {weeklySmokeData.length > 0 && sensors.some(sensor => sensor.tipo === 'Smoke') && (
+        <View style={styles.chartContainer}>
+          <Text style={styles.chartTitle}>Weekly Smoke Concentration</Text>
+          <PieChart
+            data={weeklySmokeData.map(item => ({
+              name: item.name,
+              maxSmoke: item.maxSmoke,
+              color: item.color,
+              legendFontColor: item.legendFontColor,
+              legendFontSize: item.legendFontSize,
+            }))}
+            width={Dimensions.get('window').width - 40}
+            height={220}
+            chartConfig={{
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            }}
+            accessor="maxSmoke"
+            backgroundColor="transparent"
+            paddingLeft="15"
+            absolute
+          />
+        </View>
+      )}
 
       <TouchableOpacity style={styles.packageButton} onPress={() => navigation.navigate('Paquetes')}>
         <Text style={styles.buttonText}>View Packages</Text>
@@ -468,6 +538,7 @@ const styles = StyleSheet.create({
     color: '#E53935',
     fontSize: 18,
     marginBottom: 10,
+    textAlign: 'center',
   },
   chart: {
     borderRadius: 16,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Title, Caption, Drawer } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,8 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function DrawerAdminContent(props) {
     const [activeItem, setActiveItem] = useState('');
-    const [adminName, setAdminName] = useState('Admin Name');
-    const [adminEmail, setAdminEmail] = useState('@adminusername');
+    const [adminName, setAdminName] = useState('');
+    const [adminEmail, setAdminEmail] = useState('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -21,6 +21,30 @@ export function DrawerAdminContent(props) {
         fetchUserData();
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            // Limpiar los datos de administrador almacenados en AsyncStorage
+            await AsyncStorage.removeItem('adminName');
+            await AsyncStorage.removeItem('adminEmail');
+            
+            // Muestra una alerta de cierre de sesión exitoso
+            Alert.alert(
+                "Success",
+                "Successfully logged out.",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+            );
+
+            // Navega a la pantalla de bienvenida
+            props.navigation.navigate('Welcome');
+            console.log('Logout successful and navigating to Welcome screen');
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
+
     return (
         <DrawerContentScrollView {...props} style={styles.drawerContent}>
             <View style={styles.userInfoSection}>
@@ -30,8 +54,8 @@ export function DrawerAdminContent(props) {
                         style={styles.profileImage}
                     />
                     <View style={styles.profileText}>
-                        <Title style={styles.title}>{adminName}</Title>
-                        <Caption style={styles.caption}>{adminEmail}</Caption>
+                        <Title style={styles.title}>Administrador</Title>
+                        <Caption style={styles.caption}>administrador@vsat.com</Caption>
                     </View>
                 </View>
             </View>
@@ -103,10 +127,7 @@ export function DrawerAdminContent(props) {
                     icon={({ color, size }) => ( <Icon name="logout" color='#FFF' size={size} /> )}
                     label="Logout"
                     labelStyle={styles.label}
-                    onPress={() => {
-                        props.navigation.navigate('Welcome');
-                        console.log('Logout pressed');
-                    }}
+                    onPress={handleLogout}
                     style={styles.logoutItem}
                 />
             </View>
@@ -120,9 +141,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#212121',
     },
     userInfoSection: {
-        paddingLeft: 20,
-        paddingTop: 40,
-        paddingBottom: 20,
+        paddingLeft: 8,
+        paddingTop: 15,
+        paddingBottom: 15,
         backgroundColor: '#313131',
     },
     profileContainer: {
