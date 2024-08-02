@@ -1,41 +1,42 @@
-using mvcfarm1.Data;
-using mvcfarm1.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración de CORS para permitir solicitudes desde todos los orígenes
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()  // Puedes restringir esto a orígenes específicos si es necesario
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<YourDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Conexion"));
-});
+// Agregar servicios de Swagger para la documentación de la API
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.ExpireTimeSpan = TimeSpan.FromDays(1);
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/Login";
-    });
+// Registrar el servicio de logging
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
-app.UseSession();
-
-if (!app.Environment.IsDevelopment())
+// Configuración del middleware de la aplicación
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -45,7 +46,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
+
+// Aplicar la política de CORS antes de los demás middlewares que necesiten CORS
+app.UseCors("AllowAllOrigins");
+
+app.UseAuthentication(); // Si estás usando autenticación
 app.UseAuthorization();
 
 app.MapControllerRoute(

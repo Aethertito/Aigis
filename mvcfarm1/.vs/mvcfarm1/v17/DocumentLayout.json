@@ -3,78 +3,154 @@
   "WorkspaceRootPath": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\services\\iusuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:services\\iusuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:apicontrollers\\packagesapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\properties\\servicedependencies.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:properties\\servicedependencies.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\dataaccess\\sqlserverconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:dataaccess\\sqlserverconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\support.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\support.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\data\\mvcfarmdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:data\\mvcfarmdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\ayudausuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\ayudausuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\mvcfarm1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:mvcfarm1.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\services\\usuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:services\\usuarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\controllers\\packagescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:controllers\\packagescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\dal\\usuariodal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:dal\\usuariodal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\registermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\registermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\controllers\\ayudausuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:controllers\\ayudausuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\services\\packageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:services\\packageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\charts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\charts.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\services\\ipackageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:services\\ipackageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\packages.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\packages.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\sensors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\sensors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\paquetescomprados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\paquetescomprados.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\pagos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\pagos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\membresias.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\membresias.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\citas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\citas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\dal\\ayudausuariosdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:dal\\ayudausuariosdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\models\\estadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:models\\estadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\login\\profile.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\login\\profile.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|c:\\xampp2\\htdocs\\utt4b\\aigis\\mvcfarm1\\views\\home\\packages.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5B0A665B-A379-4294-9BE5-6DB1823F00FA}|mvcfarm1.csproj|solutionrelative:views\\home\\packages.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -84,7 +160,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 286,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -92,241 +168,69 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:27:04.037Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AQIAABgAAAAAAAAAAAAowBkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:50:27.61Z",
+              "DocumentIndex": 1,
+              "Title": "site.js",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\site.js",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "wwwroot\\js\\site.js",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-08-02T04:42:21.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PackagesApiController.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\ApiControllers\\PackagesApiController.cs",
-              "RelativeDocumentMoniker": "ApiControllers\\PackagesApiController.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\ApiControllers\\PackagesApiController.cs",
-              "RelativeToolTip": "ApiControllers\\PackagesApiController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:14:49.55Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Login.cshtml",
-              "RelativeDocumentMoniker": "Views\\Login\\Login.cshtml",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Login.cshtml",
-              "RelativeToolTip": "Views\\Login\\Login.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwBUAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-02T00:27:24.473Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IUsuarioService.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\IUsuarioService.cs",
-              "RelativeDocumentMoniker": "Services\\IUsuarioService.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\IUsuarioService.cs",
-              "RelativeToolTip": "Services\\IUsuarioService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:26:06.603Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "UsuarioService.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\UsuarioService.cs",
-              "RelativeDocumentMoniker": "Services\\UsuarioService.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\UsuarioService.cs",
-              "RelativeToolTip": "Services\\UsuarioService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:26:33.118Z",
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AQIAABIAAAAAAAAAAAAQwEEAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-08-02T04:42:10.014Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAACXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-08-02T00:44:51.232Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Usuario.cs",
-              "RelativeDocumentMoniker": "Models\\Usuario.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Usuario.cs",
-              "RelativeToolTip": "Models\\Usuario.cs",
-              "ViewState": "AQIAAAQAAAAAAAAAAAAuwAwAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:25:02.993Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "mvcfarmDBContext.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Data\\mvcfarmDBContext.cs",
-              "RelativeDocumentMoniker": "Data\\mvcfarmDBContext.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Data\\mvcfarmDBContext.cs",
-              "RelativeToolTip": "Data\\mvcfarmDBContext.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAxwA4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:16:42.498Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-01T18:42:27.991Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "PackagesController.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\PackagesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PackagesController.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\PackagesController.cs",
-              "RelativeToolTip": "Controllers\\PackagesController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-01T17:05:26.839Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Profile.cshtml",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml",
-              "RelativeDocumentMoniker": "Views\\Login\\Profile.cshtml",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml",
-              "RelativeToolTip": "Views\\Login\\Profile.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Title": "Support.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Support.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Support.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Support.cshtml",
+              "RelativeToolTip": "Views\\Home\\Support.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-02T01:22:27.662Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "PackageService.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\PackageService.cs",
-              "RelativeDocumentMoniker": "Services\\PackageService.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\PackageService.cs",
-              "RelativeToolTip": "Services\\PackageService.cs",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAIwAYAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:16:09.991Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Register.cshtml",
-              "RelativeDocumentMoniker": "Views\\Login\\Register.cshtml",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Register.cshtml",
-              "RelativeToolTip": "Views\\Login\\Register.cshtml",
-              "ViewState": "AQIAABIAAAAAAAAAAAAuwCcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-02T00:27:37.949Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-02T04:25:54.566Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "Package.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Package.cs",
-              "RelativeDocumentMoniker": "Models\\Package.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Package.cs",
-              "RelativeToolTip": "Models\\Package.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:15:12.013Z",
-              "EditorCaption": ""
+              "Title": "mvcfarm1.csproj",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+              "RelativeDocumentMoniker": "mvcfarm1.csproj",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\mvcfarm1.csproj",
+              "RelativeToolTip": "mvcfarm1.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-08-02T04:14:39.515Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "IPackageService.cs",
-              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\IPackageService.cs",
-              "RelativeDocumentMoniker": "Services\\IPackageService.cs",
-              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Services\\IPackageService.cs",
-              "RelativeToolTip": "Services\\IPackageService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:14:06.137Z",
-              "EditorCaption": ""
+              "DocumentIndex": 14,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAAEsAAAAAAAAAAAAiwKMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T03:42:21.634Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "FileConfigurationProvider.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
-              "ToolTip": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs [Solo lectura]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs [Solo lectura]",
-              "ViewState": "AQIAADsAAAAAAAAAAAAAAEgAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:44:18.866Z",
-              "EditorCaption": " [Solo lectura]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "AuthenticationOptions.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
-              "ToolTip": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs [Solo lectura]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs [Solo lectura]",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADYAAAADAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:45:30.319Z",
-              "EditorCaption": " [Solo lectura]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 24,
               "Title": "Packages.cshtml",
               "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Packages.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Packages.cshtml",
@@ -334,8 +238,393 @@
               "RelativeToolTip": "Views\\Home\\Packages.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-31T06:22:22.103Z",
+              "WhenOpened": "2024-07-31T06:22:22.103Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAiwDwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-01T18:42:27.991Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T03:37:35.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AQIAADEAAAAAAAAAAAAiwF8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:50:27.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:27:04.037Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-02T00:44:51.232Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-02T04:17:05.466Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "serviceDependencies.json",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Properties\\serviceDependencies.json",
+              "RelativeDocumentMoniker": "Properties\\serviceDependencies.json",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Properties\\serviceDependencies.json",
+              "RelativeToolTip": "Properties\\serviceDependencies.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-02T04:38:11.266Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SqlServerConnection.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DataAccess\\SqlServerConnection.cs",
+              "RelativeDocumentMoniker": "DataAccess\\SqlServerConnection.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DataAccess\\SqlServerConnection.cs",
+              "RelativeToolTip": "DataAccess\\SqlServerConnection.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:15:59.011Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AyudaUsuarios.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\AyudaUsuarios.cs",
+              "RelativeDocumentMoniker": "Models\\AyudaUsuarios.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\AyudaUsuarios.cs",
+              "RelativeToolTip": "Models\\AyudaUsuarios.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T02:47:00.222Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "Views\\_ViewImports.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T04:15:27.226Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Views\\_ViewStart.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T04:15:31.482Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Privacy.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Privacy.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Privacy.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Privacy.cshtml",
+              "RelativeToolTip": "Views\\Home\\Privacy.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T03:43:11.068Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Login\\Login.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Login.cshtml",
+              "RelativeToolTip": "Views\\Login\\Login.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T00:27:24.473Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Pagos.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Pagos.cs",
+              "RelativeDocumentMoniker": "Models\\Pagos.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Pagos.cs",
+              "RelativeToolTip": "Models\\Pagos.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T02:57:57.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AyudaUsuariosController.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AyudaUsuariosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AyudaUsuariosController.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Controllers\\AyudaUsuariosController.cs",
+              "RelativeToolTip": "Controllers\\AyudaUsuariosController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:27:58.417Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "UsuarioDAL.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DAL\\UsuarioDAL.cs",
+              "RelativeDocumentMoniker": "DAL\\UsuarioDAL.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DAL\\UsuarioDAL.cs",
+              "RelativeToolTip": "DAL\\UsuarioDAL.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:55:29.844Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "RegisterModel.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\RegisterModel.cs",
+              "RelativeDocumentMoniker": "Models\\RegisterModel.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\RegisterModel.cs",
+              "RelativeToolTip": "Models\\RegisterModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:54:45.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "LoginModel.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\LoginModel.cs",
+              "RelativeDocumentMoniker": "Models\\LoginModel.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\LoginModel.cs",
+              "RelativeToolTip": "Models\\LoginModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:54:33.884Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "Models\\Usuario.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Usuario.cs",
+              "RelativeToolTip": "Models\\Usuario.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:25:02.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Package.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Package.cs",
+              "RelativeDocumentMoniker": "Models\\Package.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Package.cs",
+              "RelativeToolTip": "Models\\Package.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:15:12.013Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Charts.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Charts.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Charts.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Home\\Charts.cshtml",
+              "RelativeToolTip": "Views\\Home\\Charts.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T03:35:09.522Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml",
+              "RelativeDocumentMoniker": "Views\\Login\\Profile.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml",
+              "RelativeToolTip": "Views\\Login\\Profile.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T01:22:27.662Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Login\\Register.cshtml",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Register.cshtml",
+              "RelativeToolTip": "Views\\Login\\Register.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-02T00:27:37.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "PaquetesComprados.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\PaquetesComprados.cs",
+              "RelativeDocumentMoniker": "Models\\PaquetesComprados.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\PaquetesComprados.cs",
+              "RelativeToolTip": "Models\\PaquetesComprados.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:01:13.044Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Sensors.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Sensors.cs",
+              "RelativeDocumentMoniker": "Models\\Sensors.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Sensors.cs",
+              "RelativeToolTip": "Models\\Sensors.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:02:31.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Membresias.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Membresias.cs",
+              "RelativeDocumentMoniker": "Models\\Membresias.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Membresias.cs",
+              "RelativeToolTip": "Models\\Membresias.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T02:53:54.581Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Citas.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Citas.cs",
+              "RelativeDocumentMoniker": "Models\\Citas.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Citas.cs",
+              "RelativeToolTip": "Models\\Citas.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T02:47:08.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "AyudaUsuariosDAL.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DAL\\AyudaUsuariosDAL.cs",
+              "RelativeDocumentMoniker": "DAL\\AyudaUsuariosDAL.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\DAL\\AyudaUsuariosDAL.cs",
+              "RelativeToolTip": "DAL\\AyudaUsuariosDAL.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:13:55.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "Estadisticas.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Estadisticas.cs",
+              "RelativeDocumentMoniker": "Models\\Estadisticas.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Models\\Estadisticas.cs",
+              "RelativeToolTip": "Models\\Estadisticas.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T03:06:48.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Profile.cshtml.cs",
+              "DocumentMoniker": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml.cs",
+              "RelativeDocumentMoniker": "Views\\Login\\Profile.cshtml.cs",
+              "ToolTip": "C:\\xampp2\\htdocs\\UTT4B\\Aigis\\mvcfarm1\\Views\\Login\\Profile.cshtml.cs",
+              "RelativeToolTip": "Views\\Login\\Profile.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T01:47:57.694Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "FileConfigurationProvider.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
+              "ToolTip": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\b38c7bbc046e461a8a58c7e0eb00bea4828feec3606c51aaae6062bc28a1448e\\FileConfigurationProvider.cs",
+              "ViewState": "AQIAADIAAAAAAAAAACBjwEgAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:44:18.866Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "AuthenticationOptions.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
+              "ToolTip": "C:\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Users\\PC\\AppData\\Local\\Temp\\.vsdbgsrc\\c419dad7302b3e96c2c38cca4039887fbe745db760d3004f23d2549a94084090\\AuthenticationOptions.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADYAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-02T00:45:30.319Z"
             }
           ]
         }

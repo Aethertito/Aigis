@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims;
-@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
@@ -15,166 +15,143 @@
 </head>
 <body class="fondoGris">
     <style>
-        .salir{
+        .salir {
             margin-left: auto;
         }
 
         .sidebar {
             position: fixed;
-            width: 200px;
+            width: 240px;
             z-index: 1000;
             left: 0;
             top: 0;
             border-right: 1px solid #162636;
             height: 100%;
         }
-
     </style>
     <header>
-        @if (@ViewData["Title"] != "Login" && @ViewData["Title"] != "Register")
-        {
-            @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">A.I.G.I.S</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">AIGIS</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            @if (ViewData["Title"] != "Login" && ViewData["Title"] != "Register")
+            {
+                <div class="col-md-2">
+                    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+                        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4 fw-bold">A.I.G.I.S</span>
+                        </a>
+                        <hr>
+                        <ul class="nav nav-pills flex-column mb-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                                <a class="nav-link text-white @(ViewBag.Active == "Home" ? "linkActive" : "")" asp-controller="Home" asp-action="Index">
+                                    <i class="fa fa-home mx-2"></i>
+                                    Home
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Charts">Charts</a>
+                                <a class="nav-link text-white @(ViewBag.Active == "Packages" ? "linkActive" : "")" asp-controller="Home" asp-action="Packages">
+                                    <i class="fa fa-box mx-2"></i>
+                                    Packages
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">About</a>
+                                <a class="nav-link text-white @(ViewBag.Active == "Sensors" ? "linkActive" : "")" asp-controller="Home" asp-action="Sensors">
+                                    <i class="fa fa-microchip mx-2"></i>
+                                    Sensors
+                                </a>
                             </li>
-                            <li class="nav-item bg-danger salir rounded">
-                                <a class="btn btn-danger text-white rounded shadow-sm fw-bold" role="button" asp-area="" asp-controller="Login" asp-action="Logout">Log Out</a>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "Orders" ? "linkActive" : "")" asp-controller="Home" asp-action="Orders">
+                                    <i class="fa fa-table mx-2"></i>
+                                    Orders
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "Graphics" ? "linkActive" : "")" asp-controller="Home" asp-action="Charts">
+                                    <i class="fa fa-chart-line mx-2"></i>
+                                    Graphics
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "Cameras" ? "linkActive" : "")" asp-controller="Home" asp-action="Cameras">
+                                    <i class="fa fa-video mx-2"></i>
+                                    Cameras
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "Appointment" ? "linkActive" : "")" asp-controller="Home" asp-action="Appointment">
+                                    <i class="fa fa-calendar mx-2"></i>
+                                    Appointment
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "LocationsSensors" ? "linkActive" : "")" asp-controller="Home" asp-action="LocationsSensors">
+                                    <i class="fa fa-map-marker-alt mx-2"></i>
+                                    Locations Sensors
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "Support" ? "linkActive" : "")" asp-controller="Home" asp-action="Support">
+                                    <i class="fa fa-life-ring mx-2"></i>
+                                    Support
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "SupportHistory" ? "linkActive" : "")" asp-controller="Home" asp-action="SupportHistory">
+                                    <i class="fa fa-history mx-2"></i>
+                                    Support History
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white @(ViewBag.Active == "PremiumPackages" ? "linkActive" : "")" asp-controller="Home" asp-action="PremiumPackages">
+                                    <i class="fa fa-star mx-2"></i>
+                                    Premium Packages
+                                </a>
                             </li>
                         </ul>
+                        <hr>
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                                <strong>
+                                    @if (HttpContextAccessor.HttpContext.User.Identity!.IsAuthenticated)
+                                    {
+                                        @HttpContextAccessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).FirstOrDefault()
+                                    }
+                                </strong>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <button type="submit" class="dropdown-item">Log Out</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </nav> *@
-
-
-            <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 240px; height: 100%;">
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                    <span class="fs-4 fw-bold">A.I.G.I.S</span>
-                </a>
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Home" ? "linkActive" : "")" asp-controller="Home" asp-action="Index">
-                            <i class="fa fa-home mx-2"></i>
-                            Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Packages" ? "linkActive" : "")" asp-controller="Home" asp-action="Packages">
-                            <i class="fa fa-box mx-2"></i>
-                            Packages
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Sensors" ? "linkActive" : "")" asp-controller="Home" asp-action="Sensors">
-                            <i class="fa fa-microchip mx-2"></i>
-                            Sensors
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Orders" ? "linkActive" : "")" asp-controller="Home" asp-action="Orders">
-                            <i class="fa fa-table mx-2"></i>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Graphics" ? "linkActive" : "")" asp-controller="Home" asp-action="Charts">
-                            <i class="fa fa-chart-line mx-2"></i>
-                            Graphics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Cameras" ? "linkActive" : "")" asp-controller="Home" asp-action="Cameras">
-                            <i class="fa fa-video mx-2"></i>
-                            Cameras
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Appointment" ? "linkActive" : "")" asp-controller="Home" asp-action="Appointment">
-                            <i class="fa fa-calendar mx-2"></i>
-                            Appointment
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "LocationsSensors" ? "linkActive" : "")" asp-controller="Home" asp-action="LocationsSensors">
-                            <i class="fa fa-map-marker-alt mx-2"></i>
-                            Locations Sensors
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "Support" ? "linkActive" : "")" asp-controller="Home" asp-action="Support">
-                            <i class="fa fa-life-ring mx-2"></i>
-                            Support
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "SupportHistory" ? "linkActive" : "")" asp-controller="Home" asp-action="SupportHistory">
-                            <i class="fa fa-history mx-2"></i>
-                            Support History
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @(ViewBag.Active == "PremiumPackages" ? "linkActive" : "")" asp-controller="Home" asp-action="PremiumPackages">
-                            <i class="fa fa-star mx-2"></i>
-                            Premium Packages
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                        <strong>
-                            @if (User.Identity!.IsAuthenticated)
-                            {
-                                @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).FirstOrDefault()
-                            }
-                        </strong>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-white rounded shadow-sm fw-bold" role="button" asp-controller="Login" asp-action="Logout">Log Out</a></li>
-                    </ul>
-                </div>
+            }
+            <div class="col-md-@((ViewData["Title"] != "Login" && ViewData["Title"] != "Register") ? "10" : "12")">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-
-
-        }
-        else
-        {
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">AIGIS</a>                  
-                </div>
-            </nav>
-        }
-        
-    </header>
-    <div class="container ">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
     <footer class="border-top bg-dark footer text-muted">
-        <div class="container">            
-            &copy; 2024 - Empresa de Seguridad - <a asp-area="" asp-controller="Home" asp-action="Privacy">Aviso de Privacidad</a>
+        <div class="container">
+            &copy; 2024 - Empresa de Seguridad - <a href="/Home/Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -182,10 +159,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-    <script>
-
-
-    </script>
 </body>
 </html>
