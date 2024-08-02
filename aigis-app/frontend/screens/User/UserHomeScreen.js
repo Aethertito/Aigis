@@ -13,13 +13,7 @@ const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [viewMode, setViewMode] = useState('day');
   const [userId, setUserId] = useState(null);
-  const [weather, setWeather] = useState({
-    temperature: null,
-    location: '',
-    date: '',
-    icon: '',
-    condition: '',
-  });
+  const [weather, setWeather] = useState({});
   const [selectedData, setSelectedData] = useState('temperature');
   const [sensors, setSensors] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -30,8 +24,11 @@ const UserHomeScreen = ({ navigation }) => {
   const [weeklySmokeData, setWeeklySmokeData] = useState([]);
 
   useEffect(() => {
-    getUserId();
-    fetchWeather();
+    const fetchInitialData = async () => {
+      await getUserId();
+      fetchWeather();
+    };
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
@@ -49,10 +46,6 @@ const UserHomeScreen = ({ navigation }) => {
       fetchData(viewMode);
     }
   }, [viewMode, selectedLocation]);
-
-  useEffect(() => {
-    // console.log('Weekly Smoke Data:', weeklySmokeData);
-  }, [weeklySmokeData]);
 
   const getUserId = async () => {
     try {
@@ -104,7 +97,7 @@ const UserHomeScreen = ({ navigation }) => {
   
       if (mode === 'day') {
         startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-      } else {
+      } else if (mode === 'week') {
         startDate = new Date(endDate);
         startDate.setDate(startDate.getDate() - 7);
       }
@@ -119,9 +112,9 @@ const UserHomeScreen = ({ navigation }) => {
       const response = await axios.get(`http://${IP}:3000/api/statistics`, {
         params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
       });
+  
       const statistics = response.data;
   
-      // Verificación de los datos recibidos
       console.log('Statistics received:', statistics);
   
       const processedData = processData(statistics, mode);
@@ -129,43 +122,57 @@ const UserHomeScreen = ({ navigation }) => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };  
+  };
 
   const processData = (statistics, mode) => {
     if (!statistics || statistics.length === 0) return [];
-
-    const mappedData = statistics.flatMap(stat =>
-      stat.valores.map(entry => ({
-        date: mode === 'day' ? entry.fecha.split('T')[0] : `Week ${moment(entry.fecha).isoWeek()}`,
-        temperature: entry.valor.temperatura || 0,
-        humidity: entry.valor.humedad || 0,
-      }))
-    );
-
-    console.log('Mapped Data:', mappedData);
-
-    return mappedData;
-  };
-
-  const fetchMaxSmokeValue = async () => {
-    try {
-      if (!userId) return;
   
-      const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
-        params: { userId: userId }
+    if (mode === 'day') {
+      // Filtrar datos solo para el día de hoy
+      const today = moment().startOf('day');
+      return statistics.flatMap(stat =>
+        stat.valores
+          .filter(entry => moment(entry.fecha).isSame(today, 'day'))
+          .map(entry => ({
+            date: moment(entry.fecha).format('HH:mm'),
+            temperature: entry.valor.temperatura || 0,
+            humidity: entry.valor.humedad || 0,
+          }))
+      );
+    } else {
+      // Procesar datos semanales, seleccionando un dato representativo por día
+      const startDate = moment().startOf('week');
+      const dataByDay = {};
+  
+      statistics.forEach(stat => {
+        stat.valores.forEach(entry => {
+          const day = moment(entry.fecha).format('YYYY-MM-DD'); // Agrupar por día completo
+          if (!dataByDay[day]) {
+            dataByDay[day] = {
+              date: moment(entry.fecha).format('dddd'), // Día de la semana
+              temperature: entry.valor.temperatura || 0,
+              humidity: entry.valor.humedad || 0,
+            };
+          }
+        });
       });
   
-      if (response.data && response.data.maxValue !== undefined) {
-        // console.log('Max smoke value:', response.data.maxValue);
-        setMaxSmoke(response.data.maxValue);
-      } else {
-        console.log('No smoke data found');
-        setMaxSmoke(null);
-      }
-    } catch (error) {
-      console.error('Error fetching max smoke value:', error);
-      setMaxSmoke(null);
+      // Convertir a un array
+      return Object.values(dataByDay);
     }
+  };
+  
+
+  const maxSmokeValueForDay = (statistics) => {
+    let maxSmoke = null;
+    for (const stat of statistics) {
+      for (const val of stat.valores) {
+        if (val.valor !== null && typeof val.valor === 'number') {
+          maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, val.valor) : val.valor;
+        }
+      }
+    }
+    return maxSmoke;
   };
 
   const fetchPresenceData = async () => {
@@ -178,7 +185,6 @@ const UserHomeScreen = ({ navigation }) => {
   
       if (response.data && response.data.valores && response.data.valores.length > 0) {
         const sortedValues = response.data.valores.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        // console.log('Sorted presence values:', sortedValues);
         const latestPresence = sortedValues[0].valor;
         setPresenceDetected(latestPresence === 1 ? 'Presence detected' : 'No presence detected');
       } else {
@@ -194,23 +200,27 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchRFIDEvents = async () => {
     try {
       if (!userId) return;
-
+  
       const response = await axios.get(`http://${IP}:3000/api/sensor/rfid/events`, {
         params: { userId: userId }
       });
-
+  
+      // Verifica el contenido de response.data para asegurar que contiene los datos esperados
+      console.log('RFID Events:', response.data);
+  
+      // Procesa los eventos obtenidos
       if (response.data && response.data.length > 0) {
         const sortedEvents = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
         const lastCheckIn = sortedEvents.find(event => event.tipo === 'entrada');
         const lastCheckOut = sortedEvents.find(event => event.tipo === 'salida');
-
+  
         if (lastCheckIn) {
           const formattedCheckInDate = moment(lastCheckIn.fecha).format("HH:mm");
           setCheckInMessage(`Entry registered at ${formattedCheckInDate}`);
         } else {
           setCheckInMessage('No check-in data available');
         }
-
+  
         if (lastCheckOut) {
           const formattedCheckOutDate = moment(lastCheckOut.fecha).format("HH:mm");
           setCheckOutMessage(`Exit registered at ${formattedCheckOutDate}`);
@@ -227,24 +237,41 @@ const UserHomeScreen = ({ navigation }) => {
       setCheckOutMessage('Error fetching check-out data');
     }
   };
-
+  
   const fetchWeeklyMaxSmokeValues = async () => {
     try {
       if (!userId) return;
-
+  
       const response = await axios.get(`http://${IP}:3000/api/smoke/weeklyMax`, {
         params: { userId: userId }
       });
-
+  
       if (response.data && response.data.length > 0) {
-        const colors = ['#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#FFA07A', '#FF8C00', '#FF4500'];
-        const data = response.data.map((day, index) => ({
-          name: `Day ${index + 1}`, // Puedes modificar esto para mostrar una etiqueta más significativa
-          maxSmoke: day.valor !== null ? day.valor : 0,
-          color: colors[index % colors.length],
-          legendFontColor: "#F4F6FC",
-          legendFontSize: 15
-        }));
+        const maxValuesByDay = {};
+  
+        response.data.forEach((dayData) => {
+          const date = new Date(dayData.date);
+          const dayString = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+          if (dayData.valor !== null) {
+            // Guardar solo el valor máximo por día
+            if (!maxValuesByDay[dayString] || maxValuesByDay[dayString] < dayData.valor) {
+              maxValuesByDay[dayString] = dayData.valor;
+            }
+          }
+        });
+  
+        // Crear el array de datos para la gráfica
+        const data = Object.entries(maxValuesByDay).map(([dayString, maxValue], index) => {
+          const [year, month, day] = dayString.split('-');
+          return {
+            name: `${day}/${month}/${year.slice(2)}`, // Formato DD/MM/AA
+            maxSmoke: maxValue,
+            color: colors[index % colors.length],
+            legendFontColor: "#F4F6FC",
+            legendFontSize: 15
+          };
+        });
+  
         setWeeklySmokeData(data);
       } else {
         setWeeklySmokeData([]);
@@ -254,7 +281,7 @@ const UserHomeScreen = ({ navigation }) => {
       setWeeklySmokeData([]);
     }
   };
-
+  
   const classifySmokeLevel = (value) => {
     if (value === null || value === undefined) return 'Unknown';
     if (value < 100) return 'Low';

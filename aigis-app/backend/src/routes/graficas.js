@@ -26,7 +26,7 @@ router.get('/sensors', getUserSensors);
 router.get('/sensor/presence', getPresenceData);
 
 // Rutas para obtener eventos RFID
-router.get('/api/sensor/rfid/events', getRFID);
+router.get('/sensor/rfid/events', getRFID);
 
 // Rutas para obtener el valor máximo semanal del humo
 router.get('/smoke/weeklyMax', getWeeklyMaxSmokeValues);

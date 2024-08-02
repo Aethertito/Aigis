@@ -78,56 +78,29 @@ exports.getSensorStatistics = async (req, res) => {
 exports.getMaxSmokeValue = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log('Received request to get max smoke value for user:', userId);
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      console.log('Invalid or missing user ID:', userId);
       return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
-    // Encontrar paquetes comprados con sensores de tipo "Smoke"
-    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "Smoke" }).populate('sensores.sensor_id');
-    console.log('Found paquetesComprados:', paquetesComprados);
+    const endDate = new Date();
+    const startDate = new Date(endDate);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
 
-    if (!paquetesComprados || paquetesComprados.length === 0) {
-      console.log('No smoke sensors found for this user.');
-      return res.status(404).json({ message: 'No smoke sensors found for this user.' });
-    }
+    const statistics = await Estadistica.find({
+      sensor_id: { $in: paquetesComprados.map(p => p.sensores.map(s => s.sensor_id)).flat() },
+      'valores.fecha': { $gte: startDate, $lte: endDate }
+    });
 
-    let maxSmoke = null;
-
-    for (const paquete of paquetesComprados) {
-      for (const sensor of paquete.sensores) {
-        console.log('Processing sensor:', sensor);
-        if (sensor.tipo === 'Smoke') {
-          // Obtener estadísticas ordenadas por valor descendente
-          const estadisticas = await Estadistica.find({ sensor_id: sensor.sensor_id }).sort({ 'valores.valor': -1 });
-
-          if (estadisticas.length > 0) {
-            // Extraer los valores de los objetos de estadísticas
-            const valores = estadisticas.flatMap(est => est.valores.map(v => v.valor));
-            console.log('Valores de estadísticas del sensor:', valores);
-
-            // Filtrar valores no numéricos y encontrar el máximo
-            const maxValor = Math.max(...valores.filter(v => typeof v === 'number'));
-
-            if (!isNaN(maxValor)) {
-              maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, maxValor) : maxValor;
-            }
-          }
-        }
-      }
-    }
+    const maxSmoke = maxSmokeValueForDay(statistics);
 
     if (maxSmoke === null) {
-      console.log('No valid smoke data available.');
       return res.status(404).json({ message: 'No valid smoke data available.' });
     }
 
-    console.log('Max smoke value found:', maxSmoke);
     res.status(200).json({ maxValue: maxSmoke });
   } catch (error) {
-    console.error('Error fetching max smoke value:', error);
     res.status(500).json({ message: 'Error fetching max smoke value', error });
   }
 };
@@ -225,35 +198,52 @@ exports.getRFID = async (req, res) => {
     const { userId } = req.query;
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      console.error('Invalid or missing user ID:', userId);
       return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
-    console.log('Fetching RFID events for userId:', userId);
+    console.log('Fetching RFID events for sensor_id:', userId);
 
-    // Encuentra los eventos de RFID para el sensor del usuario
-    const eventos = await Estadistica.find({
-      'sensor_id': new mongoose.Types.ObjectId(userId), // Asegúrate de que estás buscando por el campo correcto y con el tipo de datos correcto
-      'tipo': 'RFID',
-    }).sort({ 'historial.fecha': -1 });
+    const sensorObjectId = new mongoose.Types.ObjectId(userId);
 
-    if (!eventos || eventos.length === 0) {
-      console.log('No RFID events found for userId:', userId);
+    const eventosRFID = await Estadistica.find({
+      sensor_id: sensorObjectId,
+      tipo: 'RFID'
+    });
+
+    console.log('Documents found:', eventosRFID.length);
+
+    if (!eventosRFID.length) {
+      console.log('No RFID events found for sensor_id:', userId);
       return res.status(404).json({ message: 'No RFID events found.' });
     }
 
-    console.log('RFID events fetched:', eventos);
+    const rfidEvents = eventosRFID.flatMap(evento => {
+      console.log('Processing document:', evento);
+      if (!evento.historial || !Array.isArray(evento.historial)) {
+        console.warn('Event has no valid history:', evento);
+        return []; // Skip events without valid history
+      }
+      return evento.historial.filter(h => h.tipo === 'entrada' || h.tipo === 'salida');
+    });
 
-    const lastCheckIn = eventos[0].historial.find(event => event.tipo === 'entrada');
-    const lastCheckOut = eventos[0].historial.find(event => event.tipo === 'salida');
+    console.log('RFID Events extracted:', rfidEvents);
 
-    res.status(200).json({ checkIn: lastCheckIn, checkOut: lastCheckOut });
+    if (!rfidEvents.length) {
+      console.log('No valid RFID events found in history for sensor_id:', userId);
+      return res.status(404).json({ message: 'No valid RFID events found in history.' });
+    }
 
+    rfidEvents.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+    console.log('Sorted RFID events:', rfidEvents);
+
+    res.status(200).json(rfidEvents);
   } catch (error) {
     console.error('Error fetching RFID events:', error);
-    res.status(500).json({ message: 'Error fetching RFID events', error });
+    res.status(500).json({ message: 'Error fetching RFID events', error: error.message });
   }
 };
-
 
 // Controlador para obtener los valores máximos de humo de los últimos 7 días
 exports.getWeeklyMaxSmokeValues = async (req, res) => {
@@ -271,7 +261,7 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
     }
 
     const endDate = new Date();
-    const startDate = new Date();
+    const startDate = new Date(endDate);
     startDate.setDate(endDate.getDate() - 7);
 
     const weeklyMaxValues = [];
@@ -284,26 +274,12 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
       const dayEnd = new Date(dayStart);
       dayEnd.setHours(23, 59, 59, 999);
 
-      let maxSmoke = null;
+      const statistics = await Estadistica.find({
+        sensor_id: { $in: paquetesComprados.map(p => p.sensores.map(s => s.sensor_id)).flat() },
+        'valores.fecha': { $gte: dayStart, $lte: dayEnd }
+      });
 
-      for (const paquete of paquetesComprados) {
-        for (const sensor of paquete.sensores) {
-          if (sensor.sensor_id && sensor.sensor_id.tipo === 'Smoke') {
-            const estadisticas = await Estadistica.find({
-              sensor_id: sensor.sensor_id,
-              'valores.fecha': { $gte: dayStart, $lte: dayEnd }
-            });
-
-            for (const estadistica of estadisticas) {
-              for (const valor of estadistica.valores) {
-                if (valor.valor !== null && typeof valor.valor === 'number') {
-                  maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, valor.valor) : valor.valor;
-                }
-              }
-            }
-          }
-        }
-      }
+      const maxSmoke = maxSmokeValueForDay(statistics);
 
       weeklyMaxValues.push({ date: dayStart, valor: maxSmoke });
     }

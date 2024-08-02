@@ -56,7 +56,12 @@ app.use('/paqueteComprado', PaqueteCompradoRoutes);
 app.use('/api', GraficasRoutes);
 app.use('/support', SupportRoutes); 
 
-// Poner servidor a escuchar paticiones http
+// Middleware para manejar errores 404
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Endpoint not found" });
+});
+
+// Poner servidor a escuchar peticiones HTTP
 app.listen(port, () => {
   console.log(`Servidor iniciando en el ${port}`)
 })
