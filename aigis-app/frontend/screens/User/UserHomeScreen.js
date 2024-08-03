@@ -94,7 +94,7 @@ const UserHomeScreen = ({ navigation }) => {
     try {
       const endDate = new Date();
       let startDate;
-  
+
       if (mode === 'day') {
         startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
       } else if (mode === 'week') {
@@ -103,20 +103,20 @@ const UserHomeScreen = ({ navigation }) => {
       }
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
-  
+
       const temperatureSensors = sensors.filter(sensor => sensor.tipo === 'Temperature and Humidity');
       const sensorIds = temperatureSensors.map(sensor => sensor._id).join(',');
-  
+
       if (!sensorIds) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/statistics`, {
         params: { sensorIds, startDate: startDate.toISOString(), endDate: endDate.toISOString() }
       });
-  
+
       const statistics = response.data;
-  
+
       console.log('Statistics received:', statistics);
-  
+
       const processedData = processData(statistics, mode);
       setData(processedData);
     } catch (error) {
@@ -126,7 +126,7 @@ const UserHomeScreen = ({ navigation }) => {
 
   const processData = (statistics, mode) => {
     if (!statistics || statistics.length === 0) return [];
-  
+
     if (mode === 'day') {
       // Filtrar datos solo para el día de hoy
       const today = moment().startOf('day');
@@ -143,7 +143,7 @@ const UserHomeScreen = ({ navigation }) => {
       // Procesar datos semanales, seleccionando un dato representativo por día
       const startDate = moment().startOf('week');
       const dataByDay = {};
-  
+
       statistics.forEach(stat => {
         stat.valores.forEach(entry => {
           const day = moment(entry.fecha).format('YYYY-MM-DD'); // Agrupar por día completo
@@ -156,33 +156,42 @@ const UserHomeScreen = ({ navigation }) => {
           }
         });
       });
-  
+
       // Convertir a un array
       return Object.values(dataByDay);
     }
   };
-  
 
-  const maxSmokeValueForDay = (statistics) => {
-    let maxSmoke = null;
-    for (const stat of statistics) {
-      for (const val of stat.valores) {
-        if (val.valor !== null && typeof val.valor === 'number') {
-          maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, val.valor) : val.valor;
-        }
+  const fetchMaxSmokeValue = async () => {
+    try {
+      if (!userId) return;
+
+      const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
+        params: { userId: userId }
+      });
+
+      console.log('Response from /sensor/smoke/max:', response.data);
+
+      if (response.data && response.data.maxValue !== undefined) {
+        setMaxSmoke(response.data.maxValue);
+      } else {
+        console.log('No smoke data found');
+        setMaxSmoke(null);
       }
+    } catch (error) {
+      console.error('Error fetching max smoke value:', error);
+      setMaxSmoke(null);
     }
-    return maxSmoke;
   };
-
+  
   const fetchPresenceData = async () => {
     try {
       if (!userId) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/sensor/presence`, {
         params: { userId: userId }
       });
-  
+
       if (response.data && response.data.valores && response.data.valores.length > 0) {
         const sortedValues = response.data.valores.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
         const latestPresence = sortedValues[0].valor;
@@ -200,27 +209,27 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchRFIDEvents = async () => {
     try {
       if (!userId) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/sensor/rfid/events`, {
         params: { userId: userId }
       });
-  
+
       // Verifica el contenido de response.data para asegurar que contiene los datos esperados
       console.log('RFID Events:', response.data);
-  
+
       // Procesa los eventos obtenidos
       if (response.data && response.data.length > 0) {
         const sortedEvents = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
         const lastCheckIn = sortedEvents.find(event => event.tipo === 'entrada');
         const lastCheckOut = sortedEvents.find(event => event.tipo === 'salida');
-  
+
         if (lastCheckIn) {
           const formattedCheckInDate = moment(lastCheckIn.fecha).format("HH:mm");
           setCheckInMessage(`Entry registered at ${formattedCheckInDate}`);
         } else {
           setCheckInMessage('No check-in data available');
         }
-  
+
         if (lastCheckOut) {
           const formattedCheckOutDate = moment(lastCheckOut.fecha).format("HH:mm");
           setCheckOutMessage(`Exit registered at ${formattedCheckOutDate}`);
@@ -237,7 +246,8 @@ const UserHomeScreen = ({ navigation }) => {
       setCheckOutMessage('Error fetching check-out data');
     }
   };
-  
+
+  // Método para obtener los valores máximos de humo de la semana
   const fetchWeeklyMaxSmokeValues = async () => {
     try {
       if (!userId) return;
@@ -247,32 +257,21 @@ const UserHomeScreen = ({ navigation }) => {
       });
   
       if (response.data && response.data.length > 0) {
-        const maxValuesByDay = {};
-  
-        response.data.forEach((dayData) => {
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const maxValuesByDay = response.data.map((dayData, index) => {
           const date = new Date(dayData.date);
-          const dayString = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-          if (dayData.valor !== null) {
-            // Guardar solo el valor máximo por día
-            if (!maxValuesByDay[dayString] || maxValuesByDay[dayString] < dayData.valor) {
-              maxValuesByDay[dayString] = dayData.valor;
-            }
-          }
-        });
-  
-        // Crear el array de datos para la gráfica
-        const data = Object.entries(maxValuesByDay).map(([dayString, maxValue], index) => {
-          const [year, month, day] = dayString.split('-');
+          const dayName = daysOfWeek[date.getDay()]; // Obtiene el nombre del día de la semana
+          const maxSmoke = dayData.valor !== null ? dayData.valor : 0;
           return {
-            name: `${day}/${month}/${year.slice(2)}`, // Formato DD/MM/AA
-            maxSmoke: maxValue,
-            color: colors[index % colors.length],
+            name: dayName, // Solo el nombre del día
+            maxSmoke: maxSmoke, // Valor de humo máximo
+            color: ['#FF0000', '#FF4500', '#FF6347', '#FF7F50', '#FFA07A', '#FF8C00', '#FF4500'][index % 7],
             legendFontColor: "#F4F6FC",
             legendFontSize: 15
           };
         });
   
-        setWeeklySmokeData(data);
+        setWeeklySmokeData(maxValuesByDay);
       } else {
         setWeeklySmokeData([]);
       }
@@ -282,6 +281,7 @@ const UserHomeScreen = ({ navigation }) => {
     }
   };
   
+
   const classifySmokeLevel = (value) => {
     if (value === null || value === undefined) return 'Unknown';
     if (value < 100) return 'Low';
@@ -377,7 +377,7 @@ const UserHomeScreen = ({ navigation }) => {
       <View style={styles.chartContainer}>
         <Text style={styles.chartTitle}>{selectedData === 'temperature' ? 'Temperature' : 'Humidity'}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <LineChart
+          <LineChart
             data={{
               labels: data.map(item => item.date), // Asegurarse de que todas las fechas están siendo representadas
               datasets: [
@@ -429,8 +429,7 @@ const UserHomeScreen = ({ navigation }) => {
 
       {weeklySmokeData.length > 0 && sensors.some(sensor => sensor.tipo === 'Smoke') && (
         <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>Weekly Smoke Concentration</Text>
-          {weeklySmokeData.length > 0 ? (
+          <Text style={styles.chartTitle}>Weekly Max Smoke Concentration</Text>
           <PieChart
             data={weeklySmokeData}
             width={Dimensions.get('window').width - 40}
@@ -439,14 +438,11 @@ const UserHomeScreen = ({ navigation }) => {
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             }}
-            accessor="maxSmoke"
+            accessor="maxSmoke" 
             backgroundColor="transparent"
             paddingLeft="15"
             absolute
           />
-        ) : (
-          <Text style={{ color: '#FFF' }}>No data available</Text>
-        )}
         </View>
       )}
 

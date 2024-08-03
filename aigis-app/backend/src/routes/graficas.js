@@ -31,4 +31,6 @@ router.get('/sensor/rfid/events', getRFID);
 // Rutas para obtener el valor máximo semanal del humo
 router.get('/smoke/weeklyMax', getWeeklyMaxSmokeValues);
 
+
+
 module.exports = router;

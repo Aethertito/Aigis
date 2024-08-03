@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PaqueteComprado, Estadistica, Usuario } = require('../models/model');
+const { PaqueteComprado, Estadistica } = require('../models/model');
 
 // Obtener sensores de temperatura de un usuario junto con sus ubicaciones
 exports.getTemperatureSensors = async (req, res) => {
@@ -78,32 +78,61 @@ exports.getSensorStatistics = async (req, res) => {
 exports.getMaxSmokeValue = async (req, res) => {
   try {
     const { userId } = req.query;
+    console.log('Received request to get max smoke value for user:', userId);
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      console.log('Invalid or missing user ID:', userId);
       return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
-    const endDate = new Date();
-    const startDate = new Date(endDate);
-    startDate.setHours(0, 0, 0, 0);
-    endDate.setHours(23, 59, 59, 999);
+    // Encontrar paquetes comprados con sensores de tipo "Smoke"
+    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "Smoke" }).populate('sensores.sensor_id');
+    console.log('Found paquetesComprados:', paquetesComprados);
 
-    const statistics = await Estadistica.find({
-      sensor_id: { $in: paquetesComprados.map(p => p.sensores.map(s => s.sensor_id)).flat() },
-      'valores.fecha': { $gte: startDate, $lte: endDate }
-    });
+    if (!paquetesComprados || paquetesComprados.length === 0) {
+      console.log('No smoke sensors found for this user.');
+      return res.status(404).json({ message: 'No smoke sensors found for this user.' });
+    }
 
-    const maxSmoke = maxSmokeValueForDay(statistics);
+    let maxSmoke = null;
+
+    for (const paquete of paquetesComprados) {
+      for (const sensor of paquete.sensores) {
+        console.log('Processing sensor:', sensor);
+        if (sensor.tipo === 'Smoke') {
+          // Obtener estadísticas ordenadas por valor descendente
+          const estadisticas = await Estadistica.find({ sensor_id: sensor.sensor_id }).sort({ 'valores.valor': -1 });
+
+          if (estadisticas.length > 0) {
+            // Extraer los valores de los objetos de estadísticas
+            const valores = estadisticas.flatMap(est => est.valores.map(v => v.valor));
+            console.log('Valores de estadísticas del sensor:', valores);
+
+            // Filtrar valores no numéricos y encontrar el máximo
+            const maxValor = Math.max(...valores.filter(v => typeof v === 'number'));
+
+            if (!isNaN(maxValor)) {
+              maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, maxValor) : maxValor;
+            }
+          }
+        }
+      }
+    }
 
     if (maxSmoke === null) {
+      console.log('No valid smoke data available.');
       return res.status(404).json({ message: 'No valid smoke data available.' });
     }
 
+    console.log('Max smoke value found:', maxSmoke);
     res.status(200).json({ maxValue: maxSmoke });
   } catch (error) {
+    console.error('Error fetching max smoke value:', error);
     res.status(500).json({ message: 'Error fetching max smoke value', error });
   }
 };
+
+
 
 // Obtener sensores de un usuario
 exports.getUserSensors = async (req, res) => {
@@ -148,47 +177,21 @@ exports.getUserSensors = async (req, res) => {
 // Obtener el valor de presencia más reciente
 exports.getPresenceData = async (req, res) => {
   try {
-    const { userId } = req.query;
-    console.log('Received request to get presence data for user:', userId);
+      const { userId } = req.query;
 
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      console.log('Invalid or missing user ID:', userId);
-      return res.status(400).json({ message: 'Invalid or missing user ID.' });
-    }
-
-    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "Presence" }).populate('sensores.sensor_id');
-    console.log('Found paquetesComprados:', paquetesComprados);
-
-    if (!paquetesComprados || paquetesComprados.length === 0) {
-      console.log('No presence sensors found for this user.');
-      return res.status(404).json({ message: 'No presence sensors found for this user.' });
-    }
-
-    let presenceData = null;
-    for (const paquete of paquetesComprados) {
-      for (const sensor of paquete.sensores) {
-        if (sensor.tipo === 'Presence') {
-          const estadisticas = await Estadistica.find({ sensor_id: sensor.sensor_id }).sort({ 'valores.fecha': -1 }).limit(1);
-          console.log('Found estadisticas for sensor:', sensor.sensor_id, estadisticas);
-          if (estadisticas.length > 0) {
-            presenceData = estadisticas[0];
-            break;
-          }
-        }
+      // Verificar si el usuario tiene un sensor de presencia
+      const presenceSensor = await Sensor.findOne({ usuario_id: userId, tipo: 'Presence' });
+      if (!presenceSensor) {
+          return res.status(404).json({ error: 'Presence sensor not found for this user.' });
       }
-      if (presenceData) break;
-    }
 
-    if (presenceData === null) {
-      console.log('No presence data available.');
-      return res.status(404).json({ message: 'No presence data available.' });
-    }
+      // Obtener datos de presencia
+      const presenceData = await Estadistica.find({ sensor_id: presenceSensor._id, tipo: 'Presence' });
 
-    console.log('Presence data found:', presenceData);
-    res.status(200).json(presenceData);
+      return res.json({ valores: presenceData });
   } catch (error) {
-    console.error('Error fetching presence data:', error);
-    res.status(500).json({ message: 'Error fetching presence data', error });
+      console.error('Error fetching presence data:', error);
+      res.status(500).json({ error: 'Failed to fetch presence data.' });
   }
 };
 
@@ -279,7 +282,14 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
         'valores.fecha': { $gte: dayStart, $lte: dayEnd }
       });
 
-      const maxSmoke = maxSmokeValueForDay(statistics);
+      let maxSmoke = null;
+      for (const stat of statistics) {
+        for (const val of stat.valores) {
+          if (val.valor !== null && typeof val.valor === 'number') {
+            maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, val.valor) : val.valor;
+          }
+        }
+      }
 
       weeklyMaxValues.push({ date: dayStart, valor: maxSmoke });
     }
