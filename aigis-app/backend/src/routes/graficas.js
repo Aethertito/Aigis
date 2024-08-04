@@ -7,7 +7,10 @@ const {
     getUserSensors,
     getPresenceData,
     getWeeklyMaxSmokeValues,
-    getRFID
+    getRFID,
+    obtenerEntradas_Salidas,
+    obtenerSmoke,
+    obtenerPresence
 } = require('../controllers/graficasController');
 
 // Rutas de los sensores de temperatura
@@ -30,6 +33,15 @@ router.get('/sensor/rfid/events', getRFID);
 
 // Rutas para obtener el valor máximo semanal del humo
 router.get('/smoke/weeklyMax', getWeeklyMaxSmokeValues);
+
+// Obtener entradas
+router.get('/entradas-salidas/:usuario_id', obtenerEntradas_Salidas)
+
+// Obtener smoke
+router.get('/obtener-smoke/:usuario_id', obtenerSmoke)
+
+// Obtener ultimo valor de presencia
+router.get('/ultmo-valor-presencia/:usuario_id', obtenerPresence)
 
 
 

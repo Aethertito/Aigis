@@ -45,7 +45,8 @@ const estadisticaSchema = new Schema({
   valores: [
     {
       fecha: { type: Date, default: Date.now },
-      valor: { type: Schema.Types.Mixed, required: true }
+      valor: { type: Schema.Types.Mixed, required: true },
+      tipo: { type: String, enum: ['entrada', 'salida'], required: true }
     }
   ]
 });

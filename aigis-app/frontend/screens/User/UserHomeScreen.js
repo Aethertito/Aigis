@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import RNPickerSelect from 'react-native-picker-select';
 import IP from '../../IP';
+import SensorStats from '../../components/SensorStats';
 
 const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
@@ -22,7 +23,7 @@ const UserHomeScreen = ({ navigation }) => {
   const [checkInMessage, setCheckInMessage] = useState('No check-in data available');
   const [checkOutMessage, setCheckOutMessage] = useState('No check-out data available');
   const [weeklySmokeData, setWeeklySmokeData] = useState([]);
-  const [rfidEvents, setRfidEvents] = useState([]); 
+  const [rfidEvents, setRfidEvents] = useState([]);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -166,11 +167,11 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchMaxSmokeValue = async () => {
     try {
       if (!userId) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
         params: { userId: userId }
       });
-  
+
       if (response.data && response.data.maxValue !== undefined) {
         setMaxSmoke(response.data.maxValue);
       } else {
@@ -181,7 +182,7 @@ const UserHomeScreen = ({ navigation }) => {
       setMaxSmoke('N/A'); // Mostrar valor predeterminado
     }
   };
-  
+
   const fetchPresenceData = async () => {
     try {
       if (!userId) return;
@@ -203,17 +204,17 @@ const UserHomeScreen = ({ navigation }) => {
       setPresenceDetected('Error fetching presence data');
     }
   };
-  
+
   const fetchRFIDEvents = async () => {
     try {
       if (!userId) return;
-  
+
       const response = await axios.get(`http://${IP}:3000/api/sensor/rfid/events`, {
         params: { userId: userId }
       });
-  
+
       console.log('RFID Events:', response.data);
-  
+
       if (response.data && response.data.length > 0) {
         // Procesar los eventos RFID para el usuario
         const eventos = response.data.flatMap(evento => evento.valores.map(val => ({
@@ -221,13 +222,13 @@ const UserHomeScreen = ({ navigation }) => {
           fecha: val.fecha,
           valor: val.valor
         })));
-  
+
         // Ordenar eventos por fecha
         const sortedEvents = eventos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  
+
         // Actualizar el estado con los eventos RFID
         setRfidEvents(sortedEvents);
-  
+
       } else {
         setRfidEvents([]);
       }
@@ -236,11 +237,11 @@ const UserHomeScreen = ({ navigation }) => {
       setRfidEvents([]);
     }
   };
-  
+
   const fetchWeeklyMaxSmokeValues = async () => {
     try {
       if (!userId) return;
-  
+
       // Datos estáticos para todos los días excepto el martes
       const staticData = [
         { day: 'Sun', maxSmoke: 2786 },
@@ -250,32 +251,32 @@ const UserHomeScreen = ({ navigation }) => {
         { day: 'Fri', maxSmoke: 2984 },
         { day: 'Sat', maxSmoke: 2145 },
       ];
-  
+
       // Obtener datos dinámicos para el día actual
       const response = await axios.get(`http://${IP}:3000/api/smoke/weeklyMax`, {
         params: { userId: userId }
       });
-  
+
       if (!response.data || response.data.length === 0) {
         console.log('No data available from API.');
         setWeeklySmokeData([]);
         return;
       }
-  
+
       // Obtener la fecha actual y su rango
       const today = new Date();
       const todayStart = new Date(today.setHours(0, 0, 0, 0));
       const todayEnd = new Date(today.setHours(23, 59, 59, 999));
-  
+
       console.log("Today's date range:", todayStart.toISOString(), todayEnd.toISOString());
-  
+
       // Encuentra los datos para el día actual
       const todayData = response.data.find(dayData => {
         const dataDate = new Date(dayData.date);
         console.log("Checking data for day:", dataDate.toISOString(), "with value:", dayData.valor);
         return dataDate >= todayStart && dataDate <= todayEnd;
       });
-  
+
       let maxSmokeForToday = 0;
       if (todayData) {
         maxSmokeForToday = todayData.valor !== null ? todayData.valor : 0;
@@ -283,13 +284,13 @@ const UserHomeScreen = ({ navigation }) => {
       } else {
         console.log("No data found for today.");
       }
-  
+
       // Determina la posición para el martes en los datos estáticos
       const tuesdayIndex = 2; // Índice en staticData para martes
-  
+
       // Agregar datos dinámicos para el día actual en la posición del martes
       staticData.splice(tuesdayIndex, 0, { day: 'Tue', maxSmoke: maxSmokeForToday });
-  
+
       const maxValuesByDay = staticData.map((dayData, index) => ({
         name: dayData.day,
         maxSmoke: dayData.maxSmoke,
@@ -297,14 +298,14 @@ const UserHomeScreen = ({ navigation }) => {
         legendFontColor: "#F4F6FC",
         legendFontSize: 15
       }));
-  
+
       setWeeklySmokeData(maxValuesByDay);
     } catch (error) {
       console.error('Error fetching weekly max smoke values:', error);
       setWeeklySmokeData([]);
     }
   };
-  
+
   const classifySmokeLevel = (value) => {
     if (value === null || value === undefined) return 'Unknown';
     if (value < 100) return 'Low';
@@ -313,59 +314,12 @@ const UserHomeScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView 
+    <ScrollView
       contentContainerStyle={styles.container}
       style={{ backgroundColor: '#424242' }}
       bounces={false}
     >
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.date}>{moment(weather.date).format('DD MMM YYYY')}</Text>
-          <Text style={styles.location}>{weather.location}</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <Text style={styles.temperature}>{weather.temperature}°C</Text>
-          {weather.icon ? (
-            <Image source={{ uri: weather.icon }} style={styles.weatherIcon} />
-          ) : (
-            <View style={[styles.weatherIcon, styles.placeholderIcon]}>
-              <Icon name="cloud" size={30} color="#bbb" />
-            </View>
-          )}
-          <Text style={styles.condition}>{weather.condition}</Text>
-        </View>
-      </View>
-
-      <View style={styles.statsContainer}>
-        {sensors.some(sensor => sensor.tipo === 'RFID') && (
-          <View style={styles.statCard}>
-            <Icon2 name="account-check" size={24} color="#E53935" />
-            <Text style={styles.statValue}>{checkInMessage}</Text>
-            <Text style={styles.statLabel}>Check In</Text>
-          </View>
-        )}
-        {sensors.some(sensor => sensor.tipo === 'Smoke') && (
-          <View style={styles.statCard}>
-            <Icon2 name="smoke-detector" size={24} color="#E53935" />
-            <Text style={styles.statValue}>{maxSmoke !== null ? `${maxSmoke} %` : 'N/A'}</Text>
-            <Text style={styles.statLabel}>{classifySmokeLevel(maxSmoke)} Smoke Concentration</Text>
-          </View>
-        )}
-        {sensors.some(sensor => sensor.tipo === 'RFID') && (
-          <View style={styles.statCard}>
-            <Icon2 name="exit-run" size={24} color="#E53935" />
-            <Text style={styles.statValue}>{checkOutMessage}</Text>
-            <Text style={styles.statLabel}>Check Out</Text>
-          </View>
-        )}
-        {sensors.some(sensor => sensor.tipo === 'Presence') && (
-          <View style={styles.statCardCentered}>
-            <Icon2 name="motion-sensor" size={24} color="#E53935" />
-            <Text style={styles.statValue}>{presenceDetected}</Text>
-            <Text style={styles.statLabel}>Presence</Text>
-          </View>
-        )}
-      </View>
+      <SensorStats />
 
       <View style={styles.sensorSelector}>
         <Text style={styles.selectorLabel}>Select Temperature Sensor:</Text>
@@ -461,7 +415,7 @@ const UserHomeScreen = ({ navigation }) => {
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             }}
-            accessor="maxSmoke" 
+            accessor="maxSmoke"
             backgroundColor="transparent"
             paddingLeft="15"
             absolute

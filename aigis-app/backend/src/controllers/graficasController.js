@@ -299,4 +299,130 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
   }
 };
 
+exports.obtenerEntradas_Salidas = async (req, res) => {
+  try {
+    const { usuario_id } = req.params;
+    const sensor = await Sensor.findOne({ usuario_id, tipo: 'RFID' });
+  
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor no encontrado' });
+    }
+  
+    const rfid_id = sensor._id.toString();
+    console.log(`ID del sensor RFID: ${rfid_id}`);
+  
+    const estadisticas = await Estadistica.findOne({ sensor_id: rfid_id });
+  
+    if (!estadisticas) {
+      return res.status(404).json({ message: 'Estadísticas no encontradas para el sensor' });
+    }
+  
+    console.log('Estadisticas valores:', estadisticas.valores);
+  
+    if (!Array.isArray(estadisticas.valores)) {
+      return res.status(400).json({ message: 'Formato incorrecto de datos en valores' });
+    }
+  
+    // Normalizar tipo y filtrar entradas y salidas
+    const entradas = estadisticas.valores.filter(v => v.tipo.toLowerCase() === 'entrada');
+    console.log(`Entradas encontradas: ${entradas.length}`, entradas);
+  
+    const salidas = estadisticas.valores.filter(v => v.tipo.toLowerCase() === 'salida');
+    console.log(`Salidas encontradas: ${salidas.length}`, salidas);
+  
+    res.json({ entradas: entradas.length, salidas: salidas.length });
+  
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el sensor o las estadísticas' });
+  }
+}
+
+exports.obtenerSmoke = async (req, res) => {
+  try {
+    const { usuario_id } = req.params;
+
+    // Buscar el sensor de tipo 'Smoke'
+    const sensor = await Sensor.findOne({ usuario_id, tipo: 'Smoke' });
+
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor no encontrado' });
+    }
+
+    const smoke_id = sensor._id.toString();
+    console.log(`ID del sensor Smoke: ${smoke_id}`);
+
+    // Buscar estadísticas asociadas al sensor de tipo 'Smoke'
+    const estadisticas = await Estadistica.findOne({ sensor_id: smoke_id });
+
+    if (!estadisticas) {
+      return res.status(404).json({ message: 'Estadísticas no encontradas para el sensor' });
+    }
+
+    console.log('Estadisticas:', estadisticas.valores);
+
+    // Verificar que 'valores' sea un array y no esté vacío
+    if (!Array.isArray(estadisticas.valores) || estadisticas.valores.length === 0) {
+      return res.status(404).json({ message: 'No hay valores registrados para este sensor' });
+    }
+
+    // Ordenar los valores por fecha en orden descendente y obtener el más reciente
+    const ultimoValor = estadisticas.valores
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+
+    console.log('Último valor de Smoke:', ultimoValor);
+
+    // Responder con el último valor
+    res.json({ ultimoValor });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el sensor o las estadísticas' });
+  }
+};
+
+exports.obtenerPresence = async (req, res) => {
+  try {
+    const { usuario_id } = req.params;
+
+    // Buscar el sensor de tipo 'Presence'
+    const sensor = await Sensor.findOne({ usuario_id, tipo: 'Presence' });
+
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor no encontrado' });
+    }
+
+    const presence_id = sensor._id.toString();
+    console.log(`ID del sensor Presence: ${presence_id}`);
+
+    // Buscar estadísticas asociadas al sensor de tipo 'Presence'
+    const estadisticas = await Estadistica.findOne({ sensor_id: presence_id });
+
+    if (!estadisticas) {
+      return res.status(404).json({ message: 'Estadísticas no encontradas para el sensor' });
+    }
+
+    console.log('Estadisticas:', estadisticas.valores);
+
+    // Verificar que 'valores' sea un array y no esté vacío
+    if (!Array.isArray(estadisticas.valores) || estadisticas.valores.length === 0) {
+      return res.status(404).json({ message: 'No hay valores registrados para este sensor' });
+    }
+
+    // Ordenar los valores por fecha en orden descendente y obtener el más reciente
+    const ultimoValor = estadisticas.valores
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+
+    console.log('Último valor de Presence:', ultimoValor);
+
+    // Responder con el último valor
+    res.json({ ultimoValor });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el sensor o las estadísticas' });
+  }
+};
+
+
 
