@@ -9,6 +9,7 @@ import moment from 'moment';
 import RNPickerSelect from 'react-native-picker-select';
 import IP from '../../IP';
 import SensorStats from '../../components/SensorStats';
+import TemperatureHumidityChart from '../../components/TemperatureHumidityChart';
 
 const UserHomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
@@ -321,7 +322,9 @@ const UserHomeScreen = ({ navigation }) => {
     >
       <SensorStats />
 
-      <View style={styles.sensorSelector}>
+      <TemperatureHumidityChart />
+
+      {/* <View style={styles.sensorSelector}>
         <Text style={styles.selectorLabel}>Select Temperature Sensor:</Text>
         <RNPickerSelect
           onValueChange={(value) => {
@@ -402,7 +405,7 @@ const UserHomeScreen = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Weekly</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {weeklySmokeData.length > 0 && sensors.some(sensor => sensor.tipo === 'Smoke') && (
         <View style={styles.chartContainer}>

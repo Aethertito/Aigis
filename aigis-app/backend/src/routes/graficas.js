@@ -10,7 +10,8 @@ const {
     getRFID,
     obtenerEntradas_Salidas,
     obtenerSmoke,
-    obtenerPresence
+    obtenerPresence,
+    obtenerTempData
 } = require('../controllers/graficasController');
 
 // Rutas de los sensores de temperatura
@@ -42,6 +43,9 @@ router.get('/obtener-smoke/:usuario_id', obtenerSmoke)
 
 // Obtener ultimo valor de presencia
 router.get('/ultmo-valor-presencia/:usuario_id', obtenerPresence)
+
+// Obtener valores de temp
+router.get('/valores-temp/:usuario_id',obtenerTempData)
 
 
 

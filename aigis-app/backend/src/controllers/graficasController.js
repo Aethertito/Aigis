@@ -424,5 +424,32 @@ exports.obtenerPresence = async (req, res) => {
   }
 };
 
+exports.obtenerTempData = async (req, res) => {
+  const { usuario_id } = req.params;
+  try {
+    const sensor = await Sensor.findOne({ usuario_id, tipo: 'Temperature and Humidity' });
+    if (!sensor) {
+      return res.status(404).json({ message: 'Sensor not found' });
+    }
+    const temp_id = sensor._id.toString();
+    console.log(`ID del sensor Temperature and Humidity: ${temp_id}`);
+
+    const estadisticas = await Estadistica.findOne({ sensor_id: temp_id });
+
+    if (!estadisticas || !estadisticas.valores || estadisticas.valores.length === 0) {
+      return res.status(404).json({ message: 'No statistics found for the sensor' });
+    }
+
+    // Obtener los últimos 5 valores
+    const ultimosValores = estadisticas.valores.slice(-5);
+
+    res.json(ultimosValores);
+  } catch (error) {
+    console.error('Error fetching temperature data:', error);
+    res.status(500).json({ message: 'Error fetching temperature data' });
+  }
+};
+
+
 
 
