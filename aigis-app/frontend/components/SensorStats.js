@@ -9,9 +9,9 @@ const SensorStats = () => {
   const [userId, setUserId] = useState(null);
   const [smokeData, setSmokeData] = useState(null);
   const [presenceData, setPresenceData] = useState(null);
-  const [entradasSalidasData, setEntradasSalidasData] = useState({ entradas: 0, salidas: 0 });
+  const [entradas, setEntradas] = useState(0);
+  const [salidas, setSalidas] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getUserId = async () => {
@@ -32,66 +32,71 @@ const SensorStats = () => {
       const fetchData = async () => {
         setLoading(true);
         try {
+            const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);
+            console.log('Entradas y Salidas Response:', entradasSalidasResponse.data);
+            const { entradas: entradasCount, salidas: salidasCount } = entradasSalidasResponse.data || { entradas: 0, salidas: 0 };
+            setEntradas(entradasCount);
+            setSalidas(salidasCount);
           // Fetch smoke data
           const smokeResponse = await axios.get(`http://${IP}:3000/api/obtener-smoke/${userId}`);
-          setSmokeData(smokeResponse.data.ultimoValor);
-
+          setSmokeData(smokeResponse.data.ultimoValor || null);
+  
           // Fetch presence data
           const presenceResponse = await axios.get(`http://${IP}:3000/api/ultmo-valor-presencia/${userId}`);
-          setPresenceData(presenceResponse.data.ultimoValor);
-
+          setPresenceData(presenceResponse.data.ultimoValor || null);
+  
           // Fetch entradas y salidas data
-          const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);
-          setEntradasSalidasData(entradasSalidasResponse.data);
+
+  
         } catch (err) {
-          setError('Error al obtener los datos de los sensores');
-          console.error(err);
+          console.error('Error al obtener los datos de los sensores', err);
         }
         setLoading(false);
       };
-
+  
       fetchData();
     }
   }, [userId]);
+  
 
   if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
-  if (error) return <Text style={styles.errorText}>{error}</Text>;
 
-  const maxSmoke = smokeData ? smokeData.valor : 'N/A';
-  const presenceDetected = presenceData ? (presenceData.valor ? 'Detected' : 'Not Detected') : 'N/A';
-  const { entradas, salidas } = entradasSalidasData;
+  const maxSmoke = smokeData ? smokeData.valor : null;
+  const presenceDetected = presenceData ? (presenceData.valor ? 'Detected' : 'Not Detected') : null;
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      bounces={false}
-    >
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Icon2 name="smoke-detector" size={24} color="#E53935" />
-          <Text style={styles.statValue}>{maxSmoke}</Text>
-          <Text style={styles.statLabel}>Smoke Concentration</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Icon2 name="motion-sensor" size={24} color="#E53935" />
-          <Text style={styles.statValue}>{presenceDetected}</Text>
-          <Text style={styles.statLabel}>Presence</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Icon2 name="account-check" size={24} color="#E53935" />
-          <Text style={styles.statValue}>{entradas}</Text>
-          <Text style={styles.statLabel}>Entradas</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Icon2 name="exit-run" size={24} color="#E53935" />
-          <Text style={styles.statValue}>{salidas}</Text>
-          <Text style={styles.statLabel}>Salidas</Text>
-        </View>
+    <ScrollView contentContainerStyle={styles.container} bounces={false}>
+  <View style={styles.statsContainer}>
+    {maxSmoke !== null && (
+      <View style={styles.statCard}>
+        <Icon2 name="smoke-detector" size={24} color="#E53935" />
+        <Text style={styles.statValue}>{`${maxSmoke} ppm`}</Text>
+        <Text style={styles.statLabel}>Smoke Concentration</Text>
       </View>
-    </ScrollView>
+    )}
+
+    {presenceDetected !== null && (
+      <View style={styles.statCard}>
+        <Icon2 name="motion-sensor" size={24} color="#E53935" />
+        <Text style={styles.statValue}>{presenceDetected}</Text>
+        <Text style={styles.statLabel}>Presence</Text>
+      </View>
+    )}
+
+    <View style={styles.statCard}>
+      <Icon2 name="account-check" size={24} color="#E53935" />
+      <Text style={styles.statValue}>{entradas}</Text>
+      <Text style={styles.statLabel}>Entradas</Text>
+    </View>
+
+    <View style={styles.statCard}>
+      <Icon2 name="exit-run" size={24} color="#E53935" />
+      <Text style={styles.statValue}>{salidas}</Text>
+      <Text style={styles.statLabel}>Salidas</Text>
+    </View>
+  </View>
+</ScrollView>
+
   );
 };
 
@@ -103,12 +108,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     color: '#F4F6FC',
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  errorText: {
-    color: '#E53935',
     fontSize: 18,
     textAlign: 'center',
     marginTop: 20,
