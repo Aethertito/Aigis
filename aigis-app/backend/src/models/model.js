@@ -123,6 +123,18 @@ const registroAcceso = new Schema({
   tipoAcceso: { type: String, enum: ['Entry', 'Exit', 'Failed'] }
 })
 
+const estadisticaRFIDSchema = new Schema({
+  usuario_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+  sensor_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Sensor', required: true },
+  tipo: { type: String, enum: ['RFID'], required: true },
+  valores: [
+    {
+      fecha: { type: Date, required: true },
+      valor: { type: String, required: true }
+    }
+  ]
+});
+
 
 
 const Usuario = model('Usuario', usuarioSchema);
@@ -137,6 +149,7 @@ const Cita = mongoose.model('Cita', citaSchema);
 const Empleado = model('Empleado', empleadoSchema)
 const AccesoRFID = model('AccesoRFID', accesoRFIDSchema)
 const RegistroRFID = model('RegistroRFID', registroAcceso)
+const EstadisticaRFID = mongoose.model('EstadisticaRFID', estadisticaRFIDSchema);
 
 module.exports = {
   Usuario,
@@ -150,5 +163,6 @@ module.exports = {
   Cita,
   Empleado,
   AccesoRFID,
-  RegistroRFID
+  RegistroRFID,
+  EstadisticaRFID
 };

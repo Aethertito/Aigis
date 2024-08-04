@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PaqueteComprado, Estadistica, Sensor } = require('../models/model');
+const { PaqueteComprado, Estadistica, Sensor, EstadisticaRFID } = require('../models/model');
 
 // Obtener sensores de temperatura de un usuario junto con sus ubicaciones
 exports.getTemperatureSensors = async (req, res) => {
@@ -213,24 +213,16 @@ exports.getRFID = async (req, res) => {
 
     console.log('Fetching RFID events for user ID:', userId);
 
-    // Encuentra los sensores RFID del usuario
-    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "RFID" }).populate('sensores.sensor_id');
-
-    if (!paquetesComprados || paquetesComprados.length === 0) {
-      console.log('No RFID sensors found for this user.');
-      return res.status(404).json({ message: 'No RFID sensors found for this user.' });
-    }
-
-    const sensorIds = paquetesComprados.flatMap(p => p.sensores.map(s => s.sensor_id._id));
-
-    // Busca todas las estadísticas asociadas a esos sensores
-    const eventosRFID = await Estadistica.find({
-      sensor_id: { $in: sensorIds },
+    // Encuentra los eventos RFID del usuario desde la colección estadisticaRFID
+    const eventosRFID = await EstadisticaRFID.find({
+      usuario_id: userId,
       tipo: 'RFID'
     });
 
+    console.log('Eventos RFID encontrados:', eventosRFID);
+
     if (!eventosRFID.length) {
-      console.log('No RFID events found for sensors:', sensorIds);
+      console.log('No RFID events found for user ID:', userId);
       return res.status(404).json({ message: 'No RFID events found.' });
     }
 

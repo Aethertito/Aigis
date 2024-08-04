@@ -22,6 +22,7 @@ const UserHomeScreen = ({ navigation }) => {
   const [checkInMessage, setCheckInMessage] = useState('No check-in data available');
   const [checkOutMessage, setCheckOutMessage] = useState('No check-out data available');
   const [weeklySmokeData, setWeeklySmokeData] = useState([]);
+  const [rfidEvents, setRfidEvents] = useState([]); 
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -165,11 +166,11 @@ const UserHomeScreen = ({ navigation }) => {
   const fetchMaxSmokeValue = async () => {
     try {
       if (!userId) return;
-
+  
       const response = await axios.get(`http://${IP}:3000/api/sensor/smoke/max`, {
         params: { userId: userId }
       });
-
+  
       if (response.data && response.data.maxValue !== undefined) {
         setMaxSmoke(response.data.maxValue);
       } else {
@@ -177,7 +178,7 @@ const UserHomeScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error fetching max smoke value:', error);
-      setMaxSmoke(null);
+      setMaxSmoke('N/A'); // Mostrar valor predeterminado
     }
   };
   
@@ -214,36 +215,25 @@ const UserHomeScreen = ({ navigation }) => {
       console.log('RFID Events:', response.data);
   
       if (response.data && response.data.length > 0) {
+        // Procesar los eventos RFID para el usuario
+        const eventos = response.data.flatMap(evento => evento.valores.map(val => ({
+          sensor_id: evento.sensor_id,
+          fecha: val.fecha,
+          valor: val.valor
+        })));
+  
         // Ordenar eventos por fecha
-        const sortedEvents = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        
-        // Filtrar eventos de "entrada" y "salida"
-        const entradaEvents = sortedEvents.filter(event => event.tipo === 'entrada');
-        const salidaEvents = sortedEvents.filter(event => event.tipo === 'salida');
+        const sortedEvents = eventos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
   
-        if (entradaEvents.length > 0) {
-          const lastCheckIn = entradaEvents[0]; // Último evento de entrada
-          const formattedCheckInDate = moment(lastCheckIn.fecha).format("HH:mm");
-          setCheckInMessage(`Entry registered at ${formattedCheckInDate}`);
-        } else {
-          setCheckInMessage('No check-in data available');
-        }
+        // Actualizar el estado con los eventos RFID
+        setRfidEvents(sortedEvents);
   
-        if (salidaEvents.length > 0) {
-          const lastCheckOut = salidaEvents[0]; // Último evento de salida
-          const formattedCheckOutDate = moment(lastCheckOut.fecha).format("HH:mm");
-          setCheckOutMessage(`Exit registered at ${formattedCheckOutDate}`);
-        } else {
-          setCheckOutMessage('No check-out data available');
-        }
       } else {
-        setCheckInMessage('No check-in data available');
-        setCheckOutMessage('No check-out data available');
+        setRfidEvents([]);
       }
     } catch (error) {
       console.error('Error fetching RFID events:', error.response ? error.response.data : error.message);
-      setCheckInMessage('Error fetching check-in data');
-      setCheckOutMessage('Error fetching check-out data');
+      setRfidEvents([]);
     }
   };
   
@@ -314,7 +304,6 @@ const UserHomeScreen = ({ navigation }) => {
       setWeeklySmokeData([]);
     }
   };
-  
   
   const classifySmokeLevel = (value) => {
     if (value === null || value === undefined) return 'Unknown';
