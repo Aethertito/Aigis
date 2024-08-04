@@ -85,6 +85,12 @@ exports.getMaxSmokeValue = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
+    // Obtener el rango de fechas para el día actual
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
+
     // Encontrar paquetes comprados con sensores de tipo "Smoke"
     const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "Smoke" }).populate('sensores.sensor_id');
     console.log('Found paquetesComprados:', paquetesComprados);
@@ -98,10 +104,12 @@ exports.getMaxSmokeValue = async (req, res) => {
 
     for (const paquete of paquetesComprados) {
       for (const sensor of paquete.sensores) {
-        console.log('Processing sensor:', sensor);
-        if (sensor.tipo === 'Smoke') {
-          // Obtener estadísticas ordenadas por valor descendente
-          const estadisticas = await Estadistica.find({ sensor_id: sensor.sensor_id }).sort({ 'valores.valor': -1 });
+        if (sensor.sensor_id && sensor.sensor_id.tipo === 'Smoke') {
+          // Obtener estadísticas para el día actual ordenadas por valor descendente
+          const estadisticas = await Estadistica.find({
+            sensor_id: sensor.sensor_id._id,
+            'valores.fecha': { $gte: startDate, $lte: endDate }
+          }).sort({ 'valores.valor': -1 });
 
           if (estadisticas.length > 0) {
             // Extraer los valores de los objetos de estadísticas
@@ -131,8 +139,6 @@ exports.getMaxSmokeValue = async (req, res) => {
     res.status(500).json({ message: 'Error fetching max smoke value', error });
   }
 };
-
-
 
 // Obtener sensores de un usuario
 exports.getUserSensors = async (req, res) => {
@@ -195,7 +201,7 @@ exports.getPresenceData = async (req, res) => {
   }
 };
 
-// Controlador para obtener eventos RFID
+// Controlador para obtener todos los eventos RFID sin filtrar
 exports.getRFID = async (req, res) => {
   try {
     const { userId } = req.query;
@@ -205,17 +211,19 @@ exports.getRFID = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or missing user ID.' });
     }
 
-    console.log('Fetching RFID events for sensor_id:', userId);
+    console.log('Fetching RFID events for user ID:', userId);
 
     // Encuentra los sensores RFID del usuario
     const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "RFID" }).populate('sensores.sensor_id');
 
     if (!paquetesComprados || paquetesComprados.length === 0) {
+      console.log('No RFID sensors found for this user.');
       return res.status(404).json({ message: 'No RFID sensors found for this user.' });
     }
 
     const sensorIds = paquetesComprados.flatMap(p => p.sensores.map(s => s.sensor_id._id));
 
+    // Busca todas las estadísticas asociadas a esos sensores
     const eventosRFID = await Estadistica.find({
       sensor_id: { $in: sensorIds },
       tipo: 'RFID'
@@ -226,15 +234,10 @@ exports.getRFID = async (req, res) => {
       return res.status(404).json({ message: 'No RFID events found.' });
     }
 
-    const rfidEvents = eventosRFID.flatMap(evento => evento.historial.filter(h => h.tipo === 'entrada' || h.tipo === 'salida'));
+    console.log('RFID events found:', eventosRFID.length);
 
-    if (!rfidEvents.length) {
-      return res.status(404).json({ message: 'No valid RFID events found in history.' });
-    }
-
-    rfidEvents.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
-    res.status(200).json(rfidEvents);
+    // Devuelve todos los eventos RFID sin filtrar
+    res.status(200).json(eventosRFID);
   } catch (error) {
     console.error('Error fetching RFID events:', error);
     res.status(500).json({ message: 'Error fetching RFID events', error: error.message });
@@ -257,10 +260,12 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
     }
 
     const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
     const startDate = new Date(endDate);
-    startDate.setDate(endDate.getDate() - 7);
+    startDate.setDate(endDate.getDate() - 6);
+    startDate.setHours(0, 0, 0, 0);
 
-    const weeklyMaxValues = [];
+    let weeklyMaxValues = [];
 
     for (let i = 0; i < 7; i++) {
       const dayStart = new Date(startDate);
@@ -270,21 +275,30 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
       const dayEnd = new Date(dayStart);
       dayEnd.setHours(23, 59, 59, 999);
 
-      const statistics = await Estadistica.find({
-        sensor_id: { $in: paquetesComprados.map(p => p.sensores.map(s => s.sensor_id)).flat() },
-        'valores.fecha': { $gte: dayStart, $lte: dayEnd }
-      });
+      let maxSmokeForDay = null;
 
-      let maxSmoke = null;
-      for (const stat of statistics) {
-        for (const val of stat.valores) {
-          if (val.valor !== null && typeof val.valor === 'number') {
-            maxSmoke = maxSmoke !== null ? Math.max(maxSmoke, val.valor) : val.valor;
+      for (const paquete of paquetesComprados) {
+        for (const sensor of paquete.sensores) {
+          if (sensor.sensor_id && sensor.sensor_id.tipo === 'Smoke') {
+            const estadisticas = await Estadistica.find({
+              sensor_id: sensor.sensor_id._id,
+              'valores.fecha': { $gte: dayStart, $lte: dayEnd }
+            });
+
+            const valores = estadisticas.flatMap(est => est.valores.map(v => v.valor));
+            const maxValor = Math.max(...valores.filter(v => typeof v === 'number'));
+
+            if (!isNaN(maxValor)) {
+              maxSmokeForDay = maxSmokeForDay !== null ? Math.max(maxSmokeForDay, maxValor) : maxValor;
+            }
           }
         }
       }
 
-      weeklyMaxValues.push({ date: dayStart, valor: maxSmoke });
+      weeklyMaxValues.push({
+        date: dayStart,
+        valor: maxSmokeForDay !== null ? maxSmokeForDay : 0
+      });
     }
 
     res.status(200).json(weeklyMaxValues);
@@ -292,3 +306,5 @@ exports.getWeeklyMaxSmokeValues = async (req, res) => {
     res.status(500).json({ message: 'Error fetching weekly max smoke values', error });
   }
 };
+
+
