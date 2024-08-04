@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PaqueteComprado, Estadistica } = require('../models/model');
+const { PaqueteComprado, Estadistica, Sensor } = require('../models/model');
 
 // Obtener sensores de temperatura de un usuario junto con sus ubicaciones
 exports.getTemperatureSensors = async (req, res) => {
@@ -174,24 +174,24 @@ exports.getUserSensors = async (req, res) => {
   }
 };
 
-// Obtener el valor de presencia más reciente
+// Obtener el valor de presencia más reciente// Obtener el valor de presencia más reciente
 exports.getPresenceData = async (req, res) => {
   try {
-      const { userId } = req.query;
+    const { userId } = req.query;
 
-      // Verificar si el usuario tiene un sensor de presencia
-      const presenceSensor = await Sensor.findOne({ usuario_id: userId, tipo: 'Presence' });
-      if (!presenceSensor) {
-          return res.status(404).json({ error: 'Presence sensor not found for this user.' });
-      }
+    // Verificar si el usuario tiene un sensor de presencia
+    const presenceSensor = await Sensor.findOne({ usuario_id: userId, tipo: 'Presence' });
+    if (!presenceSensor) {
+      return res.status(404).json({ error: 'Presence sensor not found for this user.' });
+    }
 
-      // Obtener datos de presencia
-      const presenceData = await Estadistica.find({ sensor_id: presenceSensor._id, tipo: 'Presence' });
+    // Obtener datos de presencia
+    const presenceData = await Estadistica.find({ sensor_id: presenceSensor._id, tipo: 'Presence' });
 
-      return res.json({ valores: presenceData });
+    return res.json({ valores: presenceData });
   } catch (error) {
-      console.error('Error fetching presence data:', error);
-      res.status(500).json({ error: 'Failed to fetch presence data.' });
+    console.error('Error fetching presence data:', error);
+    res.status(500).json({ error: 'Failed to fetch presence data.' });
   }
 };
 
@@ -207,39 +207,32 @@ exports.getRFID = async (req, res) => {
 
     console.log('Fetching RFID events for sensor_id:', userId);
 
-    const sensorObjectId = new mongoose.Types.ObjectId(userId);
+    // Encuentra los sensores RFID del usuario
+    const paquetesComprados = await PaqueteComprado.find({ usuario: userId, "sensores.tipo": "RFID" }).populate('sensores.sensor_id');
+
+    if (!paquetesComprados || paquetesComprados.length === 0) {
+      return res.status(404).json({ message: 'No RFID sensors found for this user.' });
+    }
+
+    const sensorIds = paquetesComprados.flatMap(p => p.sensores.map(s => s.sensor_id._id));
 
     const eventosRFID = await Estadistica.find({
-      sensor_id: sensorObjectId,
+      sensor_id: { $in: sensorIds },
       tipo: 'RFID'
     });
 
-    console.log('Documents found:', eventosRFID.length);
-
     if (!eventosRFID.length) {
-      console.log('No RFID events found for sensor_id:', userId);
+      console.log('No RFID events found for sensors:', sensorIds);
       return res.status(404).json({ message: 'No RFID events found.' });
     }
 
-    const rfidEvents = eventosRFID.flatMap(evento => {
-      console.log('Processing document:', evento);
-      if (!evento.historial || !Array.isArray(evento.historial)) {
-        console.warn('Event has no valid history:', evento);
-        return []; // Skip events without valid history
-      }
-      return evento.historial.filter(h => h.tipo === 'entrada' || h.tipo === 'salida');
-    });
-
-    console.log('RFID Events extracted:', rfidEvents);
+    const rfidEvents = eventosRFID.flatMap(evento => evento.historial.filter(h => h.tipo === 'entrada' || h.tipo === 'salida'));
 
     if (!rfidEvents.length) {
-      console.log('No valid RFID events found in history for sensor_id:', userId);
       return res.status(404).json({ message: 'No valid RFID events found in history.' });
     }
 
     rfidEvents.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
-    console.log('Sorted RFID events:', rfidEvents);
 
     res.status(200).json(rfidEvents);
   } catch (error) {

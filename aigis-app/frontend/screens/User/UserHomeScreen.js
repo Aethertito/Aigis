@@ -205,7 +205,7 @@ const UserHomeScreen = ({ navigation }) => {
       setPresenceDetected('Error fetching presence data');
     }
   };
-
+  
   const fetchRFIDEvents = async () => {
     try {
       if (!userId) return;
