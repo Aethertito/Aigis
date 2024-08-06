@@ -78,7 +78,7 @@ exports.getSensorStatistics = async (req, res) => {
 exports.getMaxSmokeValue = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log('Received request to get max smoke value for user:', userId);
+    // console.log('Received request to get max smoke value for user:', userId);
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       console.log('Invalid or missing user ID:', userId);
@@ -114,7 +114,7 @@ exports.getMaxSmokeValue = async (req, res) => {
           if (estadisticas.length > 0) {
             // Extraer los valores de los objetos de estadísticas
             const valores = estadisticas.flatMap(est => est.valores.map(v => v.valor));
-            console.log('Valores de estadísticas del sensor:', valores);
+            // console.log('Valores de estadísticas del sensor:', valores);
 
             // Filtrar valores no numéricos y encontrar el máximo
             const maxValor = Math.max(...valores.filter(v => typeof v === 'number'));
@@ -132,7 +132,7 @@ exports.getMaxSmokeValue = async (req, res) => {
       return res.status(404).json({ message: 'No valid smoke data available.' });
     }
 
-    console.log('Max smoke value found:', maxSmoke);
+    // console.log('Max smoke value found:', maxSmoke);
     res.status(200).json({ maxValue: maxSmoke });
   } catch (error) {
     console.error('Error fetching max smoke value:', error);
@@ -303,40 +303,44 @@ exports.obtenerEntradas_Salidas = async (req, res) => {
   try {
     const { usuario_id } = req.params;
     const sensor = await Sensor.findOne({ usuario_id, tipo: 'RFID' });
-  
+
     if (!sensor) {
       return res.status(404).json({ message: 'Sensor no encontrado' });
     }
-  
+
     const rfid_id = sensor._id.toString();
     console.log(`ID del sensor RFID: ${rfid_id}`);
-  
+
     const estadisticas = await Estadistica.findOne({ sensor_id: rfid_id });
-  
+
     if (!estadisticas) {
       return res.status(404).json({ message: 'Estadísticas no encontradas para el sensor' });
     }
-  
-    console.log('Estadisticas valores:', estadisticas.valores);
-  
+
     if (!Array.isArray(estadisticas.valores)) {
       return res.status(400).json({ message: 'Formato incorrecto de datos en valores' });
     }
-  
-    // Normalizar tipo y filtrar entradas y salidas
-    const entradas = estadisticas.valores.filter(v => v.tipo.toLowerCase() === 'entrada');
-    console.log(`Entradas encontradas: ${entradas.length}`, entradas);
-  
-    const salidas = estadisticas.valores.filter(v => v.tipo.toLowerCase() === 'salida');
-    console.log(`Salidas encontradas: ${salidas.length}`, salidas);
-  
-    res.json({ entradas: entradas.length, salidas: salidas.length });
-  
+
+    // Obtener la última entrada
+    const ultimaEntrada = estadisticas.valores
+      .filter(v => v.tipo.toLowerCase() === 'entrada')
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+
+    // Obtener la última salida
+    const ultimaSalida = estadisticas.valores
+      .filter(v => v.tipo.toLowerCase() === 'salida')
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+
+    // Enviar los últimos eventos de entrada y salida con sus fechas
+    res.json({ entrada: ultimaEntrada, salida: ultimaSalida });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener el sensor o las estadísticas' });
   }
-}
+};
+
+
 
 exports.obtenerSmoke = async (req, res) => {
   try {
@@ -352,34 +356,48 @@ exports.obtenerSmoke = async (req, res) => {
     const smoke_id = sensor._id.toString();
     console.log(`ID del sensor Smoke: ${smoke_id}`);
 
-    // Buscar estadísticas asociadas al sensor de tipo 'Smoke'
-    const estadisticas = await Estadistica.findOne({ sensor_id: smoke_id });
+    // Obtener el rango de fechas para el día actual
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
 
-    if (!estadisticas) {
-      return res.status(404).json({ message: 'Estadísticas no encontradas para el sensor' });
+    // Buscar estadísticas asociadas al sensor de tipo 'Smoke' para el día actual
+    const estadisticas = await Estadistica.find({
+      sensor_id: smoke_id,
+      'valores.fecha': { $gte: startDate, $lte: endDate }
+    });
+
+    if (!estadisticas || estadisticas.length === 0) {
+      return res.status(404).json({ message: 'No smoke data found for today' });
     }
 
-    console.log('Estadisticas:', estadisticas.valores);
+    // Obtener los valores de humo y encontrar el máximo
+    let maxValor = null;
 
-    // Verificar que 'valores' sea un array y no esté vacío
-    if (!Array.isArray(estadisticas.valores) || estadisticas.valores.length === 0) {
-      return res.status(404).json({ message: 'No hay valores registrados para este sensor' });
+    estadisticas.forEach(est => {
+      est.valores.forEach(valor => {
+        if (valor.valor && !isNaN(valor.valor)) {
+          maxValor = maxValor !== null ? Math.max(maxValor, valor.valor) : valor.valor;
+        }
+      });
+    });
+
+    if (maxValor === null) {
+      return res.status(404).json({ message: 'No valid smoke data available for today' });
     }
 
-    // Ordenar los valores por fecha en orden descendente y obtener el más reciente
-    const ultimoValor = estadisticas.valores
-      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
-
-    console.log('Último valor de Smoke:', ultimoValor);
-
-    // Responder con el último valor
-    res.json({ ultimoValor });
+    console.log('Valor de humo más alto del día actual:', maxValor);
+    res.json({ maxValor });
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener el sensor o las estadísticas' });
   }
 };
+
+
+
 
 exports.obtenerPresence = async (req, res) => {
   try {
@@ -434,22 +452,27 @@ exports.obtenerTempData = async (req, res) => {
     const temp_id = sensor._id.toString();
     console.log(`ID del sensor Temperature and Humidity: ${temp_id}`);
 
+    // Obtener estadísticas para el sensor
     const estadisticas = await Estadistica.findOne({ sensor_id: temp_id });
 
     if (!estadisticas || !estadisticas.valores || estadisticas.valores.length === 0) {
       return res.status(404).json({ message: 'No statistics found for the sensor' });
     }
 
-    // Obtener los últimos 5 valores
-    const ultimosValores = estadisticas.valores.slice(-5);
+    // Filtrar los datos para el día actual
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Establecer a medianoche del día actual
+    const maniana = new Date(hoy);
+    maniana.setDate(hoy.getDate() + 1); // El siguiente día
 
-    res.json(ultimosValores);
+    const valoresDelDia = estadisticas.valores.filter(valor => {
+      const fecha = new Date(valor.fecha);
+      return fecha >= hoy && fecha < maniana;
+    });
+
+    res.json(valoresDelDia);
   } catch (error) {
     console.error('Error fetching temperature data:', error);
     res.status(500).json({ message: 'Error fetching temperature data' });
   }
 };
-
-
-
-
