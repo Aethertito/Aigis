@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, Image } from 'react-native';
 import axios from 'axios';
 import IP from '../IP';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -84,6 +84,10 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.overlay}>
+        <Image 
+          source={require('../assets/LOGO-AIGISV2.png')} 
+          style={styles.image}
+        />
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.nameField}>Email</Text>
       <TextInput
@@ -159,7 +163,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F4F6FC',
     marginBottom: 20,
-    
+  },
+  image: {
+    bottom: 150,
+    width: 80,
+    height: 80,
+    right: 8
   },
   input: {
     width: '100%',

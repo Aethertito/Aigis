@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable, Image } from 'react-native';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -76,7 +76,11 @@ const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} style={{ backgroundColor: '#424242' }}>
+        <Image 
+          source={require('../assets/LOGO-AIGISV2.png')} 
+          style={styles.image}
+        />
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.nameField}>Company Name</Text>
       <TextInput
@@ -174,6 +178,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#424242',
     padding: 20,
+  },
+  image: {
+    bottom: 5,
+    width: 80,
+    height: 80,
+    right: 8
   },
   nameField: {
     color: '#F4F6FC',
