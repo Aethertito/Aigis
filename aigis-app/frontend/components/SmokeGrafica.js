@@ -24,19 +24,19 @@ return (
 };
 
 const styles = StyleSheet.create({
-  chartContainer: {
+chartContainer: {
     backgroundColor: '#212121',
     borderRadius: 16,
     padding: 6,
     marginBottom: 20,
     overflow: 'hidden',
-  },
-  chartTitle: {
+    },
+chartTitle: {
     color: '#E53935',
     fontSize: 18,
     marginBottom: 10,
     textAlign: 'center',
-  },
+    },
 });
 
 export default SmokeGrafica;

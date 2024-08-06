@@ -42,22 +42,19 @@ const SensorStats = () => {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);
+          const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);//Traer datos RFID
           console.log('Entradas y Salidas Response:', entradasSalidasResponse.data);
           setEntrada(entradasSalidasResponse.data.entrada || null);
           setSalida(entradasSalidasResponse.data.salida || null);
 
-          // Fetch smoke data
-          const smokeResponse = await axios.get(`http://${IP}:3000/api/obtener-smoke/${userId}`);
+          const smokeResponse = await axios.get(`http://${IP}:3000/api/obtener-smoke/${userId}`);//Traer datos humo
           setSmokeData(smokeResponse.data.maxValor || null);
 
-          // Update Tuesday data with actual smoke data
           setWeeklySmokeData(prevData => prevData.map(dayData =>
             dayData.name === 'Tue' ? { ...dayData, maxSmoke: smokeResponse.data.maxValor || 0 } : dayData
           ));
 
-          // Fetch presence data
-          const presenceResponse = await axios.get(`http://${IP}:3000/api/ultmo-valor-presencia/${userId}`);
+          const presenceResponse = await axios.get(`http://${IP}:3000/api/ultmo-valor-presencia/${userId}`); //Traer datos presencia
           setPresenceData(presenceResponse.data.ultimoValor || null);
 
         } catch (err) {

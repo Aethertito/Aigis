@@ -20,7 +20,7 @@ const UserHomeScreen = ({ navigation }) => {
     { name: 'Fri', maxSmoke: 2084, color: '#FF8C00', legendFontColor: "#F4F6FC", legendFontSize: 15 },
     { name: 'Sat', maxSmoke: 2145, color: '#FF4500', legendFontColor: "#F4F6FC", legendFontSize: 15 },
   ]);
-  const [hasSmokeData, setHasSmokeData] = useState(false); // Nueva variable de estado
+  const [hasSmokeData, setHasSmokeData] = useState(false);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -104,6 +104,7 @@ const UserHomeScreen = ({ navigation }) => {
         </View>
       </View>
 
+      {/*Traer las graficas y estadisticas de las dems screens*/}
       <SensorStats />
       <TemperatureHumidityChart />
       {hasSmokeData && <SmokeGrafica weeklySmokeData={weeklySmokeData} />}

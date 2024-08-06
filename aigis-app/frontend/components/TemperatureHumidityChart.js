@@ -21,7 +21,6 @@ const TemperatureHumidityChart = () => {
         const id = await AsyncStorage.getItem('userId');
         setUserId(id);
         fetchUserSensors(id);
-        console.log('User ID:', id);
       } catch (error) {
         console.error('Error getting user ID:', error);
       }
@@ -44,15 +43,16 @@ const TemperatureHumidityChart = () => {
   const fetchTemperatureHumidityData = async () => {
     try {
       let startDate;
-      const endDate = new Date();
+      let endDate = new Date();
 
       if (viewMode === 'day') {
         // Modo diario: obtener datos del día actual
-        startDate = moment().startOf('day').toDate();
-        endDate.setHours(23, 59, 59, 999); // Final del día actual
+        startDate = moment(endDate).startOf('day').toDate();
+        endDate = moment(endDate).endOf('day').toDate();
       } else if (viewMode === 'week') {
         // Modo semanal: obtener datos de los últimos 7 días
-        startDate = moment().subtract(7, 'days').startOf('day').toDate();
+        startDate = moment(endDate).subtract(7, 'days').startOf('day').toDate();
+        endDate = moment(endDate).endOf('day').toDate();
       }
 
       const response = await axios.get(`http://${IP}:3000/api/valores-temp/${userId}`, {
@@ -61,7 +61,36 @@ const TemperatureHumidityChart = () => {
           endDate: endDate.toISOString(),
         }
       });
-      setData(response.data);
+
+      if (viewMode === 'day') {
+        setData(response.data);
+      } else if (viewMode === 'week') {
+        // Agrupar datos por día y calcular el promedio para el modo semanal
+        const groupedData = {};
+        response.data.forEach(item => {
+          const day = moment(item.fecha).format('YYYY-MM-DD');
+          if (!groupedData[day]) {
+            groupedData[day] = [];
+          }
+          groupedData[day].push(item);
+        });
+
+        const weeklyData = Object.keys(groupedData).map(day => {
+          const dailyValues = groupedData[day];
+          const avgTemperature = dailyValues.reduce((sum, val) => sum + val.valor.temperatura, 0) / dailyValues.length;
+          const avgHumidity = dailyValues.reduce((sum, val) => sum + val.valor.humedad, 0) / dailyValues.length;
+
+          return {
+            fecha: day,
+            valor: {
+              temperatura: avgTemperature,
+              humedad: avgHumidity
+            }
+          };
+        });
+
+        setData(weeklyData);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -71,18 +100,27 @@ const TemperatureHumidityChart = () => {
     if (selectedLocation) {
       fetchTemperatureHumidityData();
     } else {
-      setData([]); // Clear data when no location is selected
+      setData([]);
     }
-  }, [selectedLocation, sensors, viewMode]); // Se agrega viewMode a la dependencia para actualizar la gráfica
+  }, [selectedLocation, sensors, viewMode]);
+
+  // Set the maximum number of data points to display
+  const maxDataPoints = viewMode === 'day' ? 30 : 7;
 
   // Prepare data for the chart
-  const dates = data.map(item => 
+  const dates = data.slice(-maxDataPoints).map(item => 
     viewMode === 'day'
       ? moment(item.fecha).format('HH:mm')
-      : moment(item.fecha).format('DD/MM/YY')
+      : moment(item.fecha).format('DD/MM')
   );
-  const temperatureData = data.map(item => item.valor.temperatura);
-  const humidityData = data.map(item => item.valor.humedad);
+
+  const temperatureData = data.slice(-maxDataPoints).map(item => 
+    item.valor.temperatura !== null ? item.valor.temperatura : 0
+  );
+
+  const humidityData = data.slice(-maxDataPoints).map(item => 
+    item.valor.humedad !== null ? item.valor.humedad : 0
+  );
 
   return (
     <View>

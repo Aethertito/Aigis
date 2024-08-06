@@ -340,8 +340,6 @@ exports.obtenerEntradas_Salidas = async (req, res) => {
   }
 };
 
-
-
 exports.obtenerSmoke = async (req, res) => {
   try {
     const { usuario_id } = req.params;
@@ -396,9 +394,6 @@ exports.obtenerSmoke = async (req, res) => {
   }
 };
 
-
-
-
 exports.obtenerPresence = async (req, res) => {
   try {
     const { usuario_id } = req.params;
@@ -444,35 +439,43 @@ exports.obtenerPresence = async (req, res) => {
 
 exports.obtenerTempData = async (req, res) => {
   const { usuario_id } = req.params;
+  const { startDate, endDate } = req.query;
+
+  console.log("Received startDate:", startDate);
+  console.log("Received endDate:", endDate);
+
   try {
     const sensor = await Sensor.findOne({ usuario_id, tipo: 'Temperature and Humidity' });
     if (!sensor) {
       return res.status(404).json({ message: 'Sensor not found' });
     }
-    const temp_id = sensor._id.toString();
-    console.log(`ID del sensor Temperature and Humidity: ${temp_id}`);
 
-    // Obtener estadísticas para el sensor
-    const estadisticas = await Estadistica.findOne({ sensor_id: temp_id });
-
+    const estadisticas = await Estadistica.findOne({ sensor_id: sensor._id });
     if (!estadisticas || !estadisticas.valores || estadisticas.valores.length === 0) {
       return res.status(404).json({ message: 'No statistics found for the sensor' });
     }
 
-    // Filtrar los datos para el día actual
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0); // Establecer a medianoche del día actual
-    const maniana = new Date(hoy);
-    maniana.setDate(hoy.getDate() + 1); // El siguiente día
+    let valores = [];
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      console.log("Filtered Start Date:", start);
+      console.log("Filtered End Date:", end);
 
-    const valoresDelDia = estadisticas.valores.filter(valor => {
-      const fecha = new Date(valor.fecha);
-      return fecha >= hoy && fecha < maniana;
-    });
+      valores = estadisticas.valores.filter(valor => {
+        const fecha = new Date(valor.fecha);
+        return fecha >= start && fecha <= end;
+      });
 
-    res.json(valoresDelDia);
+      console.log("Filtered values:", valores);
+      res.json(valores);
+    } else {
+      // Manejo alternativo si no hay fechas
+      res.status(400).json({ message: 'Invalid or missing date parameters.' });
+    }
   } catch (error) {
     console.error('Error fetching temperature data:', error);
     res.status(500).json({ message: 'Error fetching temperature data' });
   }
 };
+
