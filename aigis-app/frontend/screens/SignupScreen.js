@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
   },
   image: {
     bottom: 5,
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     right: 8
   },
   nameField: {

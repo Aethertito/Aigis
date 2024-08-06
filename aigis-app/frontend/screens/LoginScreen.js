@@ -165,10 +165,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    bottom: 150,
-    width: 80,
-    height: 80,
-    right: 8
+    top: 10,
+    width: 220,
+    height: 220,
+    right: 14
   },
   input: {
     width: '100%',
