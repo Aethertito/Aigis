@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import IP from '../../IP'; // Ajusta la ruta según la ubicación de tu archivo IP.js
+import IP from '../../IP';
 
 const CitasAdmin = () => {
   const [citas, setCitas] = useState([]);
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   attendButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#E57373',
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 5,

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking } from 'rea
 const cameras = [
   { id: '1', location: 'Development Area (First Floor)', status: 'Active', url: 'http://192.168.100.235:81/stream' },
   { id: '2', location: 'Development Area (Second Floor)',status: 'Active', url: 'http://192.168.100.235:81/stream'  },
+
 ];
 
 const CamerasScreen = () => {
