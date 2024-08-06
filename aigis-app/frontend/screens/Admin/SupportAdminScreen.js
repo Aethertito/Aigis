@@ -4,6 +4,7 @@ import axios from 'axios';
 import IP from '../../IP';
 import RNPickerSelect from 'react-native-picker-select';
 import { Calendar } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const availableHours = [
   { label: '08:00', value: '08:00' },
@@ -172,6 +173,9 @@ const renderItem = ({ item }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+          <TouchableOpacity  onPress={() => setModalVisible(false)} style={styles.iconContainer}>
+                <Icon name="arrow-back-ios" color="#E53935" size={24} />
+              </TouchableOpacity>
             <Text style={styles.modalTitle}>Generate Appointment</Text>
             <TextInput
               style={styles.input}
@@ -240,9 +244,6 @@ const renderItem = ({ item }) => {
             />
             <TouchableOpacity style={styles.button} onPress={handleSchedule}>
               <Text style={styles.buttonText}>Confirm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   generateAppointmentButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#E57373',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -354,6 +355,13 @@ const styles = StyleSheet.create({
     color: '#F4F6FC',
     marginBottom: 15,
     textAlign: 'center',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 28,
+    left: 10,
   },
   input: {
     height: 40,

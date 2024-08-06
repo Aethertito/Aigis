@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, FlatList, Platform } from 'react-native';
 // import { WebView } from 'react-native-webview';
 
 const cameras = [
-  { id: '1', location: 'Entrance', status: 'Active' },
-  { id: '2', location: 'Parking Lot', status: 'Inactive' },
+  { id: '1', location: 'Development Area (Second Floor)', status: 'Active' },
 ];
 
 const CamerasScreen = () => {
