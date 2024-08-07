@@ -11,7 +11,10 @@ const {
     obtenerEntradas_Salidas,
     obtenerSmoke,
     obtenerPresence,
-    obtenerTempData
+    obtenerTempData,
+    getUserNotifications,
+    generateNotification,
+    deleteNotification
 } = require('../controllers/graficasController');
 
 // Rutas de los sensores de temperatura
@@ -46,6 +49,10 @@ router.get('/ultmo-valor-presencia/:usuario_id', obtenerPresence)
 
 // Obtener valores de temp
 router.get('/valores-temp/:usuario_id',obtenerTempData)
+
+router.get('/notifications', getUserNotifications);
+router.post('/notifications', generateNotification);
+router.delete('/notifications/:id', deleteNotification);
 
 
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { PaqueteComprado, Estadistica, Sensor, EstadisticaRFID } = require('../models/model');
+const { PaqueteComprado, Estadistica, Sensor, EstadisticaRFID, Notificacion } = require('../models/model');
 
 // Obtener sensores de temperatura de un usuario junto con sus ubicaciones
 exports.getTemperatureSensors = async (req, res) => {
@@ -479,3 +479,68 @@ exports.obtenerTempData = async (req, res) => {
   }
 };
 
+exports.generateNotification = async (req, res) => {
+  try {
+    const { userId, tipoSensor, valor, mensaje } = req.body;
+
+    if (!userId || !tipoSensor || !mensaje) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const nuevaNotificacion = new Notificacion({
+      usuario_id: userId,
+      tipoSensor,
+      valor,
+      mensaje,
+      fecha: new Date()
+    });
+
+    await nuevaNotificacion.save();
+    console.log(`Notificación enviada al usuario ${userId}: ${mensaje}`);
+    res.status(200).json({ message: 'Notification sent successfully' });
+  } catch (error) {
+    console.error('Error al enviar notificación:', error);
+    res.status(500).json({ message: 'Error sending notification', error });
+  }
+};
+
+exports.getUserNotifications = async (req, res) => {
+  try {
+    const { userId, tipoSensor, fecha } = req.query;
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid or missing user ID.' });
+    }
+
+    // Verifica que la fecha sea un objeto de fecha válido
+    let query = { usuario_id: userId };
+    if (tipoSensor) {
+      query.tipoSensor = tipoSensor;
+    }
+    if (fecha && !isNaN(new Date(fecha))) {
+      query.fecha = { $gte: new Date(fecha) };
+    }
+
+    const notificaciones = await Notificacion.find(query).sort({ fecha: -1 });
+
+    res.status(200).json({ status: 'success', notifications: notificaciones });
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.status(500).json({ message: 'Error fetching notifications', error });
+  }
+};
+
+exports.deleteNotification = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid or missing notification ID.' });
+    }
+
+    await Notificacion.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Notification deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    res.status(500).json({ message: 'Error deleting notification', error });
+  }
+};

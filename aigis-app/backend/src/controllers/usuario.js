@@ -1,5 +1,5 @@
     // Import model
-    const { Usuario, AyudaUsuario } = require('../models/model.js');
+    const { Usuario, AyudaUsuario, Notificacion, Sensor } = require('../models/model.js');
 
     // Register users
     const signup = async (req, res) => {
@@ -183,7 +183,6 @@
         }
     };
     
-
     const deleteUser = async (req, res) => {
         try {
             const userId = req.params.userId;
@@ -266,7 +265,7 @@ const getComments = async (req, res) => {
         });
     }
 };
-// Obtener historial de soporte de un usuario
+
 const getSupportHistory = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -292,7 +291,6 @@ const getSupportHistory = async (req, res) => {
     }
 };
 
-// Agregar una nueva compañía
 const addCompany = async (req, res) => {
     try {
         // Datos de la solicitud
@@ -352,7 +350,6 @@ const addCompany = async (req, res) => {
 };
 
 
-    // Export actions
 module.exports = {
     signup,
     login,
