@@ -292,6 +292,65 @@ const getSupportHistory = async (req, res) => {
     }
 };
 
+// Agregar una nueva compañía
+const addCompany = async (req, res) => {
+    try {
+        // Datos de la solicitud
+        const params = req.body;
+
+        // Validación de datos
+        if (!params.nombre || !params.correo || !params.contrasena || !params.direccion || !params.telefono || !params.giro) {
+            return res.status(400).json({
+                status: "error",
+                message: "Missing data to submit"
+            });
+        }
+
+        // Crear el objeto de la compañía
+        const newCompany = new Usuario({
+            nombre: params.nombre,
+            correo: params.correo,
+            contrasena: params.contrasena,
+            rol: 'user', // Asumimos que todas las compañías tendrán el rol 'user'
+            direccion: params.direccion,
+            telefono: params.telefono,
+            giro: params.giro,
+            membresia: null,
+            memActiva: false,
+            memFechaInicio: null,
+            memFechaFin: null,
+            paqSelect: [],
+            sensores: []
+        });
+
+        // Verificar si el correo ya está en uso
+        const existingCompany = await Usuario.findOne({ correo: params.correo.toLowerCase() });
+
+        if (existingCompany) {
+            return res.status(500).json({
+                status: "error",
+                message: "Email is already in use"
+            });
+        }
+
+        // Guardar la nueva compañía en la base de datos
+        const companyRegistered = await newCompany.save();
+
+        // Responder con éxito
+        return res.status(200).json({
+            status: "success",
+            message: 'Company registered successfully',
+            company: companyRegistered
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Error registering company",
+            error: error.message
+        });
+    }
+};
+
 
     // Export actions
 module.exports = {
@@ -303,5 +362,6 @@ module.exports = {
     deleteUser,
     helpUser,
     getComments,
-    getSupportHistory
+    getSupportHistory,
+    addCompany
 };
