@@ -15,6 +15,8 @@ const TemperatureHumidityChart = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [viewMode, setViewMode] = useState('day'); // Estado para seleccionar vista diaria o semanal
 
+  const notificationHistory = {}; // Para rastrear las notificaciones enviadas
+
   useEffect(() => {
     const getUserId = async () => {
       try {
@@ -91,8 +93,66 @@ const TemperatureHumidityChart = () => {
 
         setData(weeklyData);
       }
+
+      // Verificar datos de temperatura y humedad para enviar notificaciones
+      verificarNotificaciones(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const verificarNotificaciones = async (datos) => {
+    const umbralTemperaturaBaja = 10; // Umbral de temperatura baja en °C
+    const umbralTemperaturaAlta = 25; // Umbral de temperatura alta en °C
+    const umbralHumedadAlta = 50; // Umbral de humedad alta en %
+  
+    for (const item of datos) {
+      const { temperatura, humedad } = item.valor;
+      const ubicacion = sensors.find(sensor => sensor.tipo === 'Temperature and Humidity' && sensor.ubicacion === selectedLocation)?.ubicacion || 'Unknown location';
+  
+      // Notificación para temperatura baja
+      if (temperatura < umbralTemperaturaBaja) {
+        if (shouldSendNotification('Temperature', 'Low', temperatura, ubicacion)) {
+          await enviarNotificacion(userId, 'Temperature', temperatura, `Low temperature alert: ${temperatura}°C at ${ubicacion}`);
+        }
+      }
+      // Notificación para temperatura alta
+      if (temperatura > umbralTemperaturaAlta) {
+        if (shouldSendNotification('Temperature', 'High', temperatura, ubicacion)) {
+          await enviarNotificacion(userId, 'Temperature', temperatura, `High temperature alert: ${temperatura}°C at ${ubicacion}`);
+        }
+      }
+      // Notificación para humedad alta
+      if (humedad > umbralHumedadAlta) {
+        if (shouldSendNotification('Humidity', 'High', humedad, ubicacion)) {
+          await enviarNotificacion(userId, 'Humidity', humedad, `High humidity alert: ${humedad}% at ${ubicacion}`);
+        }
+      }
+    }
+  };
+  
+
+  const shouldSendNotification = (tipoSensor, nivel, valor, ubicacion) => {
+    const currentTime = new Date();
+    const historyKey = `${tipoSensor}-${nivel}-${ubicacion}`;
+
+    if (!notificationHistory[historyKey] || (currentTime - notificationHistory[historyKey]) > 3600000) { // 1 hora
+      notificationHistory[historyKey] = currentTime;
+      return true;
+    }
+    return false;
+  };
+
+  const enviarNotificacion = async (userId, tipoSensor, valor, mensaje) => {
+    try {
+      await axios.post(`http://${IP}:3000/api/notifications`, {
+        userId,
+        tipoSensor,
+        valor,
+        mensaje
+      });
+    } catch (error) {
+      console.error('Error al enviar la notificación:', error);
     }
   };
 

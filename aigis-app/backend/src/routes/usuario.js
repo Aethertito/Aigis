@@ -16,9 +16,15 @@ router.delete('/:userId', UsuarioController.deleteUser);
 
 // Ayuda
 router.post('/help', UsuarioController.helpUser);
+
 router.get('/support/comments', UsuarioController.getComments);
 
 // Historial de soporte de un usuario
 router.get('/:userId/help', UsuarioController.getSupportHistory);
+
+// Agregar compañía
+router.post('/addCompany', UsuarioController.addCompany);
+
+
 
 module.exports = router;

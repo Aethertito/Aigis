@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable, Image } from 'react-native';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import IP from '../IP';
+import IP from '../../IP';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const SignupScreen = ({ navigation }) => {
+const AddUserScreen = ({ navigation }) => {
   const [nombre, setNombre] = useState('');
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
@@ -16,20 +15,19 @@ const SignupScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignup = async () => {
+  const handleAddCompany = async () => {
     const data = { nombre, correo, contrasena, direccion, telefono, giro, rol: 'user', memActiva: false };
 
     try {
-      const url = `http://${IP}:3000/usuario/signup`;
+      const url = `http://${IP}:3000/usuario/addCompany`;
       const response = await axios.post(url, data);
       if (response.status === 200) {
-        await AsyncStorage.setItem('userId', response.data.usuario._id);
-        Alert.alert('Signup', 'Registration completed');
-        navigation.navigate('Options');
+        Alert.alert('Success', 'Company added successfully');
+        navigation.goBack(); // Volver a la pantalla anterior después de agregar la compañía
       }
     } catch (error) {
       console.log('Error in try catch: ', error);
-      setErrorMessage(error.response?.data?.message || "Something went wrong with your registration");
+      setErrorMessage(error.response?.data?.message || "Something went wrong with the registration");
     }
 
     console.log(data);
@@ -77,41 +75,41 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container} style={{ backgroundColor: '#424242' }}>
-        <Image 
-          source={require('../assets/LOGO-AIGISV2.png')} 
-          style={styles.image}
+    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
+        <Icon name='arrow-back-ios' type='MaterialIcons' color='#E53935' size={24} />
+        <Text style={styles.iconText}>Back</Text>
+    </TouchableOpacity>
+        <Text style={styles.title}>Add Company</Text>
+        <Text style={styles.nameField}>Company Name</Text>
+        <TextInput
+            style={styles.input}
+            placeholderTextColor="#F4F6FC"
+            autoCapitalize='none'
+            value={nombre}
+            onChangeText={handleNombreChange}
+            maxLength={50}
         />
-      <Text style={styles.title}>Sign Up</Text>
-      <Text style={styles.nameField}>Company Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor="#F4F6FC"
-        autoCapitalize='none'
-        value={nombre}
-        onChangeText={handleNombreChange}
-        maxLength={50}
-      />
-      <Text style={styles.nameField}>Address</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor="#F4F6FC"
-        autoCapitalize='none'
-        value={direccion}
-        onChangeText={handleDireccionChange}
-        maxLength={50}
-      />
-      <Text style={styles.nameField}>Contact Phone Number</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor="#F4F6FC"
-        autoCapitalize='none'
-        keyboardType='numeric'
-        value={telefono}
-        onChangeText={handleTelefonoChange}
-        maxLength={12}
-      />
-      <Text style={styles.nameField}>Type of Business</Text>
-      <RNPickerSelect
+        <Text style={styles.nameField}>Address</Text>
+        <TextInput
+            style={styles.input}
+            placeholderTextColor="#F4F6FC"
+            autoCapitalize='none'
+            value={direccion}
+            onChangeText={handleDireccionChange}
+            maxLength={50}
+        />
+        <Text style={styles.nameField}>Contact Phone Number</Text>
+        <TextInput
+            style={styles.input}
+            placeholderTextColor="#F4F6FC"
+            autoCapitalize='none'
+            keyboardType='numeric'
+            value={telefono}
+            onChangeText={handleTelefonoChange}
+            maxLength={12}
+        />
+    <Text style={styles.nameField}>Type of Business</Text>
+    <RNPickerSelect
         onValueChange={(value) => setGiro(value)}
         items={[
           { label: 'Industrial', value: 'Industrial' },
@@ -153,18 +151,8 @@ const SignupScreen = ({ navigation }) => {
           />
         </Pressable>
       </View>
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.loginRedirect}
-        onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.loginText}>Already have an account? Sign In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.backToWelcome}
-        onPress={() => navigation.navigate('Welcome')}>
-        <Text style={styles.backToWelcomeText}>Back to menu</Text>
+      <TouchableOpacity style={styles.signupButton} onPress={handleAddCompany}>
+        <Text style={styles.buttonText}>Register Company</Text>
       </TouchableOpacity>
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </ScrollView>
@@ -179,11 +167,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#424242',
     padding: 20,
   },
-  image: {
-    bottom: 5,
-    width: 120,
-    height: 120,
-    right: 8
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    bottom: 70,
+    right: 150
+  },
+  iconText: {
+    color: '#E53935',
+    fontSize: 16,
+    marginLeft: 1,
   },
   nameField: {
     color: '#F4F6FC',
@@ -222,18 +216,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold'
   },
-  loginRedirect: {
+  backButton: {
     marginTop: 20,
   },
-  loginText: {
-    color: '#E53935',
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-  backToWelcome: {
-    marginTop: 10,
-  },
-  backToWelcomeText: {
+  backText: {
     color: '#E53935',
     fontSize: 16,
     fontWeight: 'bold'
@@ -297,4 +283,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default AddUserScreen;

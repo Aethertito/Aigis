@@ -10,6 +10,7 @@ import MoreInformationScreen from '../screens/Admin/MoreInformationScreen';
 import SupportAdminScreen from '../screens/Admin/SupportAdminScreen';
 import CitasAdmin from '../screens/Admin/CitasAdmin';
 import PaymentScreen from '../screens/Admin/PaymentScreen';
+import AddUserScreen from '../screens/Admin/AddUserScreen';
 import DrawerAdminContent from './DrawerAdminStyle';
 
 const Drawer = createDrawerNavigator();
@@ -48,6 +49,7 @@ const AdminStack = () => (
     <Stack.Screen name="EditUser" component={EditUserScreen} />
     <Stack.Screen name="ManageUser" component={ManageUsersScreen} />
     <Stack.Screen name="MoreInfo" component={MoreInformationScreen} />
+    <Stack.Screen name="AddUser" component={AddUserScreen} />
   </Stack.Navigator>
 );
 

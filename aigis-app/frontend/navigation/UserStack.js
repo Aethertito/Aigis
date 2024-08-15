@@ -10,6 +10,7 @@ import ViewSensorsScreen from '../screens/User/ViewSensorsScreen';
 import PayPackScreen from '../screens/User/PayPackScreen';
 import Ubicaciones   from '../screens/User/Ubicaciones'
 import HelpScreen from '../screens/User/HelpScreen'
+import NotiScreen from '../screens/User/NotiScreen';
 
 import SupportHistoryScreen from '../screens/User/SupportHistoryScreen';
 import PaquetesScreen from '../screens/User/PaquetesScreen';
@@ -44,6 +45,7 @@ const UserDrawer = () => (
     <Drawer.Screen name="Ubicaciones" component={Ubicaciones} />
     <Drawer.Screen name="Help" component={HelpScreen} />
     <Drawer.Screen name="Support History" component={SupportHistoryScreen} />
+    <Drawer.Screen name="Notifications" component={NotiScreen} />
   </Drawer.Navigator>
 );
 

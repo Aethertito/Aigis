@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import { PieChart } from 'react-native-chart-kit';
 import IP from '../IP';
 
 const SensorStats = () => {
@@ -12,15 +11,6 @@ const SensorStats = () => {
   const [presenceData, setPresenceData] = useState(null);
   const [entrada, setEntrada] = useState(null);
   const [salida, setSalida] = useState(null);
-  const [weeklySmokeData, setWeeklySmokeData] = useState([
-    { name: 'Sun', maxSmoke: 2786, color: '#FF0000', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Mon', maxSmoke: 2699, color: '#FF4500', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Tue', maxSmoke: 0, color: '#FF6347', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Wed', maxSmoke: 2405, color: '#FF7F50', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Thu', maxSmoke: 2867, color: '#FFA07A', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Fri', maxSmoke: 2984, color: '#FF8C00', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-    { name: 'Sat', maxSmoke: 2145, color: '#FF4500', legendFontColor: "#F4F6FC", legendFontSize: 15 },
-  ]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,20 +32,39 @@ const SensorStats = () => {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);//Traer datos RFID
+          // Obtener datos de entradas y salidas
+          const entradasSalidasResponse = await axios.get(`http://${IP}:3000/api/entradas-salidas/${userId}`);
           console.log('Entradas y Salidas Response:', entradasSalidasResponse.data);
           setEntrada(entradasSalidasResponse.data.entrada || null);
           setSalida(entradasSalidasResponse.data.salida || null);
 
-          const smokeResponse = await axios.get(`http://${IP}:3000/api/obtener-smoke/${userId}`);//Traer datos humo
-          setSmokeData(smokeResponse.data.maxValor || null);
+          // Notificación por RFID
+          if (entradasSalidasResponse.data.entrada) {
+            await enviarNotificacion(userId, 'RFID', 1, 'Entry registered');
+          }
+          if (entradasSalidasResponse.data.salida) {
+            await enviarNotificacion(userId, 'RFID', 1, 'Exit registered');
+          }
 
-          setWeeklySmokeData(prevData => prevData.map(dayData =>
-            dayData.name === 'Tue' ? { ...dayData, maxSmoke: smokeResponse.data.maxValor || 0 } : dayData
-          ));
+          // Obtener datos de humo
+          const smokeResponse = await axios.get(`http://${IP}:3000/api/obtener-smoke/${userId}`);
+          const maxValorHumo = smokeResponse.data.maxValor || null;
+          setSmokeData(maxValorHumo);
 
-          const presenceResponse = await axios.get(`http://${IP}:3000/api/ultmo-valor-presencia/${userId}`); //Traer datos presencia
-          setPresenceData(presenceResponse.data.ultimoValor || null);
+          // Notificación por concentración de humo
+          if (maxValorHumo > 2500) {
+            await enviarNotificacion(userId, 'Smoke', maxValorHumo, `Alert: High concentration of smoke detected (${maxValorHumo} ppm)`);
+          }
+
+          // Obtener datos de presencia
+          const presenceResponse = await axios.get(`http://${IP}:3000/api/ultmo-valor-presencia/${userId}`);
+          const presencia = presenceResponse.data.ultimoValor || null;
+          setPresenceData(presencia);
+
+          // Notificación por presencia detectada
+          if (presencia && presencia.valor) {
+            await enviarNotificacion(userId, 'Presence', 1, 'Presence detected');
+          }
 
         } catch (err) {
           // console.error('Error al obtener los datos de los sensores', err);
@@ -67,6 +76,43 @@ const SensorStats = () => {
     }
   }, [userId]);
 
+  const enviarNotificacion = async (userId, tipoSensor, valor, mensaje) => {
+    try {
+      // Define un periodo de tiempo para considerar como reciente (por ejemplo, 1 hora)
+      const now = new Date();
+      const timeLimit = new Date(now);
+      timeLimit.setHours(now.getHours() - 1); // Cambiar este valor según tus necesidades
+  
+      // Busca notificaciones similares dentro del periodo de tiempo definido
+      const existingNotification = await axios.get(`http://${IP}:3000/api/notifications`, {
+        params: {
+          userId,
+          tipoSensor,
+          valor,
+          mensaje,
+          fecha: { $gte: timeLimit }
+        }
+      });
+  
+      // Si ya existe una notificación similar, no enviar otra
+      if (existingNotification.data.notifications.length > 0) {
+        console.log('Notificación ya enviada recientemente, no se enviará de nuevo.');
+        return;
+      }
+  
+      // Si no existe una notificación similar, enviar una nueva
+      await axios.post(`http://${IP}:3000/api/notifications`, {
+        userId,
+        tipoSensor,
+        valor,
+        mensaje
+      });
+  
+    } catch (error) {
+      console.error('Error al enviar la notificación:', error);
+    }
+  };
+  
   if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
 
   return (
@@ -94,7 +140,7 @@ const SensorStats = () => {
           {entrada && (
             <View style={styles.statCard}>
               <Icon2 name="account-check" size={24} color="#E53935" />
-              <Text style={styles.statValue}>Entry Recorded</Text>
+              <Text style={styles.statValue}>Entry Registered</Text>
               <Text style={styles.statLabel}>{new Date(entrada.fecha).toLocaleString()}</Text>
             </View>
           )}
@@ -102,7 +148,7 @@ const SensorStats = () => {
           {salida && (
             <View style={styles.statCard}>
               <Icon2 name="exit-run" size={24} color="#E53935" />
-              <Text style={styles.statValue}>Exit Recorded</Text>
+              <Text style={styles.statValue}>Exit Registered</Text>
               <Text style={styles.statLabel}>{new Date(salida.fecha).toLocaleString()}</Text>
             </View>
           )}
@@ -155,19 +201,6 @@ const styles = StyleSheet.create({
   statLabel: {
     color: '#F4F6FC',
     fontSize: 17,
-    textAlign: 'center',
-  },
-  chartContainer: {
-    backgroundColor: '#212121',
-    borderRadius: 16,
-    padding: 6,
-    marginBottom: 20,
-    overflow: 'hidden',
-  },
-  chartTitle: {
-    color: '#E53935',
-    fontSize: 18,
-    marginBottom: 10,
     textAlign: 'center',
   },
 });

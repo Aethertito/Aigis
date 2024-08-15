@@ -32,6 +32,10 @@ const ManageUsersScreen = ({ navigation }) => {
     });
   };
 
+  const handleAddCompany = () => {
+    navigation.navigate('AddUser');
+  };
+
   const handleEdit = (userId) => {
     navigation.navigate('EditUser', { userId });
   };
@@ -94,6 +98,9 @@ const ManageUsersScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Manage Companies</Text>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddCompany}>
+          <Icon name='add' color='#E53935' size={24} />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={data}

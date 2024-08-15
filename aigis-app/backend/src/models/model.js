@@ -135,6 +135,13 @@ const estadisticaRFIDSchema = new Schema({
     }
   ]
 });
+const notificacionSchema = new mongoose.Schema({
+  usuario_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+  tipoSensor: { type: String, required: true }, // Tipo de sensor
+  valor: { type: Number, required: true }, // Valor del sensor
+  mensaje: { type: String, required: true }, // Mensaje descriptivo
+  fecha: { type: Date, default: Date.now } // Fecha de la notificación
+});
 
 
 
@@ -151,6 +158,7 @@ const Empleado = model('Empleado', empleadoSchema)
 const AccesoRFID = model('AccesoRFID', accesoRFIDSchema)
 const RegistroRFID = model('RegistroRFID', registroAcceso)
 const EstadisticaRFID = mongoose.model('EstadisticaRFID', estadisticaRFIDSchema);
+const Notificacion = mongoose.model('Notificacion', notificacionSchema);
 
 module.exports = {
   Usuario,
@@ -165,5 +173,6 @@ module.exports = {
   Empleado,
   AccesoRFID,
   RegistroRFID,
-  EstadisticaRFID
+  EstadisticaRFID,
+  Notificacion
 };
